@@ -1,0 +1,23 @@
+{
+  "bonjour": "Bonjour ! Viens jouer avec Milo !",
+  "merci": "Merci !",
+  "bravo": "Bravo !",
+  "encore": "On essaie encore !",
+  "showHint": "Pose ton doigt, et attends un petit peu.",
+  "giveHint": "Fais glisser jusqu’à Milo.",
+  "fini": "Merci pour ton aide ! À bientôt !",
+  "story-1": "Bonjour ! Je m’appelle Milo.",
+  "story-2": "Oh ! Une pomme !",
+  "story-3": "Et une banane !",
+  "story-4": "Où est la pomme ?",
+  "story-5": "Ah ! La pomme ! Bravo !",
+  "story-6": "Au revoir, Milo !",
+  "show-apple": "Montre-moi la pomme !",
+  "give-apple": "Donne-moi la pomme !",
+  "show-banana": "Montre-moi la banane !",
+  "give-banana": "Donne-moi la banane !",
+  "show-water": "Montre-moi l’eau !",
+  "give-water": "Donne-moi l’eau !",
+  "show-bread": "Montre-moi le pain !",
+  "give-bread": "Donne-moi le pain !"
+}

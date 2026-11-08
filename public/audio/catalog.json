@@ -1,0 +1,152 @@
+{
+  "provider": "edge-tts",
+  "clips": {
+    "bonjour": {
+      "file": "bonjour.mp3",
+      "text": "Bonjour ! Viens jouer avec Milo !",
+      "voice": "fr-FR-EloiseNeural",
+      "rate": "-10%",
+      "signature": "8b2daae20259ca4344d7f9bbdbbe0982cde2bbf88411d91f6adaa8c60773cfcb"
+    },
+    "merci": {
+      "file": "merci.mp3",
+      "text": "Merci !",
+      "voice": "fr-FR-EloiseNeural",
+      "rate": "-10%",
+      "signature": "54e6e743721d71fd53051dc26a21667aa3282744931451fcc1f166da15fc012a"
+    },
+    "bravo": {
+      "file": "bravo.mp3",
+      "text": "Bravo !",
+      "voice": "fr-FR-EloiseNeural",
+      "rate": "-10%",
+      "signature": "281c7fcaa6d15d0ee42916b3ac0b88c1b0c971016b00dd83a0d2d18a9e66e9ca"
+    },
+    "encore": {
+      "file": "encore.mp3",
+      "text": "On essaie encore !",
+      "voice": "fr-FR-EloiseNeural",
+      "rate": "-10%",
+      "signature": "51297657820890602f4ebaab4402b46edb6dc1075827676e68c032b209f58b37"
+    },
+    "showHint": {
+      "file": "showHint.mp3",
+      "text": "Pose ton doigt, et attends un petit peu.",
+      "voice": "fr-FR-EloiseNeural",
+      "rate": "-10%",
+      "signature": "feb8978fe706a0f53150e9ed8d9c16be40fdf685b948247537be74747135d531"
+    },
+    "giveHint": {
+      "file": "giveHint.mp3",
+      "text": "Fais glisser jusqu’à Milo.",
+      "voice": "fr-FR-EloiseNeural",
+      "rate": "-10%",
+      "signature": "8d8c35671e18409b0c6646161256e4830fb3ad3dec2a09d5878a272fd64bc92a"
+    },
+    "fini": {
+      "file": "fini.mp3",
+      "text": "Merci pour ton aide ! À bientôt !",
+      "voice": "fr-FR-EloiseNeural",
+      "rate": "-10%",
+      "signature": "de4aeea8a5800697a0dbd87bb03561750bdd2cc68e6734c33f2e2b2c2495a1dd"
+    },
+    "story-1": {
+      "file": "story-1.mp3",
+      "text": "Bonjour ! Je m’appelle Milo.",
+      "voice": "fr-FR-EloiseNeural",
+      "rate": "-10%",
+      "signature": "70b9ca5f524bb682ceea31cb420e863c7c04ac773c982ce818485c5f3502270f"
+    },
+    "story-2": {
+      "file": "story-2.mp3",
+      "text": "Oh ! Une pomme !",
+      "voice": "fr-FR-EloiseNeural",
+      "rate": "-10%",
+      "signature": "cd38ee3b2d1859f491db5aa796eaaf1eff32b3a3e1fb198f278078bf395c33b4"
+    },
+    "story-3": {
+      "file": "story-3.mp3",
+      "text": "Et une banane !",
+      "voice": "fr-FR-EloiseNeural",
+      "rate": "-10%",
+      "signature": "638ce7765cbd4030d5475e98786f74e77907605ef627f460f9c2251a5986425f"
+    },
+    "story-4": {
+      "file": "story-4.mp3",
+      "text": "Où est la pomme ?",
+      "voice": "fr-FR-EloiseNeural",
+      "rate": "-10%",
+      "signature": "dae25862590e3bf2e6f4418e8e55ceb5bfb0bac433a269a56387d5fc3f396e30"
+    },
+    "story-5": {
+      "file": "story-5.mp3",
+      "text": "Ah ! La pomme ! Bravo !",
+      "voice": "fr-FR-EloiseNeural",
+      "rate": "-10%",
+      "signature": "fa3eb04e1d26925c91a66fa9dfdb4991606eee0a402f781304c89f4620983ce4"
+    },
+    "story-6": {
+      "file": "story-6.mp3",
+      "text": "Au revoir, Milo !",
+      "voice": "fr-FR-EloiseNeural",
+      "rate": "-10%",
+      "signature": "08d98415f2aa4e29686db6bdbbf1f2dbbd12cba8077ab84315285d0bbf6df3fc"
+    },
+    "show-apple": {
+      "file": "show-apple.mp3",
+      "text": "Montre-moi la pomme !",
+      "voice": "fr-FR-EloiseNeural",
+      "rate": "-10%",
+      "signature": "49752dc067e6df923dc14082e1498dacad4e9ee5f22dde7e6ee5ac0434d715f2"
+    },
+    "give-apple": {
+      "file": "give-apple.mp3",
+      "text": "Donne-moi la pomme !",
+      "voice": "fr-FR-EloiseNeural",
+      "rate": "-10%",
+      "signature": "db9cbe0fccab63c9ec4f2d8665d6afbfc86d7cea12dbbe70e7ed3be36d21eb8a"
+    },
+    "show-banana": {
+      "file": "show-banana.mp3",
+      "text": "Montre-moi la banane !",
+      "voice": "fr-FR-EloiseNeural",
+      "rate": "-10%",
+      "signature": "1e9a3a6f36397ce48499423b2555373cf7c3ff21aad50c0f811ab0fc62c1072c"
+    },
+    "give-banana": {
+      "file": "give-banana.mp3",
+      "text": "Donne-moi la banane !",
+      "voice": "fr-FR-EloiseNeural",
+      "rate": "-10%",
+      "signature": "8cf9e8f58ebc6440a65d2566e0eb3b9ea4a0b8d4135180c7057ade2ce76ee6ff"
+    },
+    "show-water": {
+      "file": "show-water.mp3",
+      "text": "Montre-moi l’eau !",
+      "voice": "fr-FR-EloiseNeural",
+      "rate": "-10%",
+      "signature": "6f9ebe3c656c776b726cd10b602a5059878779cd545278eae8e03c336dee3b10"
+    },
+    "give-water": {
+      "file": "give-water.mp3",
+      "text": "Donne-moi l’eau !",
+      "voice": "fr-FR-EloiseNeural",
+      "rate": "-10%",
+      "signature": "979bd4f76369f4a391f82d6c4f9be714ba57faedb20b05f3782abf414630a36c"
+    },
+    "show-bread": {
+      "file": "show-bread.mp3",
+      "text": "Montre-moi le pain !",
+      "voice": "fr-FR-EloiseNeural",
+      "rate": "-10%",
+      "signature": "f0ba7b154264a698c689afe2a4ad14e8b7633bbeb626f93c15d9766806f15662"
+    },
+    "give-bread": {
+      "file": "give-bread.mp3",
+      "text": "Donne-moi le pain !",
+      "voice": "fr-FR-EloiseNeural",
+      "rate": "-10%",
+      "signature": "d05d759c828cc54ac07e694b892b55340a289b63a172cb6b284758cf631df104"
+    }
+  }
+}

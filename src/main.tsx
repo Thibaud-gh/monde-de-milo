@@ -1,0 +1,10 @@
+import ReactDOM from 'react-dom/client';
+import '@fontsource/delius/latin-400.css';
+import '@fontsource-variable/nunito';
+import './styles.css';
+import App from './App';
+import { initializeStore } from './lib/store';
+import { initializeCloud } from './lib/cloud';
+await initializeStore();
+ReactDOM.createRoot(document.getElementById('root')!).render(<App/>);
+void initializeCloud();
