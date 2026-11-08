@@ -4,6 +4,14 @@ A picture-book café for a six-year-old beginning French. The child explores **c
 
 React + TypeScript + Vite, packaged for iPad with Capacitor. The English parent dashboard runs in the same project at `#/parent`; the child app never displays accuracy scores. Supabase optionally connects the iPad and web dashboard. Without configuration, each device has its own local records, with no fake sample progress.
 
+## Project links
+
+- Source: <https://github.com/Thibaud-gh/monde-de-milo>
+- Web app: <https://thibaud-gh.github.io/monde-de-milo/>
+- Parent dashboard: <https://thibaud-gh.github.io/monde-de-milo/#/parent>
+
+GitHub Actions builds and deploys `main` automatically. Cloud progress sharing remains disabled until the Supabase configuration is added; without it, each device saves its own local records.
+
 ## Run locally
 
 Node 22.12+ (Node 24 recommended), npm, and Xcode 26+ for iOS.

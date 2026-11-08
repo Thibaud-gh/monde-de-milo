@@ -14,7 +14,7 @@
 ## Still requires the user's accounts or real-device playtesting
 
 - Supabase project creation, schema execution and parent login. No real cloud account has been configured; cross-device syncing and live RLS isolation have not been exercised against a hosted database.
-- GitHub repository / Pages configuration. A deploy workflow is provided; nothing is published yet.
+- GitHub Pages is configured at `Thibaud-gh/monde-de-milo`; deployment status is available in the repository Actions tab. Supabase configuration is still separate.
 - Physical iPad signing with a free Personal Team and a subsequent seven-day reinstall.
 - Playtesting with the child, especially whether the hold gesture feels natural and whether gesture confusion is distinguishable from language uncertainty.
 
