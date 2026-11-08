@@ -3,10 +3,10 @@
   "clips": {
     "bonjour": {
       "file": "bonjour.mp3",
-      "text": "Bonjour ! Viens jouer avec Milo !",
+      "text": "Bonjour, Éva ! Viens jouer avec Milo !",
       "voice": "fr-FR-EloiseNeural",
       "rate": "-10%",
-      "signature": "8b2daae20259ca4344d7f9bbdbbe0982cde2bbf88411d91f6adaa8c60773cfcb"
+      "signature": "a44195c86a274f145613b7a31c56855e691efa6ced81a8198f1a8fade10c4b8a"
     },
     "merci": {
       "file": "merci.mp3",
@@ -31,17 +31,17 @@
     },
     "showHint": {
       "file": "showHint.mp3",
-      "text": "Pose ton doigt, et attends un petit peu.",
+      "text": "Touche simplement l’image.",
       "voice": "fr-FR-EloiseNeural",
       "rate": "-10%",
-      "signature": "feb8978fe706a0f53150e9ed8d9c16be40fdf685b948247537be74747135d531"
+      "signature": "886356c9fb9f06b726db9b1abaaba0af3b3cbef398d56cddc051e4b51a394e50"
     },
     "giveHint": {
       "file": "giveHint.mp3",
-      "text": "Fais glisser jusqu’à Milo.",
+      "text": "Garde le doigt sur l’image et glisse jusqu’à Milo.",
       "voice": "fr-FR-EloiseNeural",
       "rate": "-10%",
-      "signature": "8d8c35671e18409b0c6646161256e4830fb3ad3dec2a09d5878a272fd64bc92a"
+      "signature": "a45324d488e171c2ee6a7ce6b160cf8b0322941556bcde6c8561aa86070466d5"
     },
     "fini": {
       "file": "fini.mp3",
@@ -52,45 +52,45 @@
     },
     "story-1": {
       "file": "story-1.mp3",
-      "text": "Bonjour ! Je m’appelle Milo.",
+      "text": "Bonjour, Éva ! Je cherche ma pomme.",
       "voice": "fr-FR-EloiseNeural",
       "rate": "-10%",
-      "signature": "70b9ca5f524bb682ceea31cb420e863c7c04ac773c982ce818485c5f3502270f"
+      "signature": "297dfcde0df880a76877e68c68ca8e582cd0fdc5e8bccdf5fe4b4cdb9cc9e7e7"
     },
     "story-2": {
       "file": "story-2.mp3",
-      "text": "Oh ! Une pomme !",
+      "text": "Sur la table ? Non, c’est de l’eau !",
       "voice": "fr-FR-EloiseNeural",
       "rate": "-10%",
-      "signature": "cd38ee3b2d1859f491db5aa796eaaf1eff32b3a3e1fb198f278078bf395c33b4"
+      "signature": "1026c7922cc8cefb33e6521a88945c710d6a8dc3a237c43c23194832225cb0ca"
     },
     "story-3": {
       "file": "story-3.mp3",
-      "text": "Et une banane !",
+      "text": "Sur l’étagère ? Non, c’est une banane !",
       "voice": "fr-FR-EloiseNeural",
       "rate": "-10%",
-      "signature": "638ce7765cbd4030d5475e98786f74e77907605ef627f460f9c2251a5986425f"
+      "signature": "920e3e83b9ff64ee12786ad3cefbef28908ef2c7f48b111492a13f92ec7f36f6"
     },
     "story-4": {
       "file": "story-4.mp3",
-      "text": "Où est la pomme ?",
+      "text": "Et dans le panier ? Voyons…",
       "voice": "fr-FR-EloiseNeural",
       "rate": "-10%",
-      "signature": "dae25862590e3bf2e6f4418e8e55ceb5bfb0bac433a269a56387d5fc3f396e30"
+      "signature": "fd458e40eb48d23ca6de54799e92d3a1877bc3f21c504063102280bd81574a58"
     },
     "story-5": {
       "file": "story-5.mp3",
-      "text": "Ah ! La pomme ! Bravo !",
+      "text": "Ah ! Ma pomme ! Merci, Éva !",
       "voice": "fr-FR-EloiseNeural",
       "rate": "-10%",
-      "signature": "fa3eb04e1d26925c91a66fa9dfdb4991606eee0a402f781304c89f4620983ce4"
+      "signature": "01f39727f6986ad8e2357f562d03dd8a977b1f2056cf1008b78c2d225dcaa455"
     },
     "story-6": {
       "file": "story-6.mp3",
-      "text": "Au revoir, Milo !",
+      "text": "Au revoir, Éva ! À bientôt !",
       "voice": "fr-FR-EloiseNeural",
       "rate": "-10%",
-      "signature": "08d98415f2aa4e29686db6bdbbf1f2dbbd12cba8077ab84315285d0bbf6df3fc"
+      "signature": "4b76b55ca022f9f7004aad3446ff20fdd5c7e806403fe761feda90823d92a36e"
     },
     "show-apple": {
       "file": "show-apple.mp3",
@@ -147,6 +147,34 @@
       "voice": "fr-FR-EloiseNeural",
       "rate": "-10%",
       "signature": "d05d759c828cc54ac07e694b892b55340a289b63a172cb6b284758cf631df104"
+    },
+    "bonjour-generic": {
+      "file": "bonjour-generic.mp3",
+      "text": "Bonjour ! Viens jouer avec Milo !",
+      "voice": "fr-FR-EloiseNeural",
+      "rate": "-10%",
+      "signature": "8b2daae20259ca4344d7f9bbdbbe0982cde2bbf88411d91f6adaa8c60773cfcb"
+    },
+    "story-1-generic": {
+      "file": "story-1-generic.mp3",
+      "text": "Bonjour ! Je cherche ma pomme.",
+      "voice": "fr-FR-EloiseNeural",
+      "rate": "-10%",
+      "signature": "f230ed80edb47011e05447f19b9e4de9b58cf6c56044ddc1e2032e62418646d8"
+    },
+    "story-5-generic": {
+      "file": "story-5-generic.mp3",
+      "text": "Ah ! Ma pomme ! Merci !",
+      "voice": "fr-FR-EloiseNeural",
+      "rate": "-10%",
+      "signature": "8ea45ca77a9e338ea0ddf34b63edede60c3291bc63fc858eecbd074644beca24"
+    },
+    "story-6-generic": {
+      "file": "story-6-generic.mp3",
+      "text": "Au revoir ! À bientôt !",
+      "voice": "fr-FR-EloiseNeural",
+      "rate": "-10%",
+      "signature": "7a2c7178388c25222e8a73dbdbd38eb7ae98704a8046645bc2a3b0853158f36d"
     }
   }
 }

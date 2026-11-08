@@ -1,5 +1,5 @@
 import { useId } from 'react';
-import type { Food } from '../content/week1';
+import type { Food, StorySceneId } from '../content/week1';
 export function FoodArt({ food, className = '' }: { food: Food; className?: string }) {
   return <svg className={className} viewBox="0 0 180 180" fill="none" aria-hidden="true">
     {food === 'apple' && <>
@@ -58,10 +58,8 @@ export function BasketArt() {
 export function BookArt() {
   return <svg viewBox="0 0 220 180" aria-hidden="true"><path d="m34 32 151-14 11 130-152 15Z" fill="#365878"/><path d="m44 34 131-11 10 119-132 13Z" fill="#FFF9ED"/><path d="m53 25 131-9 9 121-130 11Z" fill="#D9534F"/><path d="m69 42 98-7 5 75-98 7Z" fill="#F8D767"/><circle cx="123" cy="72" r="23" fill="#C18B58"/><circle cx="104" cy="55" r="8" fill="#C18B58"/><circle cx="140" cy="53" r="8" fill="#C18B58"/><ellipse cx="123" cy="81" rx="13" ry="10" fill="#E8C7A0"/><path d="m116 68 1 0m14-1h1" stroke="#47362F" strokeWidth="4" strokeLinecap="round"/><ellipse cx="123" cy="78" rx="4" ry="3" fill="#47362F"/><path d="m83 128 74-5" stroke="#FFF9ED" strokeWidth="5" strokeLinecap="round"/></svg>;
 }
-export function CafeScene({ page, className = '' }: { page?: number; className?: string }) {
+export function CafeScene({ className = '' }: { className?: string }) {
   const id = useId();
-  const storyMode = page !== undefined;
-  const appleVisible = !storyMode || page === 1 || page === 2 || page === 4;
   return <svg className={className} viewBox="0 0 1100 530" aria-hidden="true">
     <defs><pattern id={`${id}-wall`} width="38" height="38" patternUnits="userSpaceOnUse"><path d="M19 0v38" stroke="#E6E3CA" strokeWidth="1"/></pattern><pattern id={`${id}-cloth`} width="52" height="52" patternUnits="userSpaceOnUse"><rect width="52" height="52" fill="#F9F3D8"/><path d="M0 13h52M13 0v52" stroke="#A9C8D0" strokeWidth="13" opacity=".5"/></pattern><clipPath id={`${id}-window`}><path d="M150 180a100 100 0 0 1 200 0v160H150Z"/></clipPath></defs>
     <rect width="1100" height="530" fill="#FFF9ED"/><rect width="1100" height="530" fill={`url(#${id}-wall)`}/>
@@ -73,18 +71,47 @@ export function CafeScene({ page, className = '' }: { page?: number; className?:
     <path d="M815 335h153" stroke="#A97D59" strokeWidth="12" strokeLinecap="round"/>
     <rect x="832" y="95" width="110" height="90" rx="3" fill="#365878" transform="rotate(4 887 140)"/>
     <path d="M857 119h58m-59 15h45m-45 15h54m-55 15h31" stroke="#EAF1E9" strokeWidth="4" strokeLinecap="round"/>
-    <svg x={page === 3 ? 365 : 397} y="125" width="320" height="350"><Milo waving={!storyMode || page === 0 || page === 5} happy={page === 4}/></svg>
+    <svg x="397" y="125" width="320" height="350"><Milo waving/></svg>
     <path d="M0 397h1100v133H0Z" fill="#BF9064"/><path d="M0 400h1100v14H0Z" fill="#A97D59"/>
     <path d="m87 387 934 0 49 83H35Z" fill={`url(#${id}-cloth)`}/>
     <path d="M35 470h1035v32c-30 18-50-13-80 0-30 18-50-13-80 0-30 18-50-13-80 0-30 18-50-13-80 0-30 18-50-13-80 0-30 18-50-13-80 0-30 18-50-13-80 0-30 18-50-13-80 0-30 18-50-13-80 0-30 18-50-13-80 0-30 18-50-13-80 0-30 18-50-13-80 0-30 18-50-13-80 0Z" fill={`url(#${id}-cloth)`}/>
-    {appleVisible && <svg x={storyMode ? 650 : 242} y="326" width="135" height="135"><FoodArt food="apple"/></svg>}
-    {(!storyMode || page === 2 || page === 3 || page === 4) && <svg x="350" y="339" width="135" height="135"><FoodArt food="banana"/></svg>}
-    <svg x={storyMode ? 810 : 705} y="315" width="180" height="150"><BasketArt/></svg>
-    {(page === 3 || page === 4) && <path d={page === 3 ? 'm640 327 109-4 62 135-181-1Z' : 'm789 313 39-27 54 112-60 4Z'} fill="#CCE5EA" stroke="#6D929D" strokeWidth="3"/>}
-    {page === 3 && <text x="710" y="258" fontSize="70" fill="#365878" fontFamily="Delius, cursive">?</text>}
+    <svg x="242" y="326" width="135" height="135"><FoodArt food="apple"/></svg>
+    <svg x="350" y="339" width="135" height="135"><FoodArt food="banana"/></svg>
+    <svg x="705" y="315" width="180" height="150"><BasketArt/></svg>
     <path d="M0 0h1100v38H0Z" fill="#F8D767"/>
     {Array.from({ length: 11 }, (_, i) => <path key={i} d={`M${i * 100} 0h50v59q-25 30-50 0Z`} fill="#365878"/>)}
     {Array.from({ length: 11 }, (_, i) => <path key={i} d={`M${i * 100 + 50} 0h50v59q-25 30-50 0Z`} fill="#F8D767"/>)}
-    {!storyMode && <g transform="rotate(-5 540 104)"><rect x="430" y="68" width="220" height="59" rx="5" fill="#FFF9ED"/><text x="540" y="108" textAnchor="middle" fontFamily="Delius, cursive" fontSize="30" fill="#263B59">Le café de Milo</text></g>}
+    {<g transform="rotate(-5 540 104)"><rect x="430" y="68" width="220" height="59" rx="5" fill="#FFF9ED"/><text x="540" y="108" textAnchor="middle" fontFamily="Delius, cursive" fontSize="30" fill="#263B59">Le café de Milo</text></g>}
+  </svg>;
+}
+
+// Each page shares the same room and object locations, so the search has continuity.
+export function StoryScene({ scene }: { scene: StorySceneId }) {
+  const id = useId();
+  const found = scene === 'found' || scene === 'goodbye';
+  const bearX = scene === 'table' ? 265 : scene === 'shelf' ? 555 : scene === 'basket' || scene === 'found' ? 485 : 400;
+  return <svg viewBox="0 0 1100 530" role="img" aria-label={scene === 'table' ? 'Milo regarde le verre d’eau sur la table.' : scene === 'shelf' ? 'Milo regarde la banane sur l’étagère.' : scene === 'basket' ? 'Milo soulève le tissu du panier.' : scene === 'found' ? 'Milo retrouve sa pomme dans le panier.' : scene === 'goodbye' ? 'Milo dit au revoir avec sa pomme.' : 'Milo cherche sa pomme dans le café.'}>
+    <defs><pattern id={`${id}-wall`} width="42" height="42" patternUnits="userSpaceOnUse"><path d="M21 0v42" stroke="#E6E3CA"/></pattern><pattern id={`${id}-cloth`} width="50" height="50" patternUnits="userSpaceOnUse"><rect width="50" height="50" fill="#F9F3D8"/><path d="M0 12h50M12 0v50" stroke="#A9C8D0" strokeWidth="12" opacity=".45"/></pattern></defs>
+    <rect width="1100" height="530" fill="#FFF9ED"/><rect width="1100" height="530" fill={`url(#${id}-wall)`}/>
+    <path d="M100 285V145a85 85 0 0 1 170 0v140Z" fill="#CCE5EA" stroke="#6D929D" strokeWidth="8"/><path d="M105 249q35-35 80-9 43-38 80-5v45H105Z" fill="#97B6A3"/><path d="M185 65v220M102 170h165M85 290h200" stroke="#6D929D" strokeWidth="8" strokeLinecap="round"/>
+    <path d="M785 194h205" stroke="#A97D59" strokeWidth="14" strokeLinecap="round"/><path d="m811 201 12 24m143-24-12 24" stroke="#A97D59" strokeWidth="7" strokeLinecap="round"/>
+    <svg x="804" y="70" width="140" height="140"><FoodArt food="banana"/></svg>
+    <svg x={bearX} y={scene === 'table' || scene === 'basket' ? 151 : 128} width="320" height="350" transform={scene === 'table' ? `rotate(-8 ${bearX + 160} 440)` : scene === 'shelf' ? `rotate(6 ${bearX + 160} 440)` : undefined}><Milo waving={scene === 'goodbye'} happy={found}/></svg>
+    {scene === 'search' && <g><path d="M670 115q-15-80 73-85h65q80 5 65 90-6 38-70 40h-51l-36 32 6-37q-45-7-52-40" fill="#FFF9ED" stroke="#A9C8D0" strokeWidth="3"/><svg x="720" y="38" width="100" height="100"><FoodArt food="apple"/></svg><text x="824" y="116" fontSize="48" fill="#365878" fontFamily="Delius">?</text></g>}
+    <path d="M0 408h1100v122H0Z" fill="#BF9064"/><path d="M0 408h1100v13H0Z" fill="#A97D59"/><path d="m70 394 960 0 45 105H25Z" fill={`url(#${id}-cloth)`}/><path d="M25 499h1050v31H25Z" fill={`url(#${id}-cloth)`}/>
+    <svg x="190" y="298" width="160" height="160"><FoodArt food="water"/></svg>
+    <path d="M808 377c0-90 124-90 124 0" fill="none" stroke="#9A6B40" strokeWidth="12"/>
+    <ellipse cx="870" cy="382" rx="103" ry="27" fill="#8D623F"/>
+    {scene === 'found' && <svg x="807" y="288" width="130" height="130"><FoodArt food="apple"/></svg>}
+    <path d="m765 381 23 87q80 21 163 0l23-87q-104 35-209 0Z" fill="#D6A668"/>
+    <path d="M780 407q90 29 181 0M786 430q84 28 170 0M801 397l12 78m19-72 7 75m25-72v76m29-77-5 74m29-79-9 76m29-84-12 76" fill="none" stroke="#B9874E" strokeWidth="3"/>
+    <path d="M765 381q105 35 209 0" stroke="#9A6B40" strokeWidth="9" fill="none" strokeLinecap="round"/>
+    {!found && <path d={scene === 'basket' ? 'M765 375q35-67 91-92l81 26q-54 30-84 95l-31 30Z' : 'M760 376q106-38 218 0l-38 53-37-22-40 25-47-28-34 18Z'} fill="#E8F1F0" stroke="#8BAEB7" strokeWidth="3"/>}
+    {found && <path d="m963 389 45 18 19 79-46-6Z" fill="#E8F1F0" stroke="#8BAEB7" strokeWidth="3"/>}
+    {scene === 'goodbye' && <svg x="465" y="309" width="123" height="123"><FoodArt food="apple"/></svg>}
+    {scene === 'table' && <path d="m358 342 30-12m-26 40h31" stroke="#D8B443" strokeWidth="6" strokeLinecap="round"/>}
+    {scene === 'shelf' && <path d="m955 100 22-17m-14 46 29-1" stroke="#D8B443" strokeWidth="6" strokeLinecap="round"/>}
+    {scene === 'found' && <path d="m789 313-23-19m37-8-5-24m126 34 23-22" stroke="#D8B443" strokeWidth="6" strokeLinecap="round"/>}
+    <path d="M0 0h1100v22H0Z" fill="#F8D767"/>
   </svg>;
 }

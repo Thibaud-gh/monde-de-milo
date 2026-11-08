@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { readFileSync, existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
-import { foods, phrase, story } from './week1';
+import { foods, phrase, story, storyForLearner } from './week1';
 import type { Food } from './week1';
 const audio = new URL('../../public/audio/', import.meta.url);
 const phrases = JSON.parse(readFileSync(new URL('phrases.json', audio), 'utf8'));
@@ -14,6 +14,12 @@ describe('prepared French voice content', () => {
   it('covers all six story captions without imposing a quiz', () => {
     expect(story.pages).toHaveLength(6);
     for (const page of story.pages) expect(phrases[page.audio]).toBe(page.text);
+  });
+  it('keeps narration accurate when a different child creates an account', () => {
+    const alternate = storyForLearner('Alex');
+    expect(alternate.pages.at(-1)?.text).not.toContain('Éva');
+    for (const page of alternate.pages) expect(phrases[page.audio]).toBe(page.text);
+    expect(story.pages.map(page => page.scene)).toEqual(['search', 'table', 'shelf', 'basket', 'found', 'goodbye']);
   });
   it('bundles every declared clip as a nonempty MP3', () => {
     for (const id of Object.keys(phrases)) {

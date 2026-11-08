@@ -12,15 +12,22 @@ describe('independent object and action evidence', () => {
   it('separates a correct noun from a misunderstood action', () => {
     expect(assess(trial, 'apple', 'give')).toEqual({ objectCorrect: true, actionCorrect: false, combinedCorrect: false, outcome: 'retry' });
   });
-  it.each(['tap', 'incomplete'] as const)('leaves action comprehension unknown for %s', gesture => {
-    expect(assess(trial, 'apple', gesture)).toEqual({ objectCorrect: true, actionCorrect: null, combinedCorrect: false, outcome: 'motor' });
+  it('leaves action comprehension unknown for an unfinished drag', () => {
+    expect(assess(trial, 'apple', 'incomplete')).toEqual({ objectCorrect: true, actionCorrect: null, combinedCorrect: false, outcome: 'motor' });
+  });
+  it('accepts a tap to show without needing a hold', () => {
+    expect(assess(trial, 'apple', 'tap')).toEqual({ objectCorrect: true, actionCorrect: true, combinedCorrect: true, outcome: 'correct' });
+    expect(assess(trial, 'banana', 'tap').actionCorrect).toBe(true);
+  });
+  it('keeps a tap during a give prompt out of language ratios', () => {
+    expect(assess({ ...trial, action: 'give' }, 'apple', 'tap').outcome).toBe('motor');
   });
   it('excludes guidance and motor slips from independent language ratios', () => {
     const records = [
       event('1', attemptPayload('find', 's', trial, 'apple', 'show', false, 1)),
       event('2', attemptPayload('find', 's', trial, 'apple', 'give', false, 2)),
       event('3', attemptPayload('find', 's', trial, 'apple', 'show', true, 3)),
-      event('4', attemptPayload('find', 's', trial, 'apple', 'tap', false, 4)),
+      event('4', attemptPayload('give', 's', { ...trial, action: 'give' }, 'apple', 'tap', false, 4)),
       event('5', { kind: 'engagement', contentId: 'milo-apple', sessionId: 's', event: 'story_complete' }),
     ];
     const result = metrics(records);

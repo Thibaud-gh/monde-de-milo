@@ -1,5 +1,8 @@
 # Le Monde de Milo — Overall Design
 
+> Prototype revision, 8 November 2026: chapters open a choice of three games and one story, without a duplicate first-game shortcut. “Montre-moi” now uses a tap; “Donne-moi” uses a drag to Milo. This supersedes the original hold proposal below. The story follows a continuous search: Milo wants his apple, checks water on the table and a banana on the shelf, looks in the basket, finds the apple, then says “Au revoir, Éva ! À bientôt !”. Parent signup lives in the app; the child’s first name is collected with the parent profile. Éva is the recorded prototype name.
+
+
 **Status:** Working specification, 8 November 2026  
 **Learner:** Six-year-old, almost no French comprehension  
 **Goal:** Enjoyable, practical French comprehension and increasingly confident spoken communication.

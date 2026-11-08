@@ -2,21 +2,16 @@ import { chapters } from '../content/chapters';
 import { activities } from '../content/week1';
 import type { ActivityId } from '../content/week1';
 import { useProgress } from '../lib/store';
-import { BasketArt, BookArt, CafeScene } from './Art';
+import { BookArt, FoodArt, Milo } from './Art';
 import { Icon } from './Icon';
 export function Chapter({ index, onHome, onActivity, onStory }: { index: number; onHome: () => void; onActivity: (id: ActivityId) => void; onStory: () => void }) {
   const chapter = chapters[index];
   const progress = useProgress();
   const finished = new Set(progress.events.flatMap(e => e.payload.kind === 'engagement' && e.payload.event === 'activity_complete' ? [e.payload.contentId] : []));
-  const next = activities.slice(0, progress.lesson).find(a => !finished.has(a.id)) ?? activities[progress.lesson - 1];
-  const storyOpened = progress.events.some(e => e.payload.kind === 'engagement' && e.payload.event === 'story_open');
-  const inviteStory = progress.lesson >= 2 && finished.has(next.id) && !storyOpened;
   return <main className="chapter child-screen"><header className="chapter-header"><button className="round" onClick={onHome} aria-label="Tous les chapitres"><Icon name="left"/></button><span>Chapitre {index + 1}</span><span className="brand-flower" aria-hidden="true"><Icon name="flower" size={32}/></span></header>
-    <div className="chapter-title"><h1>{chapter.title}</h1><p>{chapter.subtitle}</p></div>
-    <div className="chapter-scene"><CafeScene/></div>
-    {!chapter.available && <p className="coming-soon">Milo prépare de nouvelles aventures. À bientôt !</p>}
-    <div className="chapter-activities"><section className="chapter-game"><div className="chapter-section-title"><BasketArt/><h2>On joue ?</h2></div>{chapter.available ? <><button className="primary next-game" onClick={inviteStory ? onStory : () => onActivity(next.id)}><Icon name={inviteStory ? 'book' : 'play'}/>{inviteStory ? 'Une petite histoire ?' : next.title}</button><div className="chapter-game-list">{activities.map(a => <button className="chapter-game-row" key={a.id} onClick={() => onActivity(a.id)}><Icon name={a.icon} size={22}/><span>{a.title}</span><Icon name="play" size={18}/></button>)}</div></> : <><p>{chapter.game}</p><span className="soon-label">Bientôt</span></>}</section>
-    <section className="chapter-story"><div className="chapter-section-title"><BookArt/><h2>On écoute ?</h2></div><h3>{chapter.story}</h3>{chapter.available ? <><p>Une petite histoire avec Milo.</p><button className="primary story-play" onClick={onStory}><Icon name="sound"/> Écouter l’histoire</button></> : <span className="soon-label">Bientôt</span>}</section></div>
+    <div className="chapter-welcome"><div><h1>{chapter.title}</h1><p>3 jeux et 1 histoire à découvrir</p></div><Milo waving/></div>
+    {chapter.available ? <div className="chapter-choices"><section aria-labelledby="games-title"><h2 id="games-title">Les jeux <span>Choisis ton jeu</span></h2><div className="game-choices">{activities.map((a, i) => <button className={`game-choice game-choice-${a.id}`} key={a.id} onClick={() => onActivity(a.id)} aria-label={`Jeu ${i + 1} : ${a.title}`}><span className="choice-label">Jeu {i + 1}{finished.has(a.id) && <Icon name="check" size={17}/>}</span><div className="choice-picture"><FoodArt food={a.food}/><span><Icon name={a.icon} size={30}/></span></div><strong>{a.title}</strong><small>{a.instruction}</small><span className="choice-start"><Icon name="play" size={19}/> Jouer</span></button>)}</div></section>
+    <section className="story-choice-section" aria-labelledby="story-title"><h2 id="story-title">L’histoire <span>Installe-toi et écoute</span></h2><button className="story-choice" onClick={onStory} aria-label={`Histoire : ${chapter.story}`}><BookArt/><span><small>Histoire</small><strong>{chapter.story}</strong><span>Une pomme à retrouver au café…</span></span><span className="choice-start"><Icon name="sound" size={21}/> Écouter</span></button></section></div> : <p className="coming-soon">Milo prépare de nouvelles aventures. À bientôt !</p>}
     <footer className="home-footer"><span className="little-dash"/> Tout se rejoue, à ton rythme. <span className="little-dash"/></footer>
   </main>;
 }

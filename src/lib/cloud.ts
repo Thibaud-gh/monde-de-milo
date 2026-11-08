@@ -5,7 +5,7 @@ import { mergeEvents } from './model';
 import type { LearningEvent } from './model';
 const url = import.meta.env.VITE_SUPABASE_URL;
 const key = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
-export const supabase = url && key ? createClient(url, key) : null;
+export const supabase = url && key ? createClient(url, key, { auth: { flowType: 'pkce' } }) : null;
 let currentSession: Session | null = null;
 let busy: Promise<void> | null = null;
 let status = supabase ? 'Sign in to connect this device.' : 'Local progress · cloud not configured';
@@ -44,10 +44,10 @@ async function performSync() {
   try {
     // One pseudonymous learner per parent in this first milestone. The stable owner ID
     // also acts as its profile ID, so two devices cannot create competing profiles.
-    const { error: profileError } = await supabase.from('learner_profiles').upsert({ id: owner, owner_id: owner, nickname: 'Milo learner' }, { onConflict: 'id', ignoreDuplicates: true });
+    const { error: profileError } = await supabase.from('learner_profiles').upsert({ id: owner, owner_id: owner, nickname: typeof currentSession.user.user_metadata.child_name === 'string' ? currentSession.user.user_metadata.child_name.trim().normalize('NFC').slice(0, 80) || 'Éva' : 'Éva' }, { onConflict: 'id', ignoreDuplicates: true });
     if (profileError) throw profileError;
     if (currentSession?.user.id !== owner) return;
-    const { data: profile, error: settingsError } = await supabase.from('learner_profiles').select('lesson,lesson_updated_at').eq('id', owner).single();
+    const { data: profile, error: settingsError } = await supabase.from('learner_profiles').select('lesson,lesson_updated_at,nickname').eq('id', owner).single();
     if (settingsError) throw settingsError;
     const settings = getStore();
     if (new Date(settings.lessonUpdatedAt).getTime() > new Date(profile.lesson_updated_at).getTime()) {
@@ -56,7 +56,7 @@ async function performSync() {
     } else if (new Date(settings.lessonUpdatedAt).getTime() < new Date(profile.lesson_updated_at).getTime()) {
       updateStore(s => ({ ...s, lesson: profile.lesson, lessonUpdatedAt: profile.lesson_updated_at }));
     }
-    updateStore(s => ({ ...s, profileId: owner, profileOwner: owner, events: s.events.map(e => ({ ...e, profileId: owner, ownerId: owner })) }));
+    updateStore(s => ({ ...s, profileId: owner, profileOwner: owner, learnerName: profile.nickname === 'Milo learner' ? 'Éva' : profile.nickname, events: s.events.map(e => ({ ...e, profileId: owner, ownerId: owner })) }));
     const pending = getStore().events.filter(e => !e.synced);
     for (let i = 0; i < pending.length; i += 100) {
       const batch = pending.slice(i, i + 100);

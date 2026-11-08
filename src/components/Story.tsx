@@ -1,10 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
-import { story } from '../content/week1';
-import { record, getStore } from '../lib/store';
+import { storyForLearner } from '../content/week1';
+import { record, getStore, useProgress } from '../lib/store';
 import { playAudio, stopAudio } from '../lib/audio';
-import { CafeScene } from './Art';
+import { StoryScene } from './Art';
 import { Icon } from './Icon';
 export function Story({ onHome }: { onHome: () => void }) {
+  const name = useProgress().learnerName || 'Éva';
+  const [story] = useState(() => storyForLearner(name));
   const [page, setPage] = useState(0);
   const [autoplay, setAutoplay] = useState(false);
   const [playing, setPlaying] = useState(false);
@@ -58,7 +60,7 @@ export function Story({ onHome }: { onHome: () => void }) {
     autoplayRef.current = false; setAutoplay(false); setPage(0);
   }
   return <main className="story child-screen"><header className="story-header"><button className="round" aria-label="Retour au chapitre" onClick={onHome}><Icon name="left"/></button><h1>{story.title}</h1><button className={`round ${autoplay ? 'yellow' : ''}`} aria-label={autoplay ? 'Arrêter la lecture automatique' : 'Lecture automatique'} aria-pressed={autoplay} onClick={toggleAuto}><Icon name={autoplay ? 'pause' : 'play'}/></button></header>
-    <div className="storybook"><div className="story-art"><CafeScene page={currentPage.scene}/></div><div className="story-caption"><p>{currentPage.text}</p><button className="round yellow" aria-label="Réécouter la page" onClick={replayPage}><Icon name="sound"/></button></div></div>
+    <div className="storybook"><div className="story-art"><StoryScene scene={currentPage.scene}/></div><div className="story-caption"><p>{currentPage.text}</p><button className="round yellow" aria-label="Réécouter la page" onClick={replayPage}><Icon name="sound"/></button></div></div>
     {error && <button className="audio-notice" onClick={replayPage}>Touche ici pour écouter.</button>}
     <nav className="story-controls" aria-label="Les pages"><button className="round" aria-label="Page précédente" disabled={page === 0} onClick={() => setPage(p => p - 1)}><Icon name="left"/></button><div className="page-leaves" aria-hidden="true">{story.pages.map((_, i) => <span className={i === page ? 'current' : ''} key={i}/>)}</div>{page === story.pages.length - 1 ? <button className="primary" onClick={restart}><Icon name="refresh"/> Encore !</button> : <button className="round" aria-label="Page suivante" onClick={() => setPage(p => p + 1)}><Icon name="right"/></button>}</nav>
   </main>;

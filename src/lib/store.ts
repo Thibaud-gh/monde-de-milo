@@ -27,6 +27,7 @@ export async function initializeStore() {
         ...data,
         profileId: data.profileOwner ? data.profileId : incoming.profileId,
         profileOwner: data.profileOwner ?? incoming.profileOwner,
+        learnerName: incoming.learnerName ?? data.learnerName,
         events: mergeEvents(data.events, incoming.events),
         lesson: incomingSettings ? incoming.lesson : data.lesson,
         lessonUpdatedAt: incomingSettings ? incoming.lessonUpdatedAt : data.lessonUpdatedAt,

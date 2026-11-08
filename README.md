@@ -1,6 +1,6 @@
 # Le monde de Milo
 
-A picture-book café for a six-year-old beginning French. The child explores **chapters**, each containing its **games and illustrated audio story**. Chapter 1 is playable. Chapters 2–4 are clearly labelled previews, not mastery gates.
+A picture-book café for a six-year-old beginning French. The child explores **chapters**, each containing its **games and illustrated audio story**. Chapter 1 is playable. Chapters 2–4 are clearly labelled as coming soon.
 
 React + TypeScript + Vite, packaged for iPad with Capacitor. The English parent dashboard runs in the same project at `#/parent`; the child app never displays accuracy scores. Supabase optionally connects the iPad and web dashboard. Without configuration, each device has its own local records, with no fake sample progress.
 
@@ -50,11 +50,13 @@ Progress uses Capacitor Preferences on iOS and localStorage in the browser. Expo
 
 ## Connect Supabase (free plan)
 
+The Milo project is now configured locally and in GitHub Actions for `zjsrxwsgrbkocovrtbuh` (Ireland). Its schema is installed. Anonymous reads of both tables were rejected. Account creation, confirmation and authenticated cross-device sync still require user testing. The following steps document setup for a fresh project.
+
 The Supabase **project owner account** and your **app parent login** are separate things. Your child does not need either account.
 
 1. Create a free project at <https://supabase.com/dashboard>. Choose an appropriate nearby region and retain the database password privately.
 2. Open the SQL editor and run [`supabase/schema.sql`](supabase/schema.sql) once on this **new project**. It creates the protected tables, grants and row-level security policies. Do not put real child names or other identifying information into the sample nickname.
-3. In **Authentication → Users**, use **Add user → Create new user** to create your parent login with an email and password; confirm the email there for this personal prototype. You enter that password yourself. Keep public signups disabled if you only need this family account.
+3. Keep email signup and email confirmation enabled in Supabase Authentication. Set the Site URL to your published app URL, and allow the exact confirmation callbacks `https://thibaud-gh.github.io/monde-de-milo/?auth=confirm#/parent` and `http://127.0.0.1:5173/?auth=confirm#/parent`. Parents create accounts in the app, confirm their email, and sign in; no manual Supabase user creation is needed.
 4. Find the **project URL** and **publishable key** in the project's connect/API settings. Copy `.env.example` to `.env.local` and fill only those two public client values:
 
    ```dotenv
@@ -63,7 +65,7 @@ The Supabase **project owner account** and your **app parent login** are separat
    ```
 
    Never use a database password, secret key or `service_role` key in frontend configuration. The publishable key is deliberately public; row-level security enforces ownership.
-5. Restart Vite. Sign in through the parent dashboard on your computer. Rebuild and sync the iOS project, install the new build, and sign in to the **same app parent login** through Parents on the iPad.
+5. Restart Vite. Create your parent account through the app’s Parents screen, supplying a child’s first name, email and password; confirm the email, then sign in on your computer. Rebuild and sync the iOS project, install the new build, and sign in to the **same app parent login** through Parents on the iPad.
 6. The first login associates that device's existing local observations with this parent. This first milestone supports **one learner per parent**, not multiple children or two separate parent accounts sharing one learner. A device already associated with another account will refuse to upload into a different account.
 7. Play an activity on the iPad and press **Sync now** in the web dashboard. The dashboard also refreshes from Supabase every 30 seconds while open. Uploads happen after events, login and reconnect. The latest parent-lesson selection syncs between devices too.
 
@@ -81,20 +83,20 @@ Free Supabase projects may pause after a week of low activity. Play remains loca
 
 The static site contains the interface and bundled illustrations/audio. Family records remain in Supabase and require a parent login. GitHub Pages does not host the database. Changing repository variables requires a new build. Relative asset paths support both root domains and GitHub Pages project subpaths.
 
-The repository and Supabase project belong in your accounts. Supabase credentials are configured independently of website publication.
+Parents sign up in the app; Supabase Auth stores credentials, and the protected learner profile stores the child’s first name. Éva has named recordings; other names appear in the home greeting and use unnamed story recordings until their narration is prepared. The repository and Supabase project belong in your accounts. Supabase credentials are configured independently of website publication.
 
 ## What's included
 
-- Chapter home and per-chapter game/story view; 3 playable Chapter 1 activities.
-- 650 ms touch-and-hold to show, pointer drag to give, generous drop tolerance.
+- Chapter home and per-chapter game/story view; 3 playable games and a separate story in Chapter 1.
+- Tap to show, pointer drag to give, generous drop tolerance.
 - Identical food layout for show/give within an activity; independent random layout and balanced mixed trials.
 - Guided opening, audio replay, fading visual help and forgiving retries. Help stays attached to the whole trial so a successful guided retry is never reported as independent.
-- Six static illustrated story pages, prepared French narration, manual page turns, optional autoplay and replay, with no quiz.
+- Six coherent apple-search story scenes, Éva’s name in the greeting and farewell, prepared French narration, manual page turns, optional autoplay and replay, with no quiz.
 - Separate object/action/combined ratios, guided attempts, motor slips, story engagement and manual speaking observations.
 - Local progress, optional duplicate-safe cloud sync, parent-lesson setting, JSON export.
-- Locally bundled Delius and Nunito fonts and 21 prepared French neural-voice MP3 clips. Milo uses `fr-FR-EloiseNeural` at a slightly slower pace, matching FrenchKid’s original no-account workflow. Playback never falls back to a system voice. See the audio preparation instructions below.
+- Locally bundled Delius and Nunito fonts and 25 prepared French neural-voice MP3 clips. Milo uses `fr-FR-EloiseNeural` at a slightly slower pace, matching FrenchKid’s original no-account workflow. Playback never falls back to a system voice. See the audio preparation instructions below.
 
-The web build is currently a browser app, not an offline-installable PWA: native iOS bundles its content for offline use. A service worker and web install manifest can be added separately. Touch-and-hold still needs playtesting with your child; simulator/mouse tests do not establish that the gesture is comfortable for a six-year-old.
+The web build is currently a browser app, not an offline-installable PWA: native iOS bundles its content for offline use. A service worker and web install manifest can be added separately. The tap and drag controls still need playtesting with your child; simulator/mouse tests do not establish that the gesture is comfortable for a six-year-old.
 
 See [the original design](01_Le_Monde_de_Milo_Design.md), [Week 1 content](Milo_Week1.md) and [visual direction and references](docs/visual-direction.md).
 

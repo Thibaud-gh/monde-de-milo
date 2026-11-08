@@ -38,7 +38,7 @@ A generic warm-cream/serif/terracotta proposal would look like an adult lifestyl
 
 ## Playtest questions
 
-Does holding feel natural? Can she switch between holding and dragging the same food without a layout clue? Can she identify every food without reading? Can she find audio replay independently? Parent observations must distinguish gesture confusion from language understanding.
+Does tapping feel natural? Can she switch between tapping and dragging the same food without a layout clue? Can she identify every food without reading? Can she find audio replay independently? Parent observations must distinguish gesture confusion from language understanding.
 
 ## Feedback applied during the first build
 

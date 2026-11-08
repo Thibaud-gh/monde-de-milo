@@ -1,5 +1,8 @@
 # Le Monde de Milo — Week 1 Lessons and Game Specification
 
+> Prototype revision, 8 November 2026: chapters open a choice of three games and one story, without a duplicate first-game shortcut. “Montre-moi” now uses a tap; “Donne-moi” uses a drag to Milo. This supersedes the original hold proposal below. The story follows a continuous search: Milo wants his apple, checks water on the table and a banana on the shelf, looks in the basket, finds the apple, then says “Au revoir, Éva ! À bientôt !”. Parent signup lives in the app; the child’s first name is collected with the parent profile. Éva is the recorded prototype name.
+
+
 **Chapter:** Bonjour, Milo ! / Le panier de Milo  
 **Learner:** Age six, absolute French beginner  
 **Format:** Three parent-led sessions of approximately 30 minutes, optional 5–10-minute iPad practice, and one short illustrated French audio story.
@@ -132,12 +135,12 @@ A short illustrated café mission. Milo gives a sequence of **single** spoken in
 
 | Page | French narration / on-screen caption | Illustration direction |
 |---|---|---|
-| 1 | « Bonjour ! Je m'appelle Milo. » | Milo the teddy bear waves in his cosy café. |
-| 2 | « Oh ! Une pomme ! » | Milo notices a red apple on a table. |
-| 3 | « Et une banane ! » | Milo discovers a banana next to it. |
-| 4 | « Où est la pomme ? » | The apple is hidden from Milo's view; his expression shows he's searching. |
-| 5 | « Ah ! La pomme ! Bravo ! » | Milo finds the apple; happy resolution. |
-| 6 | « Au revoir, Milo ! » | Milo waves goodbye. |
+| 1 | « Bonjour, Éva ! Je cherche ma pomme. » | Milo thinks of his missing apple in the café. |
+| 2 | « Sur la table ? Non, c’est de l’eau ! » | Milo checks the water on the table. |
+| 3 | « Sur l’étagère ? Non, c’est une banane ! » | Milo checks the banana on the shelf. |
+| 4 | « Et dans le panier ? Voyons… » | The basket cloth lifts; the apple is still hidden. |
+| 5 | « Ah ! Ma pomme ! Merci, Éva ! » | The apple is revealed inside the basket. |
+| 6 | « Au revoir, Éva ! À bientôt ! » | Milo waves with the apple in his hand. |
 
 The narrative is intentionally very simple for a complete beginner. A small amount of context-supported language (*je m'appelle*, *et*, *ah*) is acceptable; do not require her to memorise it. Keep illustrations semantically precise (especially the apple's location on pages 4–5). Future stories should reuse prior vocabulary while gently adding new material.
 

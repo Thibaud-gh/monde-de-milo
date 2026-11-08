@@ -7,6 +7,7 @@ export type Attempt = {
   performedAction: PerformedAction; assisted: boolean; attemptNumber: number;
   objectCorrect: boolean; actionCorrect: boolean | null; combinedCorrect: boolean;
   outcome: 'correct' | 'retry' | 'motor';
+  interactionVersion?: 'tap-show-v2';
 };
 export type Engagement = {
   kind: 'engagement'; contentId: string; sessionId: string;
@@ -19,16 +20,17 @@ export type Assessment = {
 };
 export type Payload = Attempt | Engagement | Assessment;
 export type LearningEvent = { id: string; profileId: string; ownerId: string | null; createdAt: string; payload: Payload; synced: boolean };
-export type Store = { profileId: string; profileOwner: string | null; events: LearningEvent[]; lesson: number; lessonUpdatedAt: string };
+export type Store = { profileId: string; profileOwner: string | null; learnerName?: string; events: LearningEvent[]; lesson: number; lessonUpdatedAt: string };
 export function assess(trial: Trial, selected: Food, performed: PerformedAction) {
-  const motor = performed === 'tap' || performed === 'incomplete';
+  const motor = performed === 'incomplete' || (performed === 'tap' && trial.action === 'give');
+  const action = performed === 'tap' ? 'show' : performed;
   const objectCorrect = selected === trial.food;
-  const actionCorrect = motor ? null : performed === trial.action;
+  const actionCorrect = motor ? null : action === trial.action;
   const combinedCorrect = objectCorrect && actionCorrect === true;
   return { objectCorrect, actionCorrect, combinedCorrect, outcome: (motor ? 'motor' : combinedCorrect ? 'correct' : 'retry') as Attempt['outcome'] };
 }
 export function attemptPayload(activity: ActivityId, sessionId: string, trial: Trial, selected: Food, performed: PerformedAction, assisted: boolean, attemptNumber: number): Attempt {
-  return { kind: 'attempt', chapter: 'week-1', activity, sessionId, trialId: trial.id, phrase: phrase(trial.action, trial.food), targetObject: trial.food, targetAction: trial.action, selectedObject: selected, performedAction: performed, assisted, attemptNumber, ...assess(trial, selected, performed) };
+  return { kind: 'attempt', interactionVersion: 'tap-show-v2', chapter: 'week-1', activity, sessionId, trialId: trial.id, phrase: phrase(trial.action, trial.food), targetObject: trial.food, targetAction: trial.action, selectedObject: selected, performedAction: performed, assisted, attemptNumber, ...assess(trial, selected, performed) };
 }
 export function metrics(events: LearningEvent[]) {
   const attempts = events.map(e => e.payload).filter((p): p is Attempt => p.kind === 'attempt');
