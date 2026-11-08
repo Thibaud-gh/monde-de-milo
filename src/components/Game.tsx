@@ -86,9 +86,12 @@ export function Game({ activity, onHome }: { activity: ActivityId; onHome: () =>
   function handleAttempt(food: Food, performed: PerformedAction) {
     if (blocked.current || !audioReady) return;
     const current = trialRef.current;
+    const result = assess(current, food, performed);
+    // An unfinished gesture is not an answer. Keep the prompt and support level
+    // unchanged so the child can move the food around and try again freely.
+    if (result.outcome === 'motor') return;
     attempt.current++;
     record(attemptPayload(activity, sessionId, current, food, performed, assisted.current, attempt.current));
-    const result = assess(current, food, performed);
     if (result.combinedCorrect) {
       blocked.current = true; setBusy(true); setFeedback(current.action === 'give' ? 'Merci !' : 'Oui, bravo !');
       playAudio(current.action === 'give' ? 'merci' : 'bravo', current.action === 'give' ? 'Merci !' : 'Bravo !');
@@ -104,7 +107,7 @@ export function Game({ activity, onHome }: { activity: ActivityId; onHome: () =>
     } else {
       // Freeze input during feedback, so repeated pointer events cannot race the prompt.
       blocked.current = true; setBusy(true);
-      setFeedback(result.outcome === 'motor' ? 'Encore un petit essai !' : 'On essaie encore !');
+      setFeedback('On essaie encore !');
       playAudio('encore', 'On essaie encore !');
       timers.current.push(setTimeout(() => {
         assisted.current = true; setHint(true); blocked.current = false; setBusy(false); setFeedback(''); speak();
@@ -138,8 +141,8 @@ export function Game({ activity, onHome }: { activity: ActivityId; onHome: () =>
     setHolding(null);
     if (cancelled) return;
     // Some touch environments coalesce move events. The release position still
-      // distinguishes a quick drag from a tap when no move callback arrived.
-      const moved = g.moved || Math.hypot(event.clientX - g.x, event.clientY - g.y) > 14;
+    // distinguishes a quick drag from a tap when no move callback arrived.
+    const moved = g.moved || Math.hypot(event.clientX - g.x, event.clientY - g.y) > 14;
     handleAttempt(g.food, moved ? inDrop(event.clientX, event.clientY) ? 'give' : 'incomplete' : 'tap');
   }
   if (isComplete) return <main className="completion child-screen"><button className="round home-corner" aria-label="Retour au chapitre" onClick={onHome}><Icon name="left"/></button><Milo happy waving/><h1>Merci pour ton aide !</h1><p>À bientôt au café.</p><button className="primary" onClick={onHome}><Icon name="book"/> Au chapitre</button></main>;
