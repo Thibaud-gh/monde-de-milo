@@ -83,7 +83,7 @@ Free Supabase projects may pause after a week of low activity. Play remains loca
 
 The static site contains the interface and bundled illustrations/audio. Family records remain in Supabase and require a parent login. GitHub Pages does not host the database. Changing repository variables requires a new build. Relative asset paths support both root domains and GitHub Pages project subpaths.
 
-Parents sign up in the app; Supabase Auth stores credentials, and the protected learner profile stores the child’s first name. Éva has named recordings; other names appear in the home greeting and use unnamed story recordings until their narration is prepared. The repository and Supabase project belong in your accounts. Supabase credentials are configured independently of website publication.
+Parents sign up in the app; Supabase Auth stores credentials, and the protected learner profile stores the child’s first name. Éva has a complete named voice pack for greetings, game instructions, feedback and stories. Every line is generated as one utterance; the name is never spliced onto another recording. Eva/Éva spelling selects that pack; other names use the preserved unnamed pack. The repository and Supabase project belong in your accounts. Supabase credentials are configured independently of website publication.
 
 ## What's included
 
@@ -94,7 +94,7 @@ Parents sign up in the app; Supabase Auth stores credentials, and the protected 
 - Six coherent apple-search story scenes, Éva’s name in the greeting and farewell, prepared French narration, manual page turns, optional autoplay and replay, with no quiz.
 - Separate object/action/combined ratios, guided attempts, motor slips, story engagement and manual speaking observations.
 - Local progress, optional duplicate-safe cloud sync, parent-lesson setting, JSON export.
-- Locally bundled Delius and Nunito fonts and 25 prepared French neural-voice MP3 clips. Milo uses `fr-FR-EloiseNeural` at a slightly slower pace, matching FrenchKid’s original no-account workflow. Playback never falls back to a system voice. See the audio preparation instructions below.
+- Locally bundled Delius and Nunito fonts and 46 bundled French neural-voice MP3 clips: a new 21-clip Éva pack, the 21 unnamed clips, and four retained legacy named clips. Milo uses `fr-FR-EloiseNeural` at a slightly slower pace, matching FrenchKid’s original no-account workflow. Playback never falls back to a system voice. See the audio preparation instructions below.
 
 The web build is currently a browser app, not an offline-installable PWA: native iOS bundles its content for offline use. A service worker and web install manifest can be added separately. The tap and drag controls still need playtesting with your child; simulator/mouse tests do not establish that the gesture is comfortable for a six-year-old.
 
@@ -108,10 +108,12 @@ FrenchKid used Microsoft Edge neural voices through `edge-tts`: Éloïse for Ros
 python3 -m venv .venv
 .venv/bin/python -m pip install -r scripts/audio-requirements.txt
 .venv/bin/python scripts/generate-audio.py --sample
-.venv/bin/python scripts/generate-audio.py
+.venv/bin/python scripts/generate-audio.py --prefix eva- --force
 npm run ios:sync
 ```
 
-Version 7.3.1 is pinned because the older 7.2.7 installed with FrenchKid could no longer connect after the service changed. Generation requires internet; playback does not. The transcript is `public/audio/phrases.json`; `catalog.json` records each file’s voice and rate. Existing matching clips are cached. Use `--force` only to deliberately regenerate. To try Denise, use `--voice fr-FR-DeniseNeural --sample`; rebuild after choosing a voice.
+Version 7.3.1 is pinned because the older 7.2.7 installed with FrenchKid could no longer connect after the service changed. Generation requires internet; playback does not. The transcript is `public/audio/phrases.json`; `catalog.json` records each file’s voice, rate and, for new recordings, its content hash. `--prefix eva-` limits generation to the Éva pack and leaves the unnamed files untouched. The sample command previews the whole Éva greeting. Existing matching clips are cached. Audio URLs include the file hash so forced regeneration reaches existing browsers. Use `--force` only to deliberately regenerate. To try Denise, use `--voice fr-FR-DeniseNeural --sample`; rebuild after choosing a voice.
 
 A human recording can replace any corresponding MP3 file under the same stable ID. Maintain the transcript and catalog alongside it. The app does not contain or need an ElevenLabs key.
+
+Game feedback waits for its complete recording before advancing or replaying the prompt; a fixed animation delay must never cut off a name.

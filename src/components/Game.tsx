@@ -1,15 +1,18 @@
+import { narrationFor } from '../content/narration';
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import type { CSSProperties, PointerEvent } from 'react';
-import { activities, foodLayout, foods, makeTrials, phrase } from '../content/week1';
+import { activities, foodLayout, foods, makeTrials } from '../content/week1';
 import type { ActivityId, Food } from '../content/week1';
 import { attemptPayload, assess } from '../lib/model';
 import type { PerformedAction } from '../lib/model';
-import { record } from '../lib/store';
+import { record, useProgress } from '../lib/store';
 import { playAudio, stopAudio } from '../lib/audio';
 import { FoodArt, Milo } from './Art';
 import { Icon } from './Icon';
 type Gesture = { food: Food; pointerId: number; x: number; y: number; moved: boolean };
 export function Game({ activity, onHome }: { activity: ActivityId; onHome: () => void }) {
+  const profile = useProgress();
+  const [name] = useState(() => profile.learnerName || 'Éva');
   const [trials] = useState(() => makeTrials(activity));
   const [layout] = useState(() => foodLayout(activity));
   const [sessionId] = useState(() => crypto.randomUUID());
@@ -52,9 +55,23 @@ export function Game({ activity, onHome }: { activity: ActivityId; onHome: () =>
     if (sceneRef.current) observer.observe(sceneRef.current);
     return () => observer.disconnect();
   }, [index, trial.food, isComplete]);
+  function say(id: string, onEnd?: () => void, onError?: () => void) {
+    const clip = narrationFor(id, name);
+    playAudio(clip.audio, clip.text, onEnd, onError);
+  }
+  function sayThen(id: string, minimumDelay: number, next: () => void) {
+    const started = Date.now();
+    let finished = false;
+    const finish = () => {
+      if (finished) return;
+      finished = true;
+      timers.current.push(setTimeout(next, Math.max(0, minimumDelay - (Date.now() - started))));
+    };
+    say(id, finish, finish);
+  }
   function speak() {
     setAudioError(false); setAudioReady(false);
-    playAudio(`${trial.action}-${trial.food}`, phrase(trial.action, trial.food), () => setAudioReady(true), () => { setAudioError(true); setAudioReady(false); });
+    say(`${trial.action}-${trial.food}`, () => setAudioReady(true), () => { setAudioError(true); setAudioReady(false); });
   }
   useEffect(() => {
     const startedAt = Date.now();
@@ -67,7 +84,7 @@ export function Game({ activity, onHome }: { activity: ActivityId; onHome: () =>
   }, [activity, sessionId]);
   useEffect(() => {
     if (isComplete) {
-      playAudio('fini', 'Merci pour ton aide ! À bientôt !');
+      say('fini');
       return stopAudio;
     }
     trialRef.current = trial; indexRef.current = index; attempt.current = 0;
@@ -81,7 +98,7 @@ export function Game({ activity, onHome }: { activity: ActivityId; onHome: () =>
   }, [index]);
   function showHint() {
     assisted.current = true; setHint(true); setAudioError(false); setAudioReady(false);
-    playAudio(trial.action === 'show' ? 'showHint' : 'giveHint', trial.action === 'show' ? 'Touche simplement l’image.' : 'Garde le doigt sur l’image et glisse jusqu’à Milo.', speak, () => { setAudioError(true); });
+    say(trial.action === 'show' ? 'showHint' : 'giveHint', speak, () => { setAudioError(true); });
   }
   function handleAttempt(food: Food, performed: PerformedAction) {
     if (blocked.current || !audioReady) return;
@@ -94,24 +111,22 @@ export function Game({ activity, onHome }: { activity: ActivityId; onHome: () =>
     record(attemptPayload(activity, sessionId, current, food, performed, assisted.current, attempt.current));
     if (result.combinedCorrect) {
       blocked.current = true; setBusy(true); setFeedback(current.action === 'give' ? 'Merci !' : 'Oui, bravo !');
-      playAudio(current.action === 'give' ? 'merci' : 'bravo', current.action === 'give' ? 'Merci !' : 'Bravo !');
       setHolding(current.action === 'show' ? food : null);
       if (current.action === 'give') setReceived(food);
-      timers.current.push(setTimeout(() => {
+      sayThen(current.action === 'give' ? 'merci' : 'bravo', 1300, () => {
         setHolding(null); setReceived(null);
         if (indexRef.current + 1 === trials.length) {
           record({ kind: 'engagement', contentId: activity, sessionId, event: 'activity_complete' });
         }
         setIndex(i => i + 1);
-      }, 1300));
+      });
     } else {
       // Freeze input during feedback, so repeated pointer events cannot race the prompt.
       blocked.current = true; setBusy(true);
       setFeedback('On essaie encore !');
-      playAudio('encore', 'On essaie encore !');
-      timers.current.push(setTimeout(() => {
+      sayThen('encore', 1100, () => {
         assisted.current = true; setHint(true); blocked.current = false; setBusy(false); setFeedback(''); speak();
-      }, 1100));
+      });
     }
   }
   function begin(event: PointerEvent<HTMLButtonElement>, food: Food) {
@@ -147,7 +162,7 @@ export function Game({ activity, onHome }: { activity: ActivityId; onHome: () =>
   }
   if (isComplete) return <main className="completion child-screen"><button className="round home-corner" aria-label="Retour au chapitre" onClick={onHome}><Icon name="left"/></button><Milo happy waving/><h1>Merci pour ton aide !</h1><p>À bientôt au café.</p><button className="primary" onClick={onHome}><Icon name="book"/> Au chapitre</button></main>;
   return <main className="game child-screen">
-    <header className="game-header"><button className="round" aria-label="Retour au chapitre" onClick={onHome}><Icon name="left"/></button><div className="prompt"><span className="game-name">{activities.find(a => a.id === activity)?.title}</span><h1>{feedback || phrase(trial.action, trial.food)}</h1></div><button className="round yellow" aria-label="Réécouter" onClick={() => { if (!busy) speak(); }} disabled={busy}><Icon name="sound"/></button><button className="round" aria-label="Un petit coup de main" onClick={showHint} disabled={busy}><Icon name="help"/></button></header>
+    <header className="game-header"><button className="round" aria-label="Retour au chapitre" onClick={onHome}><Icon name="left"/></button><div className="prompt"><span className="game-name">{activities.find(a => a.id === activity)?.title}</span><h1>{feedback || narrationFor(`${trial.action}-${trial.food}`, name).text}</h1></div><button className="round yellow" aria-label="Réécouter" onClick={() => { if (!busy) speak(); }} disabled={busy}><Icon name="sound"/></button><button className="round" aria-label="Un petit coup de main" onClick={showHint} disabled={busy}><Icon name="help"/></button></header>
     {audioError && <button className="audio-notice" onClick={speak}><Icon name="sound"/> Touche ici pour écouter.</button>}
     <div className="game-scene" ref={sceneRef}>
       <div className="game-window"><span/><span/></div><div className="game-shelf"><span>bonjour</span><i/></div>

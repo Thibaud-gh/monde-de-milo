@@ -1,4 +1,5 @@
 import { learner } from './learner';
+import { narrationFor } from './narration';
 export const foods = {
   apple: { name: 'la pomme', label: 'Une pomme', english: 'Apple' },
   banana: { name: 'la banane', label: 'Une banane', english: 'Banana' },
@@ -18,29 +19,14 @@ export const activities: {
   { id: 'mission', title: 'La mission de Milo', description: 'Écoute : montre ou donne !', lesson: 3, icon: 'flag', food: 'bread', instruction: 'Touche ou glisse : écoute Milo.' },
 ];
 export type StorySceneId = 'search' | 'table' | 'shelf' | 'basket' | 'found' | 'goodbye';
-export const story: {
-  id: string; title: string; pages: { text: string; audio: string; scene: StorySceneId }[];
-} = {
-  id: 'milo-apple', title: 'Milo cherche sa pomme', pages: [
-    { text: `Bonjour, ${learner.firstName} ! Je cherche ma pomme.`, audio: 'story-1', scene: 'search' },
-    { text: 'Sur la table ? Non, c’est de l’eau !', audio: 'story-2', scene: 'table' },
-    { text: 'Sur l’étagère ? Non, c’est une banane !', audio: 'story-3', scene: 'shelf' },
-    { text: 'Et dans le panier ? Voyons…', audio: 'story-4', scene: 'basket' },
-    { text: `Ah ! Ma pomme ! Merci, ${learner.firstName} !`, audio: 'story-5', scene: 'found' },
-    { text: `Au revoir, ${learner.firstName} ! À bientôt !`, audio: 'story-6', scene: 'goodbye' },
-  ],
-};
-// Keep prepared narration and captions aligned for other learner names.
-// Éva has named recordings; other profiles use the same story with unnamed clips.
+const storyScenes: StorySceneId[] = ['search', 'table', 'shelf', 'basket', 'found', 'goodbye'];
 export function storyForLearner(name: string) {
-  if (name.normalize('NFC') === learner.firstName) return story;
-  const replacements: Record<string, string> = {
-    'story-1': 'Bonjour ! Je cherche ma pomme.',
-    'story-5': 'Ah ! Ma pomme ! Merci !',
-    'story-6': 'Au revoir ! À bientôt !',
+  return {
+    id: 'milo-apple', title: 'Milo cherche sa pomme',
+    pages: storyScenes.map((scene, index) => ({ ...narrationFor(`story-${index + 1}`, name), scene })),
   };
-  return { ...story, pages: story.pages.map(page => replacements[page.audio] ? { ...page, text: replacements[page.audio], audio: `${page.audio}-generic` } : page) };
 }
+export const story = storyForLearner(learner.firstName);
 export function phrase(action: Action, food: Food) {
   return `${action === 'show' ? 'Montre-moi' : 'Donne-moi'} ${foods[food].name} !`;
 }

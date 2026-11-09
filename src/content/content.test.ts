@@ -1,3 +1,4 @@
+import { hasEvaRecordings, narrationFor } from './narration';
 import { describe, expect, it } from 'vitest';
 import { readFileSync, existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
@@ -20,6 +21,23 @@ describe('prepared French voice content', () => {
     expect(alternate.pages.at(-1)?.text).not.toContain('Éva');
     for (const page of alternate.pages) expect(phrases[page.audio]).toBe(page.text);
     expect(story.pages.map(page => page.scene)).toEqual(['search', 'table', 'shelf', 'basket', 'found', 'goodbye']);
+  });
+  it('selects one whole-sentence recording for every Éva prompt and its unnamed alternative', () => {
+    const ids = ['bonjour', 'merci', 'bravo', 'encore', 'showHint', 'giveHint', 'fini',
+      ...Array.from({ length: 6 }, (_, index) => `story-${index + 1}`),
+      ...Object.keys(foods).flatMap(food => [`show-${food}`, `give-${food}`])];
+    for (const id of ids) {
+      const named = narrationFor(id, 'Éva');
+      const generic = narrationFor(id, 'Alex');
+      expect(named.audio).toBe(`eva-${id}`);
+      expect(phrases[named.audio]).toBe(named.text);
+      expect(generic.text).not.toMatch(/Éva|Eva/);
+      expect(phrases[generic.audio]).toBe(generic.text);
+    }
+    expect(narrationFor('show-apple', 'Éva').text).toBe('Montre-moi la pomme, Éva !');
+    expect(hasEvaRecordings('Eva')).toBe(true);
+    expect(hasEvaRecordings('Éva'.normalize('NFD'))).toBe(true);
+    expect(hasEvaRecordings('Évan')).toBe(false);
   });
   it('bundles every declared clip as a nonempty MP3', () => {
     for (const id of Object.keys(phrases)) {

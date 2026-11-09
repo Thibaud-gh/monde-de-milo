@@ -1,5 +1,5 @@
 import catalog from '../../public/audio/catalog.json';
-const clips: Record<string, { file: string; signature: string }> = catalog.clips;
+const clips: Record<string, { file: string; signature: string; contentHash?: string }> = catalog.clips;
 // Play prepared voice clips only. Missing audio never falls back to system TTS.
 let current: HTMLAudioElement | null = null;
 let generation = 0;
@@ -11,7 +11,7 @@ export function playAudio(id: string, caption: string, onEnd?: () => void, onErr
   stopAudio();
   const token = generation;
   const clip = clips[id];
-  const audio = new Audio(`${import.meta.env.BASE_URL}audio/${clip?.file ?? `${id}.mp3`}?v=${clip?.signature.slice(0, 12) ?? 'missing'}`);
+  const audio = new Audio(`${import.meta.env.BASE_URL}audio/${clip?.file ?? `${id}.mp3`}?v=${(clip?.contentHash ?? clip?.signature)?.slice(0, 12) ?? 'missing'}`);
   current = audio;
   audio.onended = () => { if (token === generation) { current = null; onEnd?.(); } };
   let failed = false;

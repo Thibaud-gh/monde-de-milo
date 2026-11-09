@@ -16,3 +16,11 @@
 - Physical iPad signing with a free Personal Team, seven-day rebuild/install and child playtesting.
 
 Simulator and local browser observations from development review are preserved; these are not child learning evidence. Supabase content is private to signed-in owners; the app interface and repository remain public.
+
+## Whole-utterance Éva narration — 9 November 2026
+
+- Generated 21 fresh `eva-` MP3 clips with one complete utterance per request. Greeting, instructions, hints, feedback and story all select from this pack; no name concatenation is used.
+- Verified all 21 unnamed clips against their committed bytes: unchanged. Other learner names select those clips; Eva and Éva select the named pack.
+- All 21 new files decode with ffprobe; their content hashes and transcripts match the catalog. File hashes version playback URLs even when text stays the same.
+- Game feedback advances only after the audio finishes (and the minimum visual delay), preventing names from being cut off by the old 1.1/1.3-second timers.
+- 15 tests pass, including pack selection and caption consistency for both named and unnamed users. Native assets are refreshed using the existing simulator build, without rebuilding the native shell or running UI automation. Subjective voice quality still needs listening review.

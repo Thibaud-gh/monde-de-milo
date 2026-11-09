@@ -175,6 +175,195 @@
       "voice": "fr-FR-EloiseNeural",
       "rate": "-10%",
       "signature": "7a2c7178388c25222e8a73dbdbd38eb7ae98704a8046645bc2a3b0853158f36d"
+    },
+    "eva-bonjour": {
+      "file": "eva-bonjour.mp3",
+      "text": "Bonjour Éva, viens jouer avec moi !",
+      "voice": "fr-FR-EloiseNeural",
+      "rate": "-10%",
+      "signature": "d21f9d5c71e1c25643b68f5d6bcb95fec017662e9d0791dd9313dd3205b960dd",
+      "contentHash": "0414f3cbb68f8692c6433a45d7e528746cabde4076043adc99b5bb683e8251a2",
+      "generation": "whole-utterance"
+    },
+    "eva-merci": {
+      "file": "eva-merci.mp3",
+      "text": "Merci Éva !",
+      "voice": "fr-FR-EloiseNeural",
+      "rate": "-10%",
+      "signature": "52ea35928f87c4886ac97e4fd528bad7479111bdebe73624c193ef1403cd6e4d",
+      "contentHash": "a0abd7fc2707ef1eaadb4257702318d4517e0297d866eb938ca8311e920f2605",
+      "generation": "whole-utterance"
+    },
+    "eva-bravo": {
+      "file": "eva-bravo.mp3",
+      "text": "Bravo Éva !",
+      "voice": "fr-FR-EloiseNeural",
+      "rate": "-10%",
+      "signature": "33acc861f72f65350ee7f213bc71926e989a26e7c62d843fb35a023e6d438a0b",
+      "contentHash": "5c453b69657519dbca705dd391fc639f2dd27f7e4931620ba5ce54bb8801f730",
+      "generation": "whole-utterance"
+    },
+    "eva-encore": {
+      "file": "eva-encore.mp3",
+      "text": "On essaie encore, Éva !",
+      "voice": "fr-FR-EloiseNeural",
+      "rate": "-10%",
+      "signature": "f6582351757cd156e32309e5ef3f10c41c02f4c7c25b1f48a7b401f2435c35d1",
+      "contentHash": "b7da3faf5039c999a33b44fda074abe8ce1bbbeafe6ca44b4c91174712c2ea20",
+      "generation": "whole-utterance"
+    },
+    "eva-showHint": {
+      "file": "eva-showHint.mp3",
+      "text": "Éva, touche simplement l’image.",
+      "voice": "fr-FR-EloiseNeural",
+      "rate": "-10%",
+      "signature": "a284d58a1812858244c7de2cb435ad78eb5434bbc129449048b71cf18a5d61b7",
+      "contentHash": "77693cbf5dabcbab17bd27433fa8669073d5dd870ece87d4fa682be3f741056d",
+      "generation": "whole-utterance"
+    },
+    "eva-giveHint": {
+      "file": "eva-giveHint.mp3",
+      "text": "Éva, garde le doigt sur l’image et glisse jusqu’à moi.",
+      "voice": "fr-FR-EloiseNeural",
+      "rate": "-10%",
+      "signature": "63c38b0128baaf04421345733442d4499ff379a61d056f7fd64cceb27bfec51f",
+      "contentHash": "b5eb95b2fb13fd07297a430c81d37cfc3b07f85529d65ebdb189ae598b0bffb1",
+      "generation": "whole-utterance"
+    },
+    "eva-fini": {
+      "file": "eva-fini.mp3",
+      "text": "Merci pour ton aide Éva, à bientôt !",
+      "voice": "fr-FR-EloiseNeural",
+      "rate": "-10%",
+      "signature": "2044ad0d498235dfe48aa531ebf08e949e87e1296af5eae993c7adfd0f31c11b",
+      "contentHash": "f692338b22b4e9d56dce57c95df6014b7fe82ae65e2a7b68c0f6d640e1bd0f59",
+      "generation": "whole-utterance"
+    },
+    "eva-story-1": {
+      "file": "eva-story-1.mp3",
+      "text": "Bonjour Éva, je cherche ma pomme.",
+      "voice": "fr-FR-EloiseNeural",
+      "rate": "-10%",
+      "signature": "ebdd61a2314267a356baf1d12be984bc3e698190887c6c210a3b3412a0687110",
+      "contentHash": "b0a71f788ff378d92c8445c8bbbfb06e1248a4696c8133a9e33483592917a0ea",
+      "generation": "whole-utterance"
+    },
+    "eva-story-2": {
+      "file": "eva-story-2.mp3",
+      "text": "Sur la table ? Non, c’est de l’eau !",
+      "voice": "fr-FR-EloiseNeural",
+      "rate": "-10%",
+      "signature": "1026c7922cc8cefb33e6521a88945c710d6a8dc3a237c43c23194832225cb0ca",
+      "contentHash": "7ad6c48b7f4e50421e742dd9d7e30f2f76844873ec2f451b772edfe9509372d9",
+      "generation": "whole-utterance"
+    },
+    "eva-story-3": {
+      "file": "eva-story-3.mp3",
+      "text": "Sur l’étagère ? Non, c’est une banane !",
+      "voice": "fr-FR-EloiseNeural",
+      "rate": "-10%",
+      "signature": "920e3e83b9ff64ee12786ad3cefbef28908ef2c7f48b111492a13f92ec7f36f6",
+      "contentHash": "6750dd1960322a7b447d5d6d678f5f2ebe57b3459dfc4f626fb6e0a780583bec",
+      "generation": "whole-utterance"
+    },
+    "eva-story-4": {
+      "file": "eva-story-4.mp3",
+      "text": "Et dans le panier ? Voyons…",
+      "voice": "fr-FR-EloiseNeural",
+      "rate": "-10%",
+      "signature": "fd458e40eb48d23ca6de54799e92d3a1877bc3f21c504063102280bd81574a58",
+      "contentHash": "4c3ce20e0b514361f601f6a8d017830521d0e4733b81d364022c1f1022a75451",
+      "generation": "whole-utterance"
+    },
+    "eva-story-5": {
+      "file": "eva-story-5.mp3",
+      "text": "Ah, ma pomme ! Merci Éva !",
+      "voice": "fr-FR-EloiseNeural",
+      "rate": "-10%",
+      "signature": "052b7cc8a8a2adb8ba3e85c7f99fc76c1245cb9f4f5b8a85252cc05d8fa4fa94",
+      "contentHash": "ee4875698b01af1f9a31331f24b4aaf038113c8ba84b5400c716a6b1ac8bff96",
+      "generation": "whole-utterance"
+    },
+    "eva-story-6": {
+      "file": "eva-story-6.mp3",
+      "text": "Au revoir Éva, à bientôt !",
+      "voice": "fr-FR-EloiseNeural",
+      "rate": "-10%",
+      "signature": "7c0dcf7154fa60458bff7a0a5524b9c595f225be8147b3cbe0b43c9f77a5fc37",
+      "contentHash": "3059c8a359a693a4b0d8d61c579f41ea7faaa109dcb9fbe3d383df752ad33386",
+      "generation": "whole-utterance"
+    },
+    "eva-show-apple": {
+      "file": "eva-show-apple.mp3",
+      "text": "Montre-moi la pomme, Éva !",
+      "voice": "fr-FR-EloiseNeural",
+      "rate": "-10%",
+      "signature": "821f205956f3eeb2730b1ffe2fb282cf6012ffa691257a6c80df4c56812dafd4",
+      "contentHash": "bacb7b78869e0fc06ae14cdbe2d2b4df83f79e571fafe3882c96de899be6da46",
+      "generation": "whole-utterance"
+    },
+    "eva-give-apple": {
+      "file": "eva-give-apple.mp3",
+      "text": "Donne-moi la pomme, Éva !",
+      "voice": "fr-FR-EloiseNeural",
+      "rate": "-10%",
+      "signature": "9dfd97acf383940f952c3b8108e1d94b10c88b6e132e102190195c7bb91f2556",
+      "contentHash": "f7e3b6df01d9348668002a30b8f7f7dab6f40bd36b23800eea8ac272b5e0a34f",
+      "generation": "whole-utterance"
+    },
+    "eva-show-banana": {
+      "file": "eva-show-banana.mp3",
+      "text": "Montre-moi la banane, Éva !",
+      "voice": "fr-FR-EloiseNeural",
+      "rate": "-10%",
+      "signature": "96492651fd011eca34b87a1234b8bef56397cfb791731676ae07298e64d772bf",
+      "contentHash": "29ada8b7827948455503e58f0e3e77f17ded1ad6e7e03f7ac85bbb4d48f0a715",
+      "generation": "whole-utterance"
+    },
+    "eva-give-banana": {
+      "file": "eva-give-banana.mp3",
+      "text": "Donne-moi la banane, Éva !",
+      "voice": "fr-FR-EloiseNeural",
+      "rate": "-10%",
+      "signature": "31209adc8f6a83406056a4b7108abbb08870062f31da551fc38ba5bcc137597f",
+      "contentHash": "cc853e3ae32d37e601296484a470d1ab9c74fa58d21209477cfc4cd92b71450f",
+      "generation": "whole-utterance"
+    },
+    "eva-show-water": {
+      "file": "eva-show-water.mp3",
+      "text": "Montre-moi l’eau, Éva !",
+      "voice": "fr-FR-EloiseNeural",
+      "rate": "-10%",
+      "signature": "bca8b54c3d1bb38ceb2ed86bee2bacbc854d3cf58f7266081e24e0e8e93f901d",
+      "contentHash": "87a6a38761980e4142508f9e609a934920ffd886ab63491d322247d996ca185e",
+      "generation": "whole-utterance"
+    },
+    "eva-give-water": {
+      "file": "eva-give-water.mp3",
+      "text": "Donne-moi l’eau, Éva !",
+      "voice": "fr-FR-EloiseNeural",
+      "rate": "-10%",
+      "signature": "18c89294fcfef88046216155cad6a462130691a358121ed3fb6d63deb36c9498",
+      "contentHash": "a0329058e73df0acc1e4f288989f8f8d096eb4cd200206aec284a546fd70b074",
+      "generation": "whole-utterance"
+    },
+    "eva-show-bread": {
+      "file": "eva-show-bread.mp3",
+      "text": "Montre-moi le pain, Éva !",
+      "voice": "fr-FR-EloiseNeural",
+      "rate": "-10%",
+      "signature": "d2d3343782ffcd9477017b502e7a4478de111899af168950a725d2b3a7740952",
+      "contentHash": "9e8326e62b9209ab414ccc50085a51b7ffbcfe2c77561d625ac26c71792b7d39",
+      "generation": "whole-utterance"
+    },
+    "eva-give-bread": {
+      "file": "eva-give-bread.mp3",
+      "text": "Donne-moi le pain, Éva !",
+      "voice": "fr-FR-EloiseNeural",
+      "rate": "-10%",
+      "signature": "65ca42e51b8c34bbe3d5b58d414f9bb8fd4cf5b5d2fceab2514e6e4d76f562e8",
+      "contentHash": "70f215d3377e2c300916173f2863b00eb18987bdcf51f7c2351b1b8b29bb1634",
+      "generation": "whole-utterance"
     }
   }
 }

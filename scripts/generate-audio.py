@@ -20,7 +20,14 @@ VOICE = 'fr-FR-EloiseNeural'
 RATE = '-10%'
 
 async def generate(args):
-    selected = {'bonjour': PHRASES['bonjour']} if args.sample else PHRASES
+    selected = PHRASES
+    if args.prefix:
+        selected = {key: text for key, text in selected.items() if key.startswith(args.prefix)}
+        if not selected:
+            raise ValueError(f'No phrases match prefix {args.prefix!r}')
+    if args.sample:
+        name = next(iter(selected)) if args.prefix else 'eva-bonjour'
+        selected = {name: selected[name]}
     catalog_path = AUDIO / 'catalog.json'
     catalog = json.loads(catalog_path.read_text()) if catalog_path.exists() else {'provider': 'edge-tts', 'clips': {}}
     for name, text in selected.items():
@@ -38,7 +45,7 @@ async def generate(args):
             temporary.replace(target)
         finally:
             temporary.unlink(missing_ok=True)
-        catalog.setdefault('clips', {})[name] = {'file': f'{name}.mp3', 'text': text, 'voice': args.voice, 'rate': RATE, 'signature': signature}
+        catalog.setdefault('clips', {})[name] = {'file': f'{name}.mp3', 'text': text, 'voice': args.voice, 'rate': RATE, 'signature': signature, 'contentHash': hashlib.sha256(target.read_bytes()).hexdigest(), 'generation': 'whole-utterance'}
         catalog['provider'] = 'edge-tts'
         catalog_path.write_text(json.dumps(catalog, indent=2, ensure_ascii=False) + '\n')
         print(f'Generated: {name} ({args.voice})')
@@ -49,4 +56,5 @@ if __name__ == '__main__':
     parser.add_argument('--voice', default=VOICE)
     parser.add_argument('--sample', action='store_true')
     parser.add_argument('--force', action='store_true')
+    parser.add_argument('--prefix', help='Generate only IDs starting with this prefix, e.g. eva-')
     asyncio.run(generate(parser.parse_args()))
