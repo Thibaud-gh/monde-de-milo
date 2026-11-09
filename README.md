@@ -1,6 +1,6 @@
 # Le monde de Milo
 
-A picture-book café for a six-year-old beginning French. The child explores **chapters**, each containing its **games and illustrated audio story**. Chapter 1 is playable. Chapters 2–4 are clearly labelled as coming soon.
+A picture-book café for a six-year-old beginning French. The child explores **chapters**, each containing its **games and illustrated story**. Chapter 1 keeps its prepared narration. Chapter 2 is a parent-led speaking lesson while the replacement voice model is pending; Chapters 3–4 are coming soon.
 
 React + TypeScript + Vite, packaged for iPad with Capacitor. The English parent dashboard runs in the same project at `#/parent`; the child app never displays accuracy scores. Supabase optionally connects the iPad and web dashboard. Without configuration, each device has its own local records, with no fake sample progress.
 
@@ -10,7 +10,17 @@ React + TypeScript + Vite, packaged for iPad with Capacitor. The English parent 
 - Web app: <https://thibaud-gh.github.io/monde-de-milo/>
 - Parent dashboard: <https://thibaud-gh.github.io/monde-de-milo/#/parent>
 
-GitHub Actions builds and deploys `main` automatically. Cloud progress sharing remains disabled until the Supabase configuration is added; without it, each device saves its own local records.
+GitHub Actions builds and deploys `main` automatically. Cloud sharing is configured for this project. Without configuration in a fresh checkout, each device saves its own local records.
+
+## Session 2 · A snack at Milo’s café
+
+Open **Parents → Session 2 · Lesson plan** for a printable, approximately 25-minute plan with exact parent/Milo prompts, expected responses and support. The same plan is in [docs/session-2.md](docs/session-2.md).
+
+The new productive chunk is “Je voudrais…” with the four familiar foods. Milo introduces “J’ai faim / J’ai soif” through actions. Chapter 2 offers four-turn activities with fading support: a full model, a sentence starter, then café practice. The adult supplies Milo’s voice and records speaking observations; there is no microphone or automatic speech assessment.
+
+In each chapter, complete Game 1, then Game 2, then repeat Game 3 for practice. The first two games complete once and resume if interrupted. Existing Chapter 1 completions count. Stories remain independently replayable. Checkpoints and completion events use the existing owner-protected event sync; no database migration is required.
+
+**All new TTS generation is paused, including Session 2.** Saved Linux reference/model/entry-point instructions: [docs/tts-workflow.md](docs/tts-workflow.md). Do not run the older generation examples below until the parent explicitly resumes voice work.
 
 ## Run locally
 

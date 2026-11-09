@@ -3,6 +3,9 @@ import { useEffect, useState } from 'react';
 import type { ActivityId } from './content/week1';
 import { Home } from './components/Home';
 import { Chapter } from './components/Chapter';
+import { canStartActivity } from './lib/progression';
+import { getStore } from './lib/store';
+import { SessionTwoGame, SessionTwoStory } from './components/SessionTwo';
 import { Game } from './components/Game';
 import { Story } from './components/Story';
 import { Dashboard } from './components/Dashboard';
@@ -26,8 +29,8 @@ export default function App() {
   function openParent() { setMenuMusicActive(false); if (parentPassed) { go('parent'); history.replaceState(null, '', '#/parent'); } else setGate(true); }
   if (gate) return <><Home onChapter={openChapter} onParent={openParent}/><ParentGate onPass={() => { setParentPassed(true); setGate(false); go('parent'); history.replaceState(null, '', '#/parent'); }} onClose={goHome}/></>;
   if (screen === 'parent') return <Dashboard onHome={goHome}/>;
-  if (screen === 'story') return <Story onHome={() => go('chapter')}/>;
-  if (screen === 'chapter') return <Chapter index={chapterIndex} onHome={goHome} onActivity={id => go(id)} onStory={() => go('story')}/>;
-  if (screen !== 'home') return <Game key={screen} activity={screen} onHome={() => go('chapter')}/>;
+  if (screen === 'story') return chapterIndex === 1 ? <SessionTwoStory onHome={() => go('chapter')}/> : <Story onHome={() => go('chapter')}/>;
+  if (screen === 'chapter') return <Chapter index={chapterIndex} onHome={goHome} onActivity={id => { if (canStartActivity(getStore().events, chapterIndex, id)) go(id); }} onStory={() => go('story')}/>;
+  if (screen !== 'home') return chapterIndex === 1 ? <SessionTwoGame key={screen} activity={screen} onHome={() => go('chapter')}/> : <Game key={screen} activity={screen} onHome={() => go('chapter')}/>;
   return <Home onChapter={openChapter} onParent={openParent}/>;
 }

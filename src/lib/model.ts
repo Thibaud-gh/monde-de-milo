@@ -11,8 +11,9 @@ export type Attempt = {
 };
 export type Engagement = {
   kind: 'engagement'; contentId: string; sessionId: string;
-  event: 'activity_open' | 'activity_complete' | 'activity_close' | 'story_open' | 'story_page' | 'story_complete' | 'story_replay' | 'story_audio_replay' | 'story_close';
+  event: 'activity_checkpoint' | 'activity_open' | 'activity_complete' | 'activity_close' | 'story_open' | 'story_page' | 'story_complete' | 'story_replay' | 'story_audio_replay' | 'story_close';
   page?: number; durationSeconds?: number; familiar?: boolean;
+  trials?: Trial[]; completedTurns?: number;
 };
 export type Assessment = {
   kind: 'assessment'; term: string; level: 'independent' | 'prompted' | 'not-yet';

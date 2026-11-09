@@ -5,6 +5,7 @@ import { activities, foodLayout, foods, makeTrials } from '../content/week1';
 import type { ActivityId, Food } from '../content/week1';
 import { attemptPayload, assess } from '../lib/model';
 import type { PerformedAction } from '../lib/model';
+import { checkpoint } from '../lib/progression';
 import { record, useProgress } from '../lib/store';
 import { playAudio, stopAudio } from '../lib/audio';
 import { FoodArt, Milo } from './Art';
@@ -13,10 +14,11 @@ type Gesture = { food: Food; pointerId: number; x: number; y: number; moved: boo
 export function Game({ activity, onHome }: { activity: ActivityId; onHome: () => void }) {
   const profile = useProgress();
   const [name] = useState(() => profile.learnerName || 'Éva');
-  const [trials] = useState(() => makeTrials(activity));
+  const [saved] = useState(() => checkpoint(profile.events, 0, activity));
+  const [trials] = useState(() => saved?.trials ?? makeTrials(activity));
   const [layout] = useState(() => foodLayout());
   const [sessionId] = useState(() => crypto.randomUUID());
-  const [index, setIndex] = useState(0);
+  const [index, setIndex] = useState(saved?.completedTurns ?? 0);
   const [hint, setHint] = useState(trials[0].guided);
   const [demoVisible, setDemoVisible] = useState(true);
   const [demoRun, setDemoRun] = useState(0);
@@ -78,6 +80,7 @@ export function Game({ activity, onHome }: { activity: ActivityId; onHome: () =>
   useEffect(() => {
     const startedAt = Date.now();
     record({ kind: 'engagement', contentId: activity, sessionId, event: 'activity_open' });
+    if (activity !== 'mission') record({ kind: 'engagement', contentId: activity, sessionId, event: 'activity_checkpoint', trials, completedTurns: index });
     return () => {
       stopAudio();
       timers.current.forEach(clearTimeout);
@@ -121,11 +124,10 @@ export function Game({ activity, onHome }: { activity: ActivityId; onHome: () =>
       blocked.current = true; setBusy(true); setFeedback(current.action === 'give' ? 'Merci !' : 'Oui, bravo !');
       setHolding(current.action === 'show' ? food : null);
       if (current.action === 'give') setReceived(food);
+      // Save the accepted turn before the feedback finishes, including the final completion.
+      record({ kind: 'engagement', contentId: activity, sessionId, event: indexRef.current + 1 === trials.length ? 'activity_complete' : 'activity_checkpoint', trials, completedTurns: indexRef.current + 1 });
       sayThen(current.action === 'give' ? 'merci' : 'bravo', 1300, () => {
         setHolding(null); setReceived(null);
-        if (indexRef.current + 1 === trials.length) {
-          record({ kind: 'engagement', contentId: activity, sessionId, event: 'activity_complete' });
-        }
         setIndex(i => i + 1);
       });
     } else {

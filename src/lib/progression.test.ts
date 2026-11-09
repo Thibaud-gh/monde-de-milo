@@ -1,0 +1,43 @@
+import { describe, expect, it } from 'vitest';
+import type { Engagement, LearningEvent } from './model';
+import type { Trial } from '../content/week1';
+import { activityKey, activityState, canStartActivity, checkpoint } from './progression';
+const event = (contentId: string, name: Engagement['event'], extra: Partial<Engagement> = {}): LearningEvent => ({ id: crypto.randomUUID(), profileId: 'p', ownerId: null, synced: false, createdAt: new Date().toISOString(), payload: { kind: 'engagement', contentId, sessionId: 's', event: name, ...extra } });
+const plan: Trial[] = ['apple', 'banana', 'water', 'bread'].map((food, i) => ({ id: `t${i}`, food: food as Trial['food'], action: 'show', guided: i === 0 }));
+describe('one-time introductions and repeatable practice', () => {
+  it('opens only the first game for a new learner', () => {
+    expect(activityState([], 1, 'find')).toBe('ready');
+    expect(canStartActivity([], 1, 'give')).toBe(false);
+    expect(canStartActivity([], 1, 'mission')).toBe(false);
+  });
+  it('requires both introductions, closes completed introductions and keeps practice replayable', () => {
+    const first = event('chapter-2:find', 'activity_complete');
+    const second = event('chapter-2:give', 'activity_complete');
+    expect(canStartActivity([second], 1, 'mission')).toBe(false);
+    expect(activityState([first], 1, 'find')).toBe('done');
+    expect(canStartActivity([first], 1, 'give')).toBe(true);
+    expect(canStartActivity([first], 1, 'mission')).toBe(false);
+    expect(canStartActivity([first, second], 1, 'mission')).toBe(true);
+    expect(canStartActivity([first, second, event('chapter-2:mission', 'activity_complete')], 1, 'mission')).toBe(true);
+    expect(canStartActivity([first, second], 1, 'find')).toBe(false);
+    expect(canStartActivity([first, second], 1, 'give')).toBe(false);
+  });
+  it('honours legacy chapter-one completions without unlocking another chapter', () => {
+    const events = [event('find', 'activity_complete'), event('give', 'activity_complete')];
+    expect(activityKey(0, 'find')).toBe('find');
+    expect(canStartActivity(events, 0, 'mission')).toBe(true);
+    expect(canStartActivity(events, 1, 'mission')).toBe(false);
+    expect(activityState(events, 1, 'find')).toBe('ready');
+  });
+  it('resumes the saved trial order and next turn, even after an older cloud checkpoint arrives late', () => {
+    const events = [event('chapter-2:find', 'activity_checkpoint', { trials: plan, completedTurns: 2 }), event('chapter-2:find', 'activity_checkpoint', { trials: plan, completedTurns: 0 })];
+    expect(checkpoint(events, 1, 'find')).toEqual({ trials: plan, completedTurns: 2 });
+    expect(activityState(events, 1, 'find')).toBe('resume');
+    expect(checkpoint(events, 0, 'find')).toBeUndefined();
+    expect(activityState([...events, event('chapter-2:find', 'activity_complete')], 1, 'find')).toBe('done');
+  });
+  it('ignores invalid checkpoints and starts practice with a fresh round', () => {
+    expect(checkpoint([event('find', 'activity_checkpoint', { trials: plan, completedTurns: 99 })], 0, 'find')).toBeUndefined();
+    expect(checkpoint([event('mission', 'activity_checkpoint', { trials: plan, completedTurns: 2 })], 0, 'mission')).toBeUndefined();
+  });
+});

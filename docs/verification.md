@@ -32,3 +32,12 @@ Simulator and local browser observations from development review are preserved; 
 - Voice playback exposes a start event; input becomes active when playback starts. Browser review confirmed a correct tap accepted during the spoken prompt. Stale audio callbacks cannot activate a later prompt. Off-target drags still return silently.
 - Original 64-second menu music generated without external samples. Mute persists; music ducks under speech and fades/pauses for games, story, parent area and background visibility. Browser mute/unmute controls checked.
 - 23 unit tests cover trial balance, one guided turn, name frequency, early audio readiness, stale callbacks, menu music lifecycle and existing progress logic. TypeScript/Vite build passes. Physical iPad update preserves the installed app’s records and parent session.
+
+## Session 2 and sequential games — 9 November 2026
+
+- 28 unit tests pass, including new progression tests for prerequisites, one-time introductions, repeatable practice, legacy completion IDs, chapter isolation and checkpoint resume after delayed sync. TypeScript/Vite production build passes.
+- Browser QA used an isolated local origin with Supabase disabled, so test speaking observations were not uploaded to the family account. Completed all three new games, checked that interrupted Game 1 resumed at turn two, and verified that Games 1/2 closed after completion and Game 3 offered Replay. “Not this time” also advances, with no mastery gate.
+- Reviewed all six parent-read story pages and its ending. Verified parent guide renders all seven timed sections, exact French parent/Milo prompts, support ladder, complete story script and print control. Screenshots saved locally under /private/tmp.
+- Chapter 2 is parent-led, without new audio. Existing MP3 assets are unchanged. Remote TTS instructions are preserved; all generation remains paused pending the replacement model.
+- Parent-reported speech evidence is saved as assessments, separately from automatic Chapter 1 gesture metrics. A model or starter cannot be labelled independent by the game controls.
+- Checkpoints and chapter-qualified engagement IDs fit the existing JSON event schema; no Supabase schema or access-policy changes were made. Authenticated cross-device verification still requires the signed-in devices.
