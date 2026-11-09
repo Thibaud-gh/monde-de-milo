@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import type { Engagement, LearningEvent } from './model';
 import type { Trial } from '../content/week1';
-import { activityKey, activityState, canStartActivity, checkpoint, gameStage } from './progression';
+import { activityKey, activityState, canStartActivity, checkpoint, gameStage, stageCompletions } from './progression';
 const event = (contentId: string, name: Engagement['event'], extra: Partial<Engagement> = {}): LearningEvent => ({ id: crypto.randomUUID(), profileId: 'p', ownerId: null, synced: false, createdAt: new Date().toISOString(), payload: { kind: 'engagement', contentId, sessionId: 's', event: name, ...extra } });
 const plan: Trial[] = ['apple', 'banana', 'water', 'bread'].map((food, i) => ({ id: `t${i}`, food: food as Trial['food'], action: 'show', guided: i === 0 }));
 describe('one-time introductions and repeatable practice', () => {
@@ -61,5 +61,18 @@ describe('independent game squares', () => {
     expect(checkpoint(saved, 1, 'find', 'understanding')).toBeUndefined();
     expect(gameStage([event('find', 'activity_complete')], 0, 'understanding')).toBe(2);
     expect(gameStage([event('find', 'activity_complete'), event('give', 'activity_complete')], 0, 'understanding')).toBe(3);
+  });
+});
+
+describe('stage stars', () => {
+  it('awards exactly one star per completed stage, including Stage 3, without adding stars for replays', () => {
+    const events = [event('chapter-2:find', 'activity_complete'), event('chapter-2:give', 'activity_complete')];
+    expect(stageCompletions([], 1, 'speaking')).toEqual([false, false, false]);
+    expect(stageCompletions(events.slice(0, 1), 1, 'speaking')).toEqual([true, false, false]);
+    expect(stageCompletions(events, 1, 'speaking')).toEqual([true, true, false]);
+    events.push(event('chapter-2:mission', 'activity_complete'), event('chapter-2:mission', 'activity_complete'));
+    expect(stageCompletions(events, 1, 'speaking')).toEqual([true, true, true]);
+    expect(stageCompletions(events, 1, 'understanding')).toEqual([false, false, false]);
+    expect(gameStage(events, 1, 'speaking')).toBe(3);
   });
 });

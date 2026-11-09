@@ -2,6 +2,9 @@ import type { ActivityId, Trial } from '../content/week1';
 import type { LearningEvent } from './model';
 export type GameKind = 'understanding' | 'speaking';
 export const stageActivities: ActivityId[] = ['find', 'give', 'mission'];
+export function stageCompletions(events: LearningEvent[], chapter: number, kind: GameKind) {
+  return stageActivities.map(activity => completedActivity(events, chapter, activity, kind));
+}
 export function gameStage(events: LearningEvent[], chapter: number, kind: GameKind): 1 | 2 | 3 {
   if (!completedActivity(events, chapter, 'find', kind)) return 1;
   return completedActivity(events, chapter, 'give', kind) ? 3 : 2;

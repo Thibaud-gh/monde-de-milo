@@ -1,6 +1,7 @@
 import type { CSSProperties } from 'react';
-export type IconName = 'home' | 'music' | 'music-off' | 'sound' | 'play' | 'pause' | 'left' | 'right' | 'book' | 'basket' | 'hand' | 'flag' | 'help' | 'parent' | 'close' | 'check' | 'download' | 'refresh' | 'flower';
+export type IconName = 'star' | 'home' | 'music' | 'music-off' | 'sound' | 'play' | 'pause' | 'left' | 'right' | 'book' | 'basket' | 'hand' | 'flag' | 'help' | 'parent' | 'close' | 'check' | 'download' | 'refresh' | 'flower';
 const paths: Record<IconName, React.ReactNode> = {
+  star: <path d="m12 2 3.1 6.3 6.9 1-5 4.9 1.2 6.8-6.2-3.2L5.8 21 7 14.2l-5-4.9 6.9-1Z"/>,
   flower: <path d="M12 1v22M1 12h22M4 4l16 16M20 4 4 20"/>,
   music: <><path d="M9 17V5l11-2v12M9 8l11-2"/><ellipse cx="6" cy="18" rx="3" ry="2"/><ellipse cx="17" cy="16" rx="3" ry="2"/></>,
   'music-off': <><path d="M9 13V5l11-2v12M9 8l11-2M3 3l18 18"/><ellipse cx="6" cy="18" rx="3" ry="2"/><ellipse cx="17" cy="16" rx="3" ry="2"/></>,

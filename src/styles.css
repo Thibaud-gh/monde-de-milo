@@ -36,61 +36,22 @@
 .game-choice:disabled{cursor:default;box-shadow:none;transform:none}.game-choice.locked{background:#e9e9df;border-color:#bbc4ba;color:#52677c}.game-choice.locked .choice-picture{opacity:.5}.game-choice.done{background:#eef2e6;border-color:#a2beb6}.game-choice.done .choice-picture{opacity:.65}.game-choice.done .choice-start{color:#416454}.chapter .home-footer{text-align:center;line-height:1.6}.parent-read-notice{text-align:center;font-size:14px;color:#52677c;padding:10px 20px;margin:0 auto;background:#e4f0ed}.speaking-game{background:var(--paper);padding-bottom:30px}.speaking-scene{display:flex;align-items:center;justify-content:center;gap:25px;max-width:850px;margin:25px auto 12px;padding:0 24px}.speaking-scene>svg{width:200px;max-height:230px;flex-shrink:0}.speech-paper{position:relative;min-width:260px;max-width:420px;min-height:155px;padding:25px;background:#e5eff3;border:2px solid #9db2c1;border-radius:5px 22px 12px 24px;text-align:center}.speech-paper small{font-size:12px}.speech-paper p{font-family:Delius,cursive;font-size:30px;margin:15px 0}.speech-paper>svg{width:75px;height:75px}.speaking-foods{display:flex;justify-content:center;gap:18px;padding:12px 24px}.speaking-foods button{width:140px;height:140px;border:2px solid #d5c78f;background:#f8f0ce;border-radius:18px;box-shadow:0 4px 0 #d5c78f60}.speaking-foods button.selected{border:3px solid #263b59;background:#f8d767}.speaking-foods svg{width:100%;height:100%}.speaking-invitation{text-align:center;font-size:18px}.adult-response{max-width:790px;margin:20px auto 0;padding:18px 24px;border-top:1px solid #a2beb6;line-height:1.6}.adult-response p{margin:0}.adult-response>div{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:10px 0}.adult-response small{color:#52677c}.adult-response button:disabled{opacity:.5;cursor:default}.read-together{background:var(--paper);padding-bottom:25px}.snack-illustration{position:relative;isolation:isolate;max-width:800px;height:340px;margin:25px auto 0;background:repeating-linear-gradient(90deg,#eaf0e4 0 49px,#e0e8da 50px 51px);border-radius:80px 80px 5px 5px;overflow:hidden}.snack-illustration>svg{position:absolute;width:270px;height:295px;bottom:20px;left:calc(50% - 155px)}.snack-table{position:absolute;z-index:-1;bottom:0;height:70px;width:100%;background:#d4ac7e;border-top:10px solid #a97d59}.snack-food{position:absolute;width:135px;height:135px;bottom:5px;left:calc(50% + 70px)}.snack-food svg{width:100%;height:100%}.snack-window{position:absolute;left:10%;top:40px;width:140px;height:180px;background:#cce5ea;border:6px solid #6d929d;border-radius:80px 80px 0 0}.reading-direction{max-width:750px;margin:12px auto 25px;padding:0 24px;text-align:center;color:#52677c;font-size:14px;line-height:1.6}.read-together .story-caption{max-width:850px;margin:auto;justify-content:center;padding:15px 25px}.target-phrase{font-family:Delius,cursive;font-size:30px;color:#263b59}.lesson-plan p{line-height:1.75}.phrase-strip{display:flex;flex-wrap:wrap;gap:10px;margin:20px 0 0}.phrase-strip span{padding:10px 14px;background:#e4f0ed;border-radius:6px}.support-ladder{padding-left:24px;line-height:1.8}.support-ladder li{padding:5px 0}.lesson-step-heading{display:flex;align-items:center;gap:18px}.lesson-step-heading>span{width:45px;height:45px;display:grid;place-items:center;background:#f8d767;border-radius:50%;font-weight:800;flex-shrink:0}.lesson-step-heading h2{margin:5px 0!important}.lesson-step-heading small{color:#52677c}.lesson-step dl{margin:18px 0 0}.lesson-step dl>div{display:grid;grid-template-columns:140px 1fr;gap:20px;border-top:1px solid #dde3d8;padding:13px 0}.lesson-step dt{font-size:13px;font-weight:800}.lesson-step dd{margin:0;line-height:1.7}.lesson-step dd[lang=fr]{font-size:18px}.story-script{padding:18px 0;border-bottom:1px solid #dde3d8}.story-script p{font-family:Delius,cursive;font-size:23px;margin:10px 0}.story-script small,.story-script>span{font-size:13px;color:#52677c}.lesson-plan a{color:#315b78;text-decoration:underline}
 @media(max-width:650px){.speaking-scene{gap:10px;padding:0 15px}.speaking-scene>svg{width:110px;height:160px}.speech-paper{min-width:0;flex:1;padding:15px 12px;min-height:140px}.speech-paper p{font-size:24px}.speaking-foods{gap:10px;padding-inline:12px}.speaking-foods button{width:calc((100vw - 54px)/4);height:100px}.adult-response{margin-inline:15px;padding:15px 0}.adult-response>div{gap:8px}.adult-response button{font-size:13px}.snack-illustration{margin-inline:18px;height:290px}.snack-illustration>svg{width:220px;height:240px;left:calc(50% - 120px)}.snack-food{width:105px;height:105px;left:calc(50% + 40px)}.snack-window{width:95px;height:140px}.lesson-step dl>div{grid-template-columns:1fr;gap:5px}.lesson-plan .dashboard-heading{display:block}.print-plan{margin-top:15px}}
 @media print{body{background:white!important}.dashboard{display:block!important}.dashboard-sidebar,.dashboard-topbar,.sync-banner,.dashboard-footer,.print-plan{display:none!important}.dashboard-main{padding:0!important;max-width:none!important}.lesson-plan{font-size:11pt;color:#172b40}.lesson-plan .dashboard-heading{margin:0 0 20px}.lesson-plan .dashboard-section{box-shadow:none;border:0;padding:10px 0;margin:8px 0}.lesson-step,.story-script{break-inside:avoid}.lesson-plan .dashboard-heading h1{font-size:28pt}.lesson-plan a{color:inherit}}
-/* Each illustrated cover is one activity; its three stages live inside it. */
-.activity-squares {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 24px;
-  max-width: 960px;
-  margin: 30px auto 32px;
-}
-.activity-squares.two-squares { grid-template-columns: repeat(2, minmax(0, 1fr)); max-width: 760px; }
-.activity-square {
-  aspect-ratio: 1;
-  position: relative;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-areas: 'type type' 'art art' 'title title' 'description description' 'stages start';
-  grid-template-rows: 18px minmax(40px, 1fr) auto 34px 30px;
-  gap: 8px;
-  padding: 16px;
-  text-align: center;
-  background: #f8f0ce;
-  border: 2px solid #d5c78f;
-  border-radius: 8px 24px 11px 20px;
-  box-shadow: 0 5px 0 #d5c78f60;
-}
-.activity-square.speaking { background: #e4f0ed; border-color: #a2beb6; box-shadow: 0 5px 0 #a2beb650; }
-.activity-square.story-square {
-  background: #e5eff3;
-  border-color: #9db2c1;
-  box-shadow: 0 5px 0 #9db2c150;
-  grid-template-areas: 'type type' 'art art' 'title title' 'description description' 'start start';
-}
-.square-type { grid-area: type; font-size: 14px; color: #52677c; }
-.square-art { grid-area: art; display: flex; align-items: center; justify-content: center; position: relative; height: 100%; min-height: 0; width: 100%; }
-.square-art > svg:first-child { height: 100%; max-height: 120px; width: auto; max-width: 120px; }
-.square-art > svg:nth-child(2) { height: 55px; width: 55px; margin-left: -30px; align-self: end; }
-.story-square .square-art > svg:first-child { max-width: 150px; max-height: 150px; transform: rotate(-5deg); }
-.activity-square > strong { grid-area: title; font-family: Delius, cursive; font-weight: 400; font-size: 25px; line-height: 1.25; }
-.square-description { grid-area: description; align-self: start; font-size: 12px; line-height: 1.5; color: #52677c; }
-.stage-path { grid-area: stages; display: flex; align-items: center; justify-content: flex-start; gap: 10px; }
-.stage-path > span { position: relative; display: grid; place-items: center; width: 24px; height: 24px; border: 1px solid #9aab9e; border-radius: 50%; font-size: 13px; background: #fff9ed; z-index: 0; }
-.stage-path > span:not(:last-child):after { content: ''; position: absolute; left: 23px; width: 11px; height: 1px; background: #9aab9e; z-index: -1; }
-.stage-path > span.current { background: #f8d767; border: 2px solid #263b59; font-weight: 900; }
-.stage-path > span.completed { background: #6d929d; border-color: #6d929d; color: white; }
-.activity-square .choice-start { grid-area: start; margin: 0; justify-content: flex-end; font-size: 12px; gap: 5px; align-self: center; }
-.story-square .choice-start { justify-content: center; }
+/* Reuse the original three activity cards for games and story. */
+.chapter-card-grid { max-width: 960px; margin: 28px auto 32px; }
+.chapter-card-grid.two-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); max-width: 760px; }
+.chapter-card-grid .game-choice { min-height: 290px; }
+.chapter-card-grid .stage-stars { display: flex; gap: 8px; margin: 0 0 14px; color: #87949c; }
+.stage-stars .earned { color: #ba8821; }
+.stage-stars .earned svg { fill: #f8d767; }
+.chapter-card-grid .story-card { background: #eaf0f4; border-color: #9db2c1; box-shadow: 0 4px 0 #9db2c130; }
 .game:has(.parent-read-notice) .prompt h1 { font-size: clamp(23px, 2.8vw, 33px); }
-@media (max-width: 900px) {
-  .activity-squares { grid-template-columns: repeat(2, minmax(0, 1fr)); max-width: 720px; }
-}
 @media (max-width: 760px) {
-  .activity-squares { gap: 18px; margin-top: 24px; }
-  .activity-square > strong { font-size: 23px; }
+  .chapter-card-grid.two-cards { grid-template-columns: 1fr; }
+  .chapter-card-grid .game-choice { min-height: 160px; }
+  .chapter-card-grid .stage-stars { grid-column: 2; margin-bottom: 10px; }
+  .chapter-card-grid .choice-picture { grid-row: 1 / 6; }
 }
 @media (max-width: 460px) {
-  .activity-squares, .activity-squares.two-squares { grid-template-columns: 1fr; max-width: 330px; }
   .game:has(.parent-read-notice) .game-header { gap: 10px; padding-inline: 15px; }
   .game:has(.parent-read-notice) .game-scene { min-height: 340px; }
   .game .parent-read-notice { font-size: 12px; padding: 8px 15px; }

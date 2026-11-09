@@ -50,3 +50,10 @@ Simulator and local browser observations from development review are preserved; 
 - 31 tests pass, covering independent game progression, legacy checkpoint isolation, and the new understanding transcripts in addition to existing gesture/audio checks. Browser review completed both understanding introductions via equivalent keyboard controls, verified the same square changed to Stage 2 then Stage 3, and confirmed old speaking progress remained at Stage 3.
 - Reviewed the two-square Session 1 layout and the three-square Session 2 layout at desktop and iPad portrait sizes. Temporary viewport override was reset. All browser test records stayed on the isolated, Supabase-disabled preview origin.
 - Updated the printable parent plan to distinguish understanding from parent-led speaking. Existing prepared audio remains unchanged; all new TTS generation remains paused.
+
+## Original activity cards and stage stars — 9 November 2026
+
+- Clarified layout: reuse the original three activity cards for Understanding / Speaking with parent / Story; keep each game’s stages inside its own card. Session 1 retains two cards. Removed the interim square-cover styling.
+- Each game shows three SVG stars. Stage completion fills that stage’s star, including Stage 3. Replay completions do not add extra stars, and existing history fills the corresponding stars automatically.
+- 32 tests pass. Added a progression test for zero, one, two and three earned stars, replay deduplication, track isolation and staying at Stage 3. Browser review showed two stars for understanding and three for speaking on the original three-card row. Test data remained isolated from Supabase.
+- The full Session 2 programme remains available under Parents → Session 2 · Lesson plan (with Print), and in docs/session-2.md. All new TTS remains paused.

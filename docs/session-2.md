@@ -96,7 +96,7 @@ Wave together. The story can be read again whenever she wants.
 
 Record one exact utterance and whether it was spontaneous, after a starter, or after a full model. Tomorrow, invite one real request at snack time (about two minutes).
 
-Session 2 has two games, each in its own square: understanding only, and speaking with a parent (the existing activity). Each game advances independently through Stages 1 → 2 → 3. The first two stages complete once and save the next turn if interrupted; Stage 3 remains replayable. Session 1 has one understanding square plus its story; Session 2 has two game squares plus its story. Understanding never requires a spoken response. Stories remain available independently. Speaking perfectly is never a condition for progression. Adult observations are separate from automatic gesture metrics; no microphone is used.
+Session 2 has two games, each in its own square: understanding only, and speaking with a parent (the existing activity). Each game advances independently through Stages 1 → 2 → 3. The first two stages complete once and save the next turn if interrupted; Stage 3 remains replayable. Each completed stage earns one of three stars on that game’s card; the stars track completion, not speaking accuracy. Session 1 has one understanding square plus its story; Session 2 has two game squares plus its story. Understanding never requires a spoken response. Stories remain available independently. Speaking perfectly is never a condition for progression. Adult observations are separate from automatic gesture metrics; no microphone is used.
 
 ## Voice status
 
