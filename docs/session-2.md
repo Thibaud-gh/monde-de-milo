@@ -30,34 +30,25 @@ Make Milo hungry. You are the café keeper; Milo is the customer. Speak the whol
 - **Her turn:** Let her serve Milo, then invite her to be the customer: “Et toi, tu voudrais quoi ?”
 - **Support:** Model a choice she actually wants: “Je voudrais une banane.” Accept “banane”, respond “Oui, tu voudrais une banane !”, then offer the model once to say together. Serve her even if she does not repeat.
 
-### 3. Game 1 · With a whole model · 7–10 min
+### 3. Game 1 · Understanding only · 7–11 min
 
-Open Chapter 2 → Avec Milo. Four short turns. You read the selected request aloud; she joins in if comfortable.
+Open the first square in Chapter 2: Milo commande. Its stages are tap to show, drag to give, then mixed instructions. Advance through the introductions at her pace; you can spread them over several sessions.
 
-- **You, as yourself:** Écoute : « Je voudrais une pomme. » À toi !
-- **You, as Milo:** Voilà !
-- **Her turn:** A whole model to copy, or just the last words. Let her choose the food so the request means something.
-- **Support:** Say the phrase together once. This is the first introduction, completed once; if you leave, it resumes at the next turn.
+- **You, as yourself:** Je voudrais une pomme. Montre-moi !
+- **You, as Milo:** Je voudrais de l’eau. Donne-moi !
+- **Her turn:** Respond by touching or dragging the food. No spoken answer or repetition is expected.
+- **Support:** Until recordings are ready, read the displayed request aloud as Milo. The help button demonstrates the gesture. An unfinished drag is not a wrong answer. Leave at any time; the introductory stages resume.
 
-### 4. Game 2 · Finish the request · 10–13 min
+### 4. Game 2 · Speaking together · 11–18 min
 
-Open À deux voix. Four turns with less support. Point to the picture rather than supplying the food word immediately.
+Open the second square: Le petit café. This is the speaking activity: Stage 1 Avec Milo (whole model), Stage 2 À deux voix (starter), Stage 3 Le petit café (open role-play). Each stage has four turns; stop early or continue next time as needed.
 
-- **You, as yourself:** Tu voudrais quoi ? Je voudrais…
-- **You, as Milo:** Je t’écoute.
-- **Her turn:** Try finishing the request with the food, then joining the starter and food in one utterance.
-- **Support:** Wait about five seconds. If needed, bring back the whole model using “Un modèle”. This introduction also completes only once; support does not block progress.
+- **You, as yourself:** Écoute : « Je voudrais une pomme. » À toi ! Puis : « Je voudrais… »
+- **You, as Milo:** Bonjour ! Tu voudrais quoi ? Voilà !
+- **Her turn:** Choose a food she wants and try asking for it. Start by joining your model, then finishing a starter, then making a request with less help.
+- **Support:** Wait about five seconds. Accept a food word, expand it once, and serve her even if she does not repeat. You record “with help”, “without help”, or “not this time”; speech is never detected automatically or required to advance. Stage 3 remains replayable.
 
-### 5. Game 3 · Run the café · 13–18 min
-
-Open Le petit café. After that, move straight to the real table. Milo serves while she orders. Play four turns, or stop sooner if tired.
-
-- **You, as yourself:** Milo prépare le goûter. À toi de commander !
-- **You, as Milo:** Bonjour ! Tu voudrais quoi ?
-- **Her turn:** Choose and request a familiar food: “Je voudrais du pain.” A polite “s’il te plaît” is an optional extra, not another target.
-- **Support:** No sentence is shown at first. Offer a starter, then a model if needed. Serve the choice warmly. This game stays available for later practice.
-
-### 6. A story and a turn for her · 18–23 min
+### 5. A story and a turn for her · 18–23 min
 
 Read Le goûter de Milo, using the teddy and objects. The app story is a parent-read book until the new voice is ready.
 
@@ -66,7 +57,7 @@ Read Le goûter de Milo, using the teddy and objects. The app story is a parent-
 - **Her turn:** Join a familiar line if she wants. At the invitation near the end, she can make one real request.
 - **Support:** Do not stop on every page to quiz. On a second reading, pause before the food word only if she enjoys filling it in.
 
-### 7. One last real request · 23–25 min
+### 6. One last real request · 23–25 min
 
 Close the iPad. Give her one fresh opportunity to ask Milo for a snack or water. Finish while it still feels fun.
 
@@ -105,7 +96,7 @@ Wave together. The story can be read again whenever she wants.
 
 Record one exact utterance and whether it was spontaneous, after a starter, or after a full model. Tomorrow, invite one real request at snack time (about two minutes).
 
-The three app games progress in order. Games 1 and 2 complete once, and save the next turn if interrupted. Only Game 3 remains replayable after that. Stories remain available independently. Speaking perfectly is never a condition for progression. Adult observations are separate from automatic gesture metrics; no microphone is used.
+Session 2 has two games, each in its own square: understanding only, and speaking with a parent (the existing activity). Each game advances independently through Stages 1 → 2 → 3. The first two stages complete once and save the next turn if interrupted; Stage 3 remains replayable. Session 1 has one understanding square plus its story; Session 2 has two game squares plus its story. Understanding never requires a spoken response. Stories remain available independently. Speaking perfectly is never a condition for progression. Adult observations are separate from automatic gesture metrics; no microphone is used.
 
 ## Voice status
 

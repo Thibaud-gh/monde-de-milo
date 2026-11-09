@@ -1,3 +1,4 @@
+import { understandingPrompt } from '../content/session2';
 import { narrationFor } from '../content/narration';
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import type { CSSProperties, PointerEvent } from 'react';
@@ -5,16 +6,17 @@ import { activities, foodLayout, foods, makeTrials } from '../content/week1';
 import type { ActivityId, Food } from '../content/week1';
 import { attemptPayload, assess } from '../lib/model';
 import type { PerformedAction } from '../lib/model';
-import { checkpoint } from '../lib/progression';
+import { activityKey, checkpoint } from '../lib/progression';
 import { record, useProgress } from '../lib/store';
 import { playAudio, stopAudio } from '../lib/audio';
 import { FoodArt, Milo } from './Art';
 import { Icon } from './Icon';
 type Gesture = { food: Food; pointerId: number; x: number; y: number; moved: boolean };
-export function Game({ activity, onHome }: { activity: ActivityId; onHome: () => void }) {
+export function Game({ activity, chapter = 0, onHome }: { activity: ActivityId; chapter?: number; onHome: () => void }) {
+  const contentId = activityKey(chapter, activity, 'understanding');
   const profile = useProgress();
   const [name] = useState(() => profile.learnerName || 'Éva');
-  const [saved] = useState(() => checkpoint(profile.events, 0, activity));
+  const [saved] = useState(() => checkpoint(profile.events, chapter, activity, 'understanding'));
   const [trials] = useState(() => saved?.trials ?? makeTrials(activity));
   const [layout] = useState(() => foodLayout());
   const [sessionId] = useState(() => crypto.randomUUID());
@@ -60,6 +62,9 @@ export function Game({ activity, onHome }: { activity: ActivityId; onHome: () =>
     return () => observer.disconnect();
   }, [index, trial.food, isComplete]);
   function say(id: string, onEnd?: () => void, onError?: () => void, onStart?: () => void) {
+    // Session 2 is read by the adult until its voice recordings are prepared.
+    // Never substitute an old clip with a different transcript.
+    if (chapter === 1) { onStart?.(); onEnd?.(); return; }
     const clip = narrationFor(id, name);
     playAudio(clip.audio, clip.text, onEnd, onError, onStart);
   }
@@ -79,14 +84,14 @@ export function Game({ activity, onHome }: { activity: ActivityId; onHome: () =>
   }
   useEffect(() => {
     const startedAt = Date.now();
-    record({ kind: 'engagement', contentId: activity, sessionId, event: 'activity_open' });
-    if (activity !== 'mission') record({ kind: 'engagement', contentId: activity, sessionId, event: 'activity_checkpoint', trials, completedTurns: index });
+    record({ kind: 'engagement', contentId, sessionId, event: 'activity_open' });
+    if (activity !== 'mission') record({ kind: 'engagement', contentId, sessionId, event: 'activity_checkpoint', trials, completedTurns: index });
     return () => {
       stopAudio();
       timers.current.forEach(clearTimeout);
-      record({ kind: 'engagement', contentId: activity, sessionId, event: 'activity_close', durationSeconds: Math.round((Date.now() - startedAt) / 1000) });
+      record({ kind: 'engagement', contentId, sessionId, event: 'activity_close', durationSeconds: Math.round((Date.now() - startedAt) / 1000) });
     };
-  }, [activity, sessionId]);
+  }, [contentId, sessionId]);
   useEffect(() => {
     if (isComplete) {
       say('fini');
@@ -119,13 +124,13 @@ export function Game({ activity, onHome }: { activity: ActivityId; onHome: () =>
     // unchanged so the child can move the food around and try again freely.
     if (result.outcome === 'motor') return;
     attempt.current++;
-    record(attemptPayload(activity, sessionId, current, food, performed, assisted.current, attempt.current));
+    record({ ...attemptPayload(activity, sessionId, current, food, performed, assisted.current, attempt.current), chapter: chapter === 0 ? 'week-1' : 'session-2', ...(chapter === 1 ? { phrase: understandingPrompt(current) } : {}) });
     if (result.combinedCorrect) {
       blocked.current = true; setBusy(true); setFeedback(current.action === 'give' ? 'Merci !' : 'Oui, bravo !');
       setHolding(current.action === 'show' ? food : null);
       if (current.action === 'give') setReceived(food);
       // Save the accepted turn before the feedback finishes, including the final completion.
-      record({ kind: 'engagement', contentId: activity, sessionId, event: indexRef.current + 1 === trials.length ? 'activity_complete' : 'activity_checkpoint', trials, completedTurns: indexRef.current + 1 });
+      record({ kind: 'engagement', contentId, sessionId, event: indexRef.current + 1 === trials.length ? 'activity_complete' : 'activity_checkpoint', trials, completedTurns: indexRef.current + 1 });
       sayThen(current.action === 'give' ? 'merci' : 'bravo', 1300, () => {
         setHolding(null); setReceived(null);
         setIndex(i => i + 1);
@@ -170,9 +175,10 @@ export function Game({ activity, onHome }: { activity: ActivityId; onHome: () =>
     const moved = g.moved || Math.hypot(event.clientX - g.x, event.clientY - g.y) > 14;
     handleAttempt(g.food, moved ? inDrop(event.clientX, event.clientY) ? 'give' : 'incomplete' : 'tap');
   }
-  if (isComplete) return <main className="completion child-screen"><button className="round home-corner" aria-label="Retour au chapitre" onClick={onHome}><Icon name="left"/></button><Milo happy waving/><h1>Merci pour ton aide !</h1><p>À bientôt au café.</p><button className="primary" onClick={onHome}><Icon name="book"/> Au chapitre</button></main>;
+  if (isComplete) return <main className="completion child-screen"><button className="round home-corner" aria-label="Retour au chapitre" onClick={onHome}><Icon name="left"/></button><Milo happy waving/><h1>Merci pour ton aide !</h1><p>{activity === 'mission' ? 'Tu peux revenir jouer quand tu veux.' : 'L’étape suivante t’attend sur le même carré.'}</p><button className="primary" onClick={onHome}><Icon name="book"/> Au chapitre</button></main>;
   return <main className="game child-screen">
-    <header className="game-header"><button className="round" aria-label="Retour au chapitre" onClick={onHome}><Icon name="left"/></button><div className="prompt"><span className="game-name">{activities.find(a => a.id === activity)?.title}</span><h1>{feedback || narrationFor(`${trial.action}-${trial.food}`, name).text}</h1></div><button className="round yellow" aria-label="Réécouter" onClick={() => { if (!busy) speak(); }} disabled={busy}><Icon name="sound"/></button><button className="round" aria-label="Un petit coup de main" onClick={showHint} disabled={busy}><Icon name="help"/></button></header>
+    <header className="game-header"><button className="round" aria-label="Retour au chapitre" onClick={onHome}><Icon name="left"/></button><div className="prompt"><span className="game-name">{chapter === 1 ? 'Milo commande' : activities.find(a => a.id === activity)?.title} · Étape {activity === 'find' ? 1 : activity === 'give' ? 2 : 3}</span><h1>{feedback || (chapter === 1 ? understandingPrompt(trial) : narrationFor(`${trial.action}-${trial.food}`, name).text)}</h1></div>{chapter === 0 && <button className="round yellow" aria-label="Réécouter" onClick={() => { if (!busy) speak(); }} disabled={busy}><Icon name="sound"/></button>}<button className="round" aria-label="Un petit coup de main" onClick={showHint} disabled={busy}><Icon name="help"/></button></header>
+    {chapter === 1 && <p className="parent-read-notice">L’adulte lit la demande de Milo. Écoute et montre ou donne : tu n’as pas besoin de parler.</p>}
     {audioError && <button className="audio-notice" onClick={speak}><Icon name="sound"/> Touche ici pour écouter.</button>}
     <div className="game-scene" ref={sceneRef}>
       <div className="game-window"><span/><span/></div><div className="game-shelf"><span>bonjour</span><i/></div>

@@ -16,9 +16,9 @@ GitHub Actions builds and deploys `main` automatically. Cloud sharing is configu
 
 Open **Parents → Session 2 · Lesson plan** for a printable, approximately 25-minute plan with exact parent/Milo prompts, expected responses and support. The same plan is in [docs/session-2.md](docs/session-2.md).
 
-The new productive chunk is “Je voudrais…” with the four familiar foods. Milo introduces “J’ai faim / J’ai soif” through actions. Chapter 2 offers four-turn activities with fading support: a full model, a sentence starter, then café practice. The adult supplies Milo’s voice and records speaking observations; there is no microphone or automatic speech assessment.
+The new productive chunk is “Je voudrais…” with the four familiar foods. Milo introduces “J’ai faim / J’ai soif” through actions. Chapter 2 has two game squares: understanding (touch responses only) and speaking with a parent. The speaking game keeps its four-turn stages with fading support: a full model, a sentence starter, then café practice. Until recordings are ready, the adult reads understanding prompts aloud. There is no microphone or automatic speech assessment.
 
-In each chapter, complete Game 1, then Game 2, then repeat Game 3 for practice. The first two games complete once and resume if interrupted. Existing Chapter 1 completions count. Stories remain independently replayable. Checkpoints and completion events use the existing owner-protected event sync; no database migration is required.
+Chapter 1 has two squares (understanding and story); Chapter 2 has three (understanding, speaking with a parent, story). Each game square independently progresses through Stages 1 → 2 → 3. Stages 1/2 complete once and resume if interrupted; Stage 3 remains replayable. Existing Chapter 1 progress and Chapter 2 speaking progress are retained. Stories remain independently replayable. Checkpoints and completion events use the existing owner-protected event sync; no database migration is required.
 
 **All new TTS generation is paused, including Session 2.** Saved Linux reference/model/entry-point instructions: [docs/tts-workflow.md](docs/tts-workflow.md). Do not run the older generation examples below until the parent explicitly resumes voice work.
 
@@ -97,10 +97,10 @@ Parents sign up in the app; Supabase Auth stores credentials, and the protected 
 
 ## What's included
 
-- Chapter home and per-chapter game/story view; 3 playable games and a separate story in Chapter 1.
+- Chapter home with one square per game and one for the story; stages live inside each game square.
 - Tap to show, pointer drag to give, generous drop tolerance.
 - Identical food layout for show/give within an activity; independent random layout and balanced mixed trials.
-- Four foods from Game 1 onward: Game 1 only shows, Game 2 only gives, and Game 3 mixes both. Each game has eight turns and one guided opening turn. Objects activate when speech starts, allowing answers before narration ends. Hand demonstrations play once; requested help can replay them.
+- Four foods from Stage 1 onward in the understanding game: Stage 1 only shows, Stage 2 only gives, and Stage 3 mixes both. Each stage has eight turns and one guided opening turn. Objects activate when speech starts, allowing answers before narration ends. Hand demonstrations play once; requested help can replay them.
 - Quiet original menu music with a saved mute preference, voice ducking, fades and background pausing. No music during games, stories or the parent dashboard.
 - Guided opening, audio replay, fading visual help and forgiving retries. Help stays attached to the whole trial so a successful guided retry is never reported as independent.
 - Six coherent apple-search story scenes, Éva’s name in the greeting and farewell, prepared French narration, manual page turns, optional autoplay and replay, with no quiz.

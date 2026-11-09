@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import type { Engagement, LearningEvent } from './model';
 import type { Trial } from '../content/week1';
-import { activityKey, activityState, canStartActivity, checkpoint } from './progression';
+import { activityKey, activityState, canStartActivity, checkpoint, gameStage } from './progression';
 const event = (contentId: string, name: Engagement['event'], extra: Partial<Engagement> = {}): LearningEvent => ({ id: crypto.randomUUID(), profileId: 'p', ownerId: null, synced: false, createdAt: new Date().toISOString(), payload: { kind: 'engagement', contentId, sessionId: 's', event: name, ...extra } });
 const plan: Trial[] = ['apple', 'banana', 'water', 'bread'].map((food, i) => ({ id: `t${i}`, food: food as Trial['food'], action: 'show', guided: i === 0 }));
 describe('one-time introductions and repeatable practice', () => {
@@ -39,5 +39,27 @@ describe('one-time introductions and repeatable practice', () => {
   it('ignores invalid checkpoints and starts practice with a fresh round', () => {
     expect(checkpoint([event('find', 'activity_checkpoint', { trials: plan, completedTurns: 99 })], 0, 'find')).toBeUndefined();
     expect(checkpoint([event('mission', 'activity_checkpoint', { trials: plan, completedTurns: 2 })], 0, 'mission')).toBeUndefined();
+  });
+});
+
+describe('independent game squares', () => {
+  it('advances each game square through its own stages and holds at three', () => {
+    const speaking = [event('chapter-2:find', 'activity_complete'), event('chapter-2:give', 'activity_complete')];
+    const understanding = [event('chapter-2:understanding:find', 'activity_complete')];
+    expect(gameStage([], 1, 'understanding')).toBe(1);
+    expect(gameStage(speaking, 1, 'speaking')).toBe(3);
+    expect(gameStage(speaking, 1, 'understanding')).toBe(1);
+    expect(gameStage([...speaking, ...understanding], 1, 'understanding')).toBe(2);
+    const all = [...speaking, ...understanding, event('chapter-2:understanding:give', 'activity_complete'), event('chapter-2:understanding:mission', 'activity_complete')];
+    expect(gameStage(all, 1, 'understanding')).toBe(3);
+    expect(gameStage(all, 1, 'speaking')).toBe(3);
+    expect(canStartActivity(all, 1, 'mission', 'understanding')).toBe(true);
+  });
+  it('keeps legacy speaking checkpoints away from understanding and retains Chapter 1 progress', () => {
+    const saved = [event('chapter-2:find', 'activity_checkpoint', { trials: plan, completedTurns: 2 })];
+    expect(checkpoint(saved, 1, 'find', 'speaking')?.completedTurns).toBe(2);
+    expect(checkpoint(saved, 1, 'find', 'understanding')).toBeUndefined();
+    expect(gameStage([event('find', 'activity_complete')], 0, 'understanding')).toBe(2);
+    expect(gameStage([event('find', 'activity_complete'), event('give', 'activity_complete')], 0, 'understanding')).toBe(3);
   });
 });

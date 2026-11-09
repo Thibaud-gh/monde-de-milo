@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { foods } from '../content/week1';
 import type { ActivityId, Food, Trial } from '../content/week1';
-import { request, session2Activities, snackStory } from '../content/session2';
+import { request, speakingStages, snackStory } from '../content/session2';
 import { activityKey, checkpoint } from '../lib/progression';
 import { getStore, record } from '../lib/store';
 import { FoodArt, Milo } from './Art';
@@ -9,14 +9,14 @@ import { Icon } from './Icon';
 const foodIds: Food[] = ['apple', 'banana', 'bread', 'water'];
 export function SessionTwoGame({ activity, onHome }: { activity: ActivityId; onHome: () => void }) {
   const [sessionId] = useState(() => crypto.randomUUID());
-  const [resume] = useState(() => checkpoint(getStore().events, 1, activity));
+  const [resume] = useState(() => checkpoint(getStore().events, 1, activity, 'speaking'));
   const [trials] = useState<Trial[]>(() => resume?.trials ?? foodIds.map(food => ({ id: crypto.randomUUID(), food, action: 'give', guided: true })));
   const [turn, setTurn] = useState(resume?.completedTurns ?? 0);
   const [food, setFood] = useState<Food | null>(null);
   const [help, setHelp] = useState(false);
   const busy = useRef(false);
-  const key = activityKey(1, activity);
-  const title = session2Activities.find(a => a.id === activity)!.title;
+  const key = activityKey(1, activity, 'speaking');
+  const title = speakingStages.find(a => a.id === activity)!.title;
   useEffect(() => {
     const start = Date.now();
     record({ kind: 'engagement', contentId: key, sessionId, event: 'activity_open' });
@@ -36,8 +36,8 @@ export function SessionTwoGame({ activity, onHome }: { activity: ActivityId; onH
     // Prevent a double tap from advancing two turns.
     requestAnimationFrame(() => { busy.current = false; });
   }
-  if (turn === trials.length) return <main className="completion child-screen"><Milo happy waving/><h1>Quel bon goûter !</h1><p>{activity === 'mission' ? 'Le café t’attend pour une autre visite.' : 'La suite t’attend dans le chapitre.'}</p><button className="primary" onClick={onHome}><Icon name="book"/> Au chapitre</button></main>;
-  return <main className="speaking-game child-screen"><header className="game-header"><button className="round" aria-label="Retour au chapitre" onClick={onHome}><Icon name="left"/></button><div className="prompt"><span className="game-name">{title} · {turn + 1} / {trials.length}</span><h1>{activity === 'find' ? 'Avec Milo, on essaie !' : activity === 'give' ? 'À toi de finir la phrase !' : 'Bienvenue au petit café !'}</h1></div></header>
+  if (turn === trials.length) return <main className="completion child-screen"><Milo happy waving/><h1>Quel bon goûter !</h1><p>{activity === 'mission' ? 'Le café t’attend pour une autre visite.' : 'La prochaine étape t’attend sur le carré du café.'}</p><button className="primary" onClick={onHome}><Icon name="book"/> Au chapitre</button></main>;
+  return <main className="speaking-game child-screen"><header className="game-header"><button className="round" aria-label="Retour au chapitre" onClick={onHome}><Icon name="left"/></button><div className="prompt"><span className="game-name">{title} · Étape {activity === 'find' ? 1 : activity === 'give' ? 2 : 3} · {turn + 1} / {trials.length}</span><h1>{activity === 'find' ? 'Avec Milo, on essaie !' : activity === 'give' ? 'À toi de finir la phrase !' : 'Bienvenue au petit café !'}</h1></div></header>
     <p className="parent-read-notice">À jouer ensemble · L’adulte prête sa voix à Milo.</p>
     <div className="speaking-scene"><Milo happy/><div className="speech-paper" aria-live="polite"><small>{food ? 'À toi de parler à Milo' : 'Milo te demande'}</small><p>{!food ? 'Tu voudrais quoi ?' : help || activity === 'find' ? request(food) : activity === 'give' ? 'Je voudrais…' : 'À toi de commander !'}</p>{food && <FoodArt food={food}/>}</div></div>
     <div className="speaking-foods" aria-label="Choisis ton goûter">{foodIds.map(id => <button key={id} className={food === id ? 'selected' : ''} aria-pressed={food === id} aria-label={foods[id].label} onClick={() => setFood(id)}><FoodArt food={id}/></button>)}</div>

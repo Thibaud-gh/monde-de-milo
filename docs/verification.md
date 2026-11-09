@@ -41,3 +41,12 @@ Simulator and local browser observations from development review are preserved; 
 - Chapter 2 is parent-led, without new audio. Existing MP3 assets are unchanged. Remote TTS instructions are preserved; all generation remains paused pending the replacement model.
 - Parent-reported speech evidence is saved as assessments, separately from automatic Chapter 1 gesture metrics. A model or starter cannot be labelled independent by the game controls.
 - Checkpoints and chapter-qualified engagement IDs fit the existing JSON event schema; no Supabase schema or access-policy changes were made. Authenticated cross-device verification still requires the signed-in devices.
+
+## One square per game — 9 November 2026
+
+- Session 1 now has two squares: one understanding game and its story. Session 2 has three: understanding, the existing parent-speaking activity, and the story. Each game opens its current stage rather than exposing three separate game cards.
+- Game stages advance independently, 1 → 2 → 3. Stages 1/2 remain one-time introductions with checkpoint resume; Stage 3 remains replayable. Legacy Chapter 1 completion IDs and Chapter 2 speaking IDs are preserved. New Chapter 2 understanding events have distinct IDs.
+- Session 2 understanding uses the existing tap/drag game engine with new “Je voudrais…” requests. No speech response, microphone or parent speech-rating controls appear in that game. Until TTS is resumed, the adult reads the displayed request. No unrelated old clip is substituted for the new text.
+- 31 tests pass, covering independent game progression, legacy checkpoint isolation, and the new understanding transcripts in addition to existing gesture/audio checks. Browser review completed both understanding introductions via equivalent keyboard controls, verified the same square changed to Stage 2 then Stage 3, and confirmed old speaking progress remained at Stage 3.
+- Reviewed the two-square Session 1 layout and the three-square Session 2 layout at desktop and iPad portrait sizes. Temporary viewport override was reset. All browser test records stayed on the isolated, Supabase-disabled preview origin.
+- Updated the printable parent plan to distinguish understanding from parent-led speaking. Existing prepared audio remains unchanged; all new TTS generation remains paused.

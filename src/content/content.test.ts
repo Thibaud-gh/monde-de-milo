@@ -1,3 +1,4 @@
+import { request, understandingPrompt } from './session2';
 import { hasEvaRecordings, narrationFor } from './narration';
 import { describe, expect, it } from 'vitest';
 import { readFileSync, existsSync } from 'node:fs';
@@ -46,6 +47,16 @@ describe('prepared French voice content', () => {
       const file = new URL(`${id}.mp3`, audio);
       expect(existsSync(fileURLToPath(file)), id).toBe(true);
       expect(readFileSync(file).length, id).toBeGreaterThan(1000);
+    }
+  });
+});
+
+// Understanding uses a request plus an action; the response remains a gesture.
+describe('Session 2 understanding requests', () => {
+  it('names every food and differentiates show from give without asking for speech', () => {
+    for (const food of Object.keys(foods) as Food[]) {
+      expect(understandingPrompt({ food, action: 'show' })).toBe(`${request(food)} Montre-moi !`);
+      expect(understandingPrompt({ food, action: 'give' })).toBe(`${request(food)} Donne-moi !`);
     }
   });
 });

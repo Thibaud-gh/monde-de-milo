@@ -1,25 +1,36 @@
 import { MusicButton } from './MusicButton';
 import { chapters } from '../content/chapters';
-import { session2Activities } from '../content/session2';
-import { activityState, completedActivity } from '../lib/progression';
-import { activities } from '../content/week1';
+import { activityState, gameStage, stageActivities } from '../lib/progression';
+import type { GameKind } from '../lib/progression';
 import type { ActivityId } from '../content/week1';
 import { useProgress } from '../lib/store';
 import { BookArt, FoodArt, Milo } from './Art';
 import { Icon } from './Icon';
-export function Chapter({ index, onHome, onActivity, onStory }: { index: number; onHome: () => void; onActivity: (id: ActivityId) => void; onStory: () => void }) {
+export function Chapter({ index, onHome, onActivity, onStory }: { index: number; onHome: () => void; onActivity: (kind: GameKind, id: ActivityId) => void; onStory: () => void }) {
   const chapter = chapters[index];
-  const progress = useProgress();
-  const chapterActivities = index === 1 ? session2Activities : activities;
+  const { events } = useProgress();
+  const games: { kind: GameKind; title: string; description: string; food: 'apple' | 'banana' }[] = [
+    { kind: 'understanding', title: index === 0 ? 'Le panier de Milo' : 'Milo commande', description: 'Écoute Milo. Montre ou donne.', food: 'apple' },
+    ...(index === 1 ? [{ kind: 'speaking' as const, title: 'Le petit café', description: 'Parle avec Milo, accompagné d’un adulte.', food: 'banana' as const }] : []),
+  ];
   return <main className="chapter child-screen"><header className="chapter-header"><button className="round" onClick={onHome} aria-label="Tous les chapitres"><Icon name="left"/></button><span>Chapitre {index + 1}</span><MusicButton/></header>
-    <div className="chapter-welcome"><div><h1>{chapter.title}</h1><p>{index === 1 ? 'Un goûter à partager avec un adulte' : '3 jeux et 1 histoire à découvrir'}</p></div><Milo waving/></div>
-    {chapter.available ? <div className="chapter-choices"><section aria-labelledby="games-title"><h2 id="games-title">Les jeux <span>Un petit pas après l’autre</span></h2><div className="game-choices">{chapterActivities.map((a, i) => {
-      const state = activityState(progress.events, index, a.id);
-      const disabled = state === 'locked' || state === 'done';
-      const label = state === 'done' ? 'Découverte terminée' : state === 'locked' ? `Après le jeu ${i}` : state === 'resume' ? 'Continuer' : a.id === 'mission' && completedActivity(progress.events, index, a.id) ? 'Rejouer' : 'Jouer';
-      return <button disabled={disabled} className={`game-choice game-choice-${a.id} ${state}`} key={a.id} onClick={() => onActivity(a.id)} aria-label={`Jeu ${i + 1} : ${a.title} · ${label}`}><span className="choice-label">Jeu {i + 1}{completedActivity(progress.events, index, a.id) && <Icon name="check" size={17}/>}</span><div className="choice-picture"><FoodArt food={a.food}/><span><Icon name={a.icon} size={30}/></span></div><strong>{a.title}</strong><small>{a.instruction}</small><span className="choice-start"><Icon name={state === 'done' ? 'check' : 'play'} size={19}/> {label}</span></button>;
-    })}</div></section>
-    <section className="story-choice-section" aria-labelledby="story-title"><h2 id="story-title">L’histoire <span>{index === 1 ? 'À lire ensemble' : 'Installe-toi et écoute'}</span></h2><button className="story-choice" onClick={onStory} aria-label={`Histoire : ${chapter.story}`}><BookArt/><span><small>Histoire</small><strong>{chapter.story}</strong><span>{index === 1 ? 'Milo a faim, puis soif. À vous de raconter…' : 'Une pomme à retrouver au café…'}</span></span><span className="choice-start"><Icon name={index === 1 ? "book" : "sound"} size={21}/> {index === 1 ? "Lire ensemble" : "Écouter"}</span></button></section></div> : <p className="coming-soon">Milo prépare de nouvelles aventures. À bientôt !</p>}
-    <footer className="home-footer"><span className="little-dash"/> Jeux 1 et 2 : une découverte. Jeu 3 : à rejouer. L’histoire : quand tu veux. <span className="little-dash"/></footer>
+    <div className="chapter-welcome"><div><h1>{chapter.title}</h1><p>{index === 0 ? 'Un jeu et une histoire' : 'Deux jeux et une histoire'}</p></div><Milo waving/></div>
+    {chapter.available ? <div className={`activity-squares ${index === 0 ? 'two-squares' : ''}`}>
+      {games.map((game, i) => {
+        const stage = gameStage(events, index, game.kind);
+        const activity = stageActivities[stage - 1];
+        const state = activityState(events, index, activity, game.kind);
+        const action = state === 'resume' ? 'Continuer' : stage === 3 ? 'Jouer et rejouer' : 'Jouer';
+        return <button key={game.kind} className={`activity-square ${game.kind}`} onClick={() => onActivity(game.kind, activity)} aria-label={`Jeu ${i + 1} : ${game.title} · Étape ${stage} · ${action}`}>
+          <span className="square-type">{game.kind === 'speaking' ? 'Avec un adulte' : 'Comprendre'}</span>
+          <div className="square-art"><Milo happy={game.kind === 'speaking'}/><FoodArt food={game.food}/></div>
+          <strong>{game.title}</strong><span className="square-description">{game.description}</span>
+          <div className="stage-path" aria-label={`Étape ${stage} sur 3`}>{[1, 2, 3].map(n => <span key={n} className={n === stage ? 'current' : n < stage ? 'completed' : ''} aria-current={n === stage ? 'step' : undefined}>{n < stage ? <Icon name="check" size={15}/> : n}</span>)}</div>
+          <span className="choice-start"><Icon name="play" size={18}/>{action}</span>
+        </button>;
+      })}
+      <button className="activity-square story-square" onClick={onStory} aria-label={`Histoire : ${chapter.story}`}><span className="square-type">L’histoire</span><div className="square-art"><BookArt/></div><strong>{chapter.story}</strong><span className="square-description">{index === 1 ? 'Une histoire à lire ensemble.' : 'Une pomme à retrouver au café…'}</span><span className="choice-start"><Icon name={index === 1 ? 'book' : 'sound'} size={18}/>{index === 1 ? 'Lire ensemble' : 'Écouter'}</span></button>
+    </div> : <p className="coming-soon">Milo prépare de nouvelles aventures. À bientôt !</p>}
+    <footer className="home-footer"><span className="little-dash"/> Chaque jeu avance à ton rythme. À l’étape 3, on rejoue ! <span className="little-dash"/></footer>
   </main>;
 }

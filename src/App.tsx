@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import type { ActivityId } from './content/week1';
 import { Home } from './components/Home';
 import { Chapter } from './components/Chapter';
+import type { GameKind } from './lib/progression';
 import { canStartActivity } from './lib/progression';
 import { getStore } from './lib/store';
 import { SessionTwoGame, SessionTwoStory } from './components/SessionTwo';
@@ -15,6 +16,7 @@ type Screen = 'home' | 'chapter' | 'story' | 'parent' | ActivityId;
 export default function App() {
   const [screen, setScreen] = useState<Screen>(() => location.hash.startsWith('#/parent') ? 'parent' : 'home');
   const [chapterIndex, setChapterIndex] = useState(0);
+  const [gameKind, setGameKind] = useState<GameKind>('understanding');
   const [gate, setGate] = useState(screen === 'parent');
   const [parentPassed, setParentPassed] = useState(false);
   useEffect(initializeMenuMusic, []);
@@ -30,7 +32,7 @@ export default function App() {
   if (gate) return <><Home onChapter={openChapter} onParent={openParent}/><ParentGate onPass={() => { setParentPassed(true); setGate(false); go('parent'); history.replaceState(null, '', '#/parent'); }} onClose={goHome}/></>;
   if (screen === 'parent') return <Dashboard onHome={goHome}/>;
   if (screen === 'story') return chapterIndex === 1 ? <SessionTwoStory onHome={() => go('chapter')}/> : <Story onHome={() => go('chapter')}/>;
-  if (screen === 'chapter') return <Chapter index={chapterIndex} onHome={goHome} onActivity={id => { if (canStartActivity(getStore().events, chapterIndex, id)) go(id); }} onStory={() => go('story')}/>;
-  if (screen !== 'home') return chapterIndex === 1 ? <SessionTwoGame key={screen} activity={screen} onHome={() => go('chapter')}/> : <Game key={screen} activity={screen} onHome={() => go('chapter')}/>;
+  if (screen === 'chapter') return <Chapter index={chapterIndex} onHome={goHome} onActivity={(kind, id) => { if (canStartActivity(getStore().events, chapterIndex, id, kind)) { setGameKind(kind); go(id); } }} onStory={() => go('story')}/>;
+  if (screen !== 'home') return gameKind === 'speaking' ? <SessionTwoGame key={screen} activity={screen} onHome={() => go('chapter')}/> : <Game key={`${chapterIndex}-${screen}`} chapter={chapterIndex} activity={screen} onHome={() => go('chapter')}/>;
   return <Home onChapter={openChapter} onParent={openParent}/>;
 }

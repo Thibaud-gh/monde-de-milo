@@ -2,7 +2,7 @@ import type { Action, ActivityId, Food, Trial } from '../content/week1';
 import { phrase } from '../content/week1';
 export type PerformedAction = Action | 'tap' | 'incomplete';
 export type Attempt = {
-  kind: 'attempt'; activity: ActivityId; chapter: 'week-1'; sessionId: string; trialId: string;
+  kind: 'attempt'; activity: ActivityId; chapter: 'week-1' | 'session-2'; sessionId: string; trialId: string;
   phrase: string; targetObject: Food; targetAction: Action; selectedObject: Food;
   performedAction: PerformedAction; assisted: boolean; attemptNumber: number;
   objectCorrect: boolean; actionCorrect: boolean | null; combinedCorrect: boolean;
