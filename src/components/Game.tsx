@@ -14,10 +14,12 @@ export function Game({ activity, onHome }: { activity: ActivityId; onHome: () =>
   const profile = useProgress();
   const [name] = useState(() => profile.learnerName || 'Éva');
   const [trials] = useState(() => makeTrials(activity));
-  const [layout] = useState(() => foodLayout(activity));
+  const [layout] = useState(() => foodLayout());
   const [sessionId] = useState(() => crypto.randomUUID());
   const [index, setIndex] = useState(0);
   const [hint, setHint] = useState(trials[0].guided);
+  const [demoVisible, setDemoVisible] = useState(true);
+  const [demoRun, setDemoRun] = useState(0);
   const [feedback, setFeedback] = useState('');
   const [busy, setBusy] = useState(false);
   const [holding, setHolding] = useState<Food | null>(null);
@@ -55,9 +57,9 @@ export function Game({ activity, onHome }: { activity: ActivityId; onHome: () =>
     if (sceneRef.current) observer.observe(sceneRef.current);
     return () => observer.disconnect();
   }, [index, trial.food, isComplete]);
-  function say(id: string, onEnd?: () => void, onError?: () => void) {
+  function say(id: string, onEnd?: () => void, onError?: () => void, onStart?: () => void) {
     const clip = narrationFor(id, name);
-    playAudio(clip.audio, clip.text, onEnd, onError);
+    playAudio(clip.audio, clip.text, onEnd, onError, onStart);
   }
   function sayThen(id: string, minimumDelay: number, next: () => void) {
     const started = Date.now();
@@ -71,7 +73,7 @@ export function Game({ activity, onHome }: { activity: ActivityId; onHome: () =>
   }
   function speak() {
     setAudioError(false); setAudioReady(false);
-    say(`${trial.action}-${trial.food}`, () => setAudioReady(true), () => { setAudioError(true); setAudioReady(false); });
+    say(`${trial.action}-${trial.food}`, undefined, () => { setAudioError(true); setAudioReady(false); }, () => setAudioReady(true));
   }
   useEffect(() => {
     const startedAt = Date.now();
@@ -88,7 +90,7 @@ export function Game({ activity, onHome }: { activity: ActivityId; onHome: () =>
       return stopAudio;
     }
     trialRef.current = trial; indexRef.current = index; attempt.current = 0;
-    assisted.current = trial.guided; setHint(trial.guided); setFeedback(''); setAudioReady(false);
+    assisted.current = trial.guided; setHint(trial.guided); setDemoVisible(trial.guided); setFeedback(''); setAudioReady(false);
     blocked.current = false; setBusy(false);
     speak();
     // Each new prompt owns audio and gesture state.
@@ -96,8 +98,14 @@ export function Game({ activity, onHome }: { activity: ActivityId; onHome: () =>
     // trial is stable within this activity; speak is intentionally scoped to it.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [index]);
+  useEffect(() => {
+    if (!demoVisible || !audioReady) return;
+    const timeout = setTimeout(() => setDemoVisible(false), trial.action === 'show' ? 2500 : 3000);
+    return () => clearTimeout(timeout);
+  }, [demoVisible, audioReady, demoRun, trial.action]);
+  function revealHint() { setHint(true); setDemoVisible(true); setDemoRun(run => run + 1); }
   function showHint() {
-    assisted.current = true; setHint(true); setAudioError(false); setAudioReady(false);
+    assisted.current = true; revealHint(); setAudioError(false); setAudioReady(false);
     say(trial.action === 'show' ? 'showHint' : 'giveHint', speak, () => { setAudioError(true); });
   }
   function handleAttempt(food: Food, performed: PerformedAction) {
@@ -125,7 +133,7 @@ export function Game({ activity, onHome }: { activity: ActivityId; onHome: () =>
       blocked.current = true; setBusy(true);
       setFeedback('On essaie encore !');
       sayThen('encore', 1100, () => {
-        assisted.current = true; setHint(true); blocked.current = false; setBusy(false); setFeedback(''); speak();
+        assisted.current = true; revealHint(); blocked.current = false; setBusy(false); setFeedback(''); speak();
       });
     }
   }
@@ -135,7 +143,7 @@ export function Game({ activity, onHome }: { activity: ActivityId; onHome: () =>
     const element = event.currentTarget;
     element.setPointerCapture(event.pointerId);
     const g: Gesture = { food, pointerId: event.pointerId, x: event.clientX, y: event.clientY, moved: false };
-    gesture.current = g; setHolding(food);
+    gesture.current = g; setHolding(food); setDemoVisible(false);
   }
   function inDrop(x: number, y: number) {
     const rect = dropTarget.current?.getBoundingClientRect();
@@ -167,7 +175,7 @@ export function Game({ activity, onHome }: { activity: ActivityId; onHome: () =>
     <div className="game-scene" ref={sceneRef}>
       <div className="game-window"><span/><span/></div><div className="game-shelf"><span>bonjour</span><i/></div>
       <div ref={dropTarget} className={`milo-target ${overMilo ? 'receiving' : ''} ${feedback.startsWith('Merci') ? 'received' : ''}`} data-testid="milo-target"><Milo happy={feedback === 'Merci !' || feedback === 'Oui, bravo !'}/>{received && <div className="milo-received"><FoodArt food={received}/></div>}<span className="target-shadow"/></div>
-      {hint && <div className={`gesture-demo ${trial.action}`} style={{ left: demo.x, top: demo.y, '--give-x': `${demo.dx}px`, '--give-y': `${demo.dy}px` } as CSSProperties} aria-hidden="true"><Icon name="hand" size={43}/></div>}
+      {hint && audioReady && demoVisible && <div key={`${index}-${demoRun}`} className={`gesture-demo ${trial.action}`} onAnimationEnd={() => setDemoVisible(false)} style={{ left: demo.x, top: demo.y, '--give-x': `${demo.dx}px`, '--give-y': `${demo.dy}px` } as CSSProperties} aria-hidden="true"><Icon name="hand" size={43}/></div>}
       <div className="food-table"><div className="foods">{layout.map(food => <button key={food} ref={element => { foodRefs.current[food] = element; }} data-testid={`food-${food}`} className={`food ${holding === food ? 'holding' : ''} ${drag?.food === food ? 'drag-source' : ''} ${received === food ? 'given' : ''} ${hint && trial.food === food ? 'hinted' : ''}`} aria-label={foods[food].label} disabled={busy || !audioReady} onPointerDown={e => begin(e, food)} onPointerMove={move} onPointerUp={e => end(e)} onPointerCancel={e => end(e, true)} onLostPointerCapture={e => end(e, true)} onContextMenu={e => e.preventDefault()} onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleAttempt(food, 'tap'); } else if (e.key.toLowerCase() === 'g') { e.preventDefault(); handleAttempt(food, 'give'); } }}><FoodArt food={food}/><span className="food-shadow"/></button>)}</div></div>
     </div>
     <div className="game-footer"><span className="small-flower" aria-hidden="true"><Icon name="flower" size={26}/></span><p>{hint ? (trial.action === 'show' ? 'Touche l’image.' : 'Garde le doigt sur l’image et glisse jusqu’à Milo.') : 'Écoute Milo.'}</p><button className="text-button" onClick={onHome}>À bientôt !</button></div>

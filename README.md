@@ -83,13 +83,15 @@ Free Supabase projects may pause after a week of low activity. Play remains loca
 
 The static site contains the interface and bundled illustrations/audio. Family records remain in Supabase and require a parent login. GitHub Pages does not host the database. Changing repository variables requires a new build. Relative asset paths support both root domains and GitHub Pages project subpaths.
 
-Parents sign up in the app; Supabase Auth stores credentials, and the protected learner profile stores the child’s first name. Éva has a complete named voice pack for greetings, game instructions, feedback and stories. Every line is generated as one utterance; the name is never spliced onto another recording. Eva/Éva spelling selects that pack; other names use the preserved unnamed pack. The repository and Supabase project belong in your accounts. Supabase credentials are configured independently of website publication.
+Parents sign up in the app; Supabase Auth stores credentials, and the protected learner profile stores the child’s first name. The complete Éva voice pack is retained, but the app uses her name only for the welcome and goodbye. Routine game prompts, hints and replies use the unnamed recordings. Every line is a complete utterance; the name is never spliced onto another recording. Other names use the preserved unnamed pack throughout. The repository and Supabase project belong in your accounts. Supabase credentials are configured independently of website publication.
 
 ## What's included
 
 - Chapter home and per-chapter game/story view; 3 playable games and a separate story in Chapter 1.
 - Tap to show, pointer drag to give, generous drop tolerance.
 - Identical food layout for show/give within an activity; independent random layout and balanced mixed trials.
+- Four foods from Game 1 onward: Game 1 only shows, Game 2 only gives, and Game 3 mixes both. Each game has eight turns and one guided opening turn. Objects activate when speech starts, allowing answers before narration ends. Hand demonstrations play once; requested help can replay them.
+- Quiet original menu music with a saved mute preference, voice ducking, fades and background pausing. No music during games, stories or the parent dashboard.
 - Guided opening, audio replay, fading visual help and forgiving retries. Help stays attached to the whole trial so a successful guided retry is never reported as independent.
 - Six coherent apple-search story scenes, Éva’s name in the greeting and farewell, prepared French narration, manual page turns, optional autoplay and replay, with no quiz.
 - Separate object/action/combined ratios, guided attempts, motor slips, story engagement and manual speaking observations.
@@ -117,3 +119,7 @@ Version 7.3.1 is pinned because the older 7.2.7 installed with FrenchKid could n
 A human recording can replace any corresponding MP3 file under the same stable ID. Maintain the transcript and catalog alongside it. The app does not contain or need an ElevenLabs key.
 
 Game feedback waits for its complete recording before advancing or replaying the prompt; a fixed animation delay must never cut off a name.
+
+## Menu music
+
+`public/music/menu-cafe.mp3` is an original, sample-free 64-second café waltz. Regenerate it with `python3 scripts/generate-menu-music.py` (numpy and ffmpeg required). The menu starts music after the first user interaction to respect browser/iPad playback rules. The Musique button remembers mute on that device. Web Audio gain keeps the level quiet on iPad, ducks under Milo’s welcome, and suspends outside menus or when the app is hidden.

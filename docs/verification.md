@@ -24,3 +24,11 @@ Simulator and local browser observations from development review are preserved; 
 - All 21 new files decode with ffprobe; their content hashes and transcripts match the catalog. File hashes version playback URLs even when text stays the same.
 - Game feedback advances only after the audio finishes (and the minimum visual delay), preventing names from being cut off by the old 1.1/1.3-second timers.
 - 15 tests pass, including pack selection and caption consistency for both named and unnamed users. Native assets are refreshed using the existing simulator build, without rebuilding the native shell or running UI automation. Subjective voice quality still needs listening review.
+
+## Playtest refinements — 9 November 2026
+
+- Éva appears in the welcome and goodbye only; routine prompts, feedback and hints use the preserved unnamed clips. All full-sentence named recordings are retained.
+- All three games display all four foods. Find: eight show prompts (two per food). Give: eight give prompts (two per food). Mission: one show and one give prompt for each food. Only the first turn is automatically guided. Hand demos run once, including replayed help.
+- Voice playback exposes a start event; input becomes active when playback starts. Browser review confirmed a correct tap accepted during the spoken prompt. Stale audio callbacks cannot activate a later prompt. Off-target drags still return silently.
+- Original 64-second menu music generated without external samples. Mute persists; music ducks under speech and fades/pauses for games, story, parent area and background visibility. Browser mute/unmute controls checked.
+- 23 unit tests cover trial balance, one guided turn, name frequency, early audio readiness, stale callbacks, menu music lifecycle and existing progress logic. TypeScript/Vite build passes. Physical iPad update preserves the installed app’s records and parent session.

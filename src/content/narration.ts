@@ -16,7 +16,9 @@ export function hasEvaRecordings(name: string) {
 // Select exactly one prepared, complete utterance. Never splice a name clip
 // onto another recording. Unknown names always get the unnamed version.
 export function narrationFor(id: string, name: string = learner.firstName) {
-  const audio = hasEvaRecordings(name) ? `eva-${id}` : genericAlternatives[id] ?? id;
+  // Personal greetings are warm; repeating the name on every turn is tiring.
+  const personal = ['bonjour', 'fini', 'story-1', 'story-6'].includes(id);
+  const audio = personal && hasEvaRecordings(name) ? `eva-${id}` : genericAlternatives[id] ?? id;
   const text = transcripts[audio];
   if (!text) throw new Error(`Missing narration: ${audio}`);
   return { audio, text };

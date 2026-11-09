@@ -1,5 +1,8 @@
 # Le Monde de Milo — Overall Design
 
+> Playtest revision, 9 November 2026: all four foods are visible in every game. Game 1 uses only montre-moi, Game 2 only donne-moi, and Game 3 mixes both actions. Eight turns each, one guided opening turn and one pass of the hand demonstration; tapping/dragging becomes active when narration starts. Off-target drags return silently. Routine speech omits Éva’s name; personal welcome and goodbye remain. Menus have quiet, optional original music that pauses during games and stories. This revision supersedes earlier details below.
+
+
 > Prototype revision, 8 November 2026: chapters open a choice of three games and one story, without a duplicate first-game shortcut. “Montre-moi” now uses a tap; “Donne-moi” uses a drag to Milo. This supersedes the original hold proposal below. The story follows a continuous search: Milo wants his apple, checks water on the table and a banana on the shelf, looks in the basket, finds the apple, then says “Au revoir, Éva ! À bientôt !”. Parent signup lives in the app; the child’s first name is collected with the parent profile. Éva is the recorded prototype name.
 
 

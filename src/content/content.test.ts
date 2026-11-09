@@ -22,19 +22,21 @@ describe('prepared French voice content', () => {
     for (const page of alternate.pages) expect(phrases[page.audio]).toBe(page.text);
     expect(story.pages.map(page => page.scene)).toEqual(['search', 'table', 'shelf', 'basket', 'found', 'goodbye']);
   });
-  it('selects one whole-sentence recording for every Éva prompt and its unnamed alternative', () => {
+  it('uses personal greetings and goodbyes without repeating Éva on every turn', () => {
     const ids = ['bonjour', 'merci', 'bravo', 'encore', 'showHint', 'giveHint', 'fini',
       ...Array.from({ length: 6 }, (_, index) => `story-${index + 1}`),
       ...Object.keys(foods).flatMap(food => [`show-${food}`, `give-${food}`])];
     for (const id of ids) {
       const named = narrationFor(id, 'Éva');
       const generic = narrationFor(id, 'Alex');
-      expect(named.audio).toBe(`eva-${id}`);
+      expect(named.audio).toBe(['bonjour', 'fini', 'story-1', 'story-6'].includes(id) ? `eva-${id}` : generic.audio);
       expect(phrases[named.audio]).toBe(named.text);
       expect(generic.text).not.toMatch(/Éva|Eva/);
       expect(phrases[generic.audio]).toBe(generic.text);
     }
-    expect(narrationFor('show-apple', 'Éva').text).toBe('Montre-moi la pomme, Éva !');
+    expect(narrationFor('show-apple', 'Éva').text).toBe('Montre-moi la pomme !');
+    expect(narrationFor('merci', 'Éva').text).toBe('Merci !');
+    expect(narrationFor('story-5', 'Éva').text).not.toContain('Éva');
     expect(hasEvaRecordings('Eva')).toBe(true);
     expect(hasEvaRecordings('Éva'.normalize('NFD'))).toBe(true);
     expect(hasEvaRecordings('Évan')).toBe(false);

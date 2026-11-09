@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { makeTrials } from '../content/week1';
+import { foodLayout, makeTrials } from '../content/week1';
 import type { Trial } from '../content/week1';
 import { assess, attemptPayload, mergeEvents, metrics } from './model';
 import type { LearningEvent, Payload } from './model';
@@ -39,19 +39,26 @@ describe('independent object and action evidence', () => {
   });
 });
 describe('weekly trials', () => {
-  it('keeps bread out of lesson one', () => {
-    const trials = makeTrials('find', () => .3);
-    expect(trials).toHaveLength(6);
-    expect(trials.every(t => t.food !== 'bread' && t.action === 'show')).toBe(true);
-    expect(trials.slice(2).every(t => !t.guided)).toBe(true);
+  it.each(['find', 'give'] as const)('uses all four foods twice, with only the requested action in %s', activity => {
+    const trials = makeTrials(activity, () => .3);
+    expect(trials).toHaveLength(8);
+    for (const food of ['apple', 'banana', 'water', 'bread']) {
+      expect(trials.filter(trial => trial.food === food)).toHaveLength(2);
+    }
+    expect(trials.every(trial => trial.action === (activity === 'find' ? 'show' : 'give'))).toBe(true);
+    expect(new Set(foodLayout())).toEqual(new Set(['apple', 'banana', 'water', 'bread']));
   });
-  it.each(['give', 'mission'] as const)('uses every food for both actions in %s', activity => {
-    const trials = makeTrials(activity, () => .7);
+  it('mixes both actions for each food only in the mission', () => {
+    const trials = makeTrials('mission', () => .7);
     expect(trials).toHaveLength(8);
     expect(new Set(trials.map(t => `${t.food}:${t.action}`)).size).toBe(8);
+  });
+  it.each(['find', 'give', 'mission'] as const)('demonstrates only the first turn in %s', activity => {
+    const trials = makeTrials(activity);
     expect(trials[0].food).toBe('apple');
     expect(trials[0].guided).toBe(true);
-    expect(new Set(trials.map(t => t.id)).size).toBe(trials.length);
+    expect(trials.slice(1).every(trial => !trial.guided)).toBe(true);
+    expect(new Set(trials.map(trial => trial.id)).size).toBe(trials.length);
   });
 });
 describe('cloud/local event merge', () => {

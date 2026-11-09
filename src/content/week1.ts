@@ -39,19 +39,20 @@ function shuffled<T>(items: T[], random = Math.random): T[] {
   return result;
 }
 export function makeTrials(id: ActivityId, random = Math.random): Trial[] {
+  const foodIds = Object.keys(foods) as Food[];
   let pairs: { food: Food; action: Action }[];
-  if (id === 'find') {
-    pairs = [{ food: 'apple', action: 'show' }, ...shuffled<Food>(['banana', 'water', 'apple', 'banana', 'water'], random).map(food => ({ food, action: 'show' as const }))];
-  } else {
-    const mixed = (Object.keys(foods) as Food[]).flatMap(food => [
+  if (id === 'mission') {
+    const mixed = foodIds.flatMap(food => [
       { food, action: 'show' as const }, { food, action: 'give' as const },
     ]);
-    pairs = id === 'give'
-      ? [{ food: 'apple', action: 'give' }, { food: 'banana', action: 'give' }, ...shuffled(mixed.filter(p => !(p.action === 'give' && ['apple', 'banana'].includes(p.food))), random)]
-      : [{ food: 'apple', action: 'show' }, ...shuffled(mixed.filter(p => !(p.action === 'show' && p.food === 'apple')), random)];
+    pairs = [{ food: 'apple', action: 'show' }, ...shuffled(mixed.filter(p => !(p.action === 'show' && p.food === 'apple')), random)];
+  } else {
+    const action: Action = id === 'find' ? 'show' : 'give';
+    const remaining: Food[] = ['banana', 'water', 'bread', 'apple', 'banana', 'water', 'bread'];
+    pairs = [{ food: 'apple', action }, ...shuffled(remaining, random).map(food => ({ food, action }))];
   }
-  return pairs.map((p, i) => ({ ...p, id: crypto.randomUUID(), guided: i < (id === 'mission' ? 1 : 2) }));
+  return pairs.map((p, i) => ({ ...p, id: crypto.randomUUID(), guided: i === 0 }));
 }
-export function foodLayout(id: ActivityId): Food[] {
-  return shuffled(id === 'find' ? ['apple', 'banana', 'water'] : Object.keys(foods)) as Food[];
+export function foodLayout(): Food[] {
+  return shuffled(Object.keys(foods)) as Food[];
 }
