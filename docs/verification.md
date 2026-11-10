@@ -57,3 +57,10 @@ Simulator and local browser observations from development review are preserved; 
 - Each game shows three SVG stars. Stage completion fills that stage’s star, including Stage 3. Replay completions do not add extra stars, and existing history fills the corresponding stars automatically.
 - 32 tests pass. Added a progression test for zero, one, two and three earned stars, replay deduplication, track isolation and staying at Stage 3. Browser review showed two stars for understanding and three for speaking on the original three-card row. Test data remained isolated from Supabase.
 - The full Session 2 programme remains available under Parents → Session 2 · Lesson plan (with Print), and in docs/session-2.md. All new TTS remains paused.
+
+## Fully screen-free parent lesson — 10 November 2026
+
+- Replaced iPad activities in the parent lesson with real-object review, a teddy demonstration, silly wrong orders, a pretend café, an acted-out story and one final request. The 25-minute programme needs only the bear, food props, a glass, a tray and a cloth. App games remain separate optional activities.
+- Updated the dashboard guide and Markdown script, including exact parent/Milo lines, expected child turns and support. Post-session notes can be written on paper; no app stages or digital scores are required by the lesson.
+- Created a two-page printable PDF, rendered and visually reviewed both pages. Verified all six timings, the story, French accents and request phrases; no iPad step remains in the printout. A copy is bundled under public/guides for download from the parent guide.
+- Production TypeScript/Vite build passes. No new game logic, audio generation or device installation was needed for this content change.

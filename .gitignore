@@ -21,3 +21,6 @@ __pycache__/
 
 # Personal record exports stay local
 milo-progress-*.json
+
+# Generated local printable artifacts; published copies live under public/guides
+output/
