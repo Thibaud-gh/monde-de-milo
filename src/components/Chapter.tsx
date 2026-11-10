@@ -30,7 +30,7 @@ export function Chapter({ index, onHome, onActivity, onStory }: { index: number;
           <span className="choice-start"><Icon name="play" size={18}/>Étape {stage} · {action}</span>
         </button>;
       })}
-      <button className="game-choice game-choice-mission story-card" onClick={onStory} aria-label={`Histoire : ${chapter.story}`}><span className="choice-label">L’histoire</span><div className="choice-picture"><BookArt/><span><Icon name="book" size={30}/></span></div><strong>{chapter.story}</strong><small>{index === 1 ? 'Une histoire à lire ensemble.' : 'Une pomme à retrouver au café…'}</small><span className="choice-start"><Icon name={index === 1 ? 'book' : 'sound'} size={18}/>{index === 1 ? 'Lire ensemble' : 'Écouter'}</span></button>
+      <button className="game-choice game-choice-mission story-card" onClick={onStory} aria-label={`Histoire : ${chapter.story}`}><span className="choice-label">L’histoire</span><div className="choice-picture"><BookArt/><span><Icon name="book" size={30}/></span></div><strong>{chapter.story}</strong><small>{index === 1 ? 'Un goûter à partager avec Milo.' : 'Une pomme à retrouver au café…'}</small><span className="choice-start"><Icon name="sound" size={18}/>Écouter</span></button>
     </div> : <p className="coming-soon">Milo prépare de nouvelles aventures. À bientôt !</p>}
     <footer className="home-footer"><span className="little-dash"/> Chaque jeu avance à ton rythme. À l’étape 3, on rejoue ! <span className="little-dash"/></footer>
   </main>;

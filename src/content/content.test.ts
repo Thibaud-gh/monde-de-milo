@@ -1,4 +1,5 @@
-import { request, understandingPrompt } from './session2';
+import { createHash } from 'node:crypto';
+import { request, understandingPrompt, snackStory } from './session2';
 import { hasEvaRecordings, narrationFor } from './narration';
 import { describe, expect, it } from 'vitest';
 import { readFileSync, existsSync } from 'node:fs';
@@ -57,6 +58,33 @@ describe('Session 2 understanding requests', () => {
     for (const food of Object.keys(foods) as Food[]) {
       expect(understandingPrompt({ food, action: 'show' })).toBe(`${request(food)} Montre-moi !`);
       expect(understandingPrompt({ food, action: 'give' })).toBe(`${request(food)} Donne-moi !`);
+    }
+  });
+});
+
+describe('approved Milo recordings for both sessions', () => {
+  it('covers every Session 2 request, story caption and speaking scaffold', () => {
+    for (const food of Object.keys(foods) as Food[]) {
+      for (const action of ['show', 'give'] as const) {
+        expect(narrationFor(`s2-${action}-${food}`).text).toBe(understandingPrompt({ food, action }));
+      }
+      expect(narrationFor(`s2-request-${food}`).text).toBe(request(food));
+    }
+    snackStory.forEach((page, index) => expect(narrationFor(`s2-story-${index + 1}`).text).toBe(page.text));
+    expect(narrationFor('s2-question').text).toBe('Tu voudrais quoi ?');
+    expect(narrationFor('s2-starter').text).toBe('Je voudrais…');
+    expect(narrationFor('s2-fini').text).toBe(snackStory.at(-1)?.text);
+  });
+  it('versions all clips with their actual bytes and keeps one pinned voice and transcript', () => {
+    const catalog = JSON.parse(readFileSync(new URL('catalog.json', audio), 'utf8'));
+    expect(catalog.provider).toBe('voxcpm2');
+    expect(catalog.voice.referenceSha256).toBe('4a32b269d96766276246d3240917f59f916602ceaa9f4146da7ba5cd552e6e3e');
+    for (const [id, text] of Object.entries(phrases)) {
+      const clip = catalog.clips[id];
+      expect(clip.text, id).toBe(text);
+      expect(clip.voice, id).toBe(catalog.voice.name);
+      expect(clip.generation, id).toBe('whole-utterance');
+      expect(clip.contentHash, id).toBe(createHash('sha256').update(readFileSync(new URL(clip.file, audio))).digest('hex'));
     }
   });
 });

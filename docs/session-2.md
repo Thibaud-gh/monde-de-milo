@@ -98,7 +98,7 @@ Wave together. The story can be read again whenever she wants.
 
 On paper, note one exact utterance and whether it was spontaneous, after a starter, or after a full model. Add it to the parent journal later only if useful. Tomorrow, invite one real request at snack time (about two minutes).
 
-The app games are separate optional activities outside this lesson. No app, game stages, stars, recordings or screen time are needed to teach this session. All new TTS remains paused.
+The app games are separate optional activities outside this lesson. No app, game stages, stars, recordings or screen time are needed to teach this session. The optional app activities now have prepared Milo recordings; this printed lesson still uses only you, the teddy and real objects.
 
 ## Basis for the approach
 

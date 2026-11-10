@@ -1,6 +1,6 @@
 # Le monde de Milo
 
-A picture-book café for a six-year-old beginning French. The child explores **chapters**, each containing its **games and illustrated story**. Chapter 1 keeps its prepared narration. Chapter 2 is a parent-led speaking lesson while the replacement voice model is pending; Chapters 3–4 are coming soon.
+A picture-book café for a six-year-old beginning French. The child explores **chapters**, each containing its **games and illustrated story**. Chapters 1 and 2 have prepared Milo narration; Chapter 2 also offers parent-led speaking practice; Chapters 3–4 are coming soon.
 
 React + TypeScript + Vite, packaged for iPad with Capacitor. The English parent dashboard runs in the same project at `#/parent`; the child app never displays accuracy scores. Supabase optionally connects the iPad and web dashboard. Without configuration, each device has its own local records, with no fake sample progress.
 
@@ -16,11 +16,11 @@ GitHub Actions builds and deploys `main` automatically. Cloud sharing is configu
 
 Open **Parents → Session 2 · Lesson plan** for a printable, fully screen-free, approximately 25-minute plan with exact parent/Milo prompts, expected responses and support. The detailed script is in [docs/session-2.md](docs/session-2.md), with a [two-page printable PDF](public/guides/milo-lesson-2-screen-free.pdf) also downloadable from the parent plan.
 
-The lesson uses only the teddy, familiar food props, a glass and a tray; the app games are separate optional activities outside the lesson. The new productive chunk is “Je voudrais…” with the four familiar foods. Milo introduces “J’ai faim / J’ai soif” through actions. Chapter 2 has two game squares: understanding (touch responses only) and speaking with a parent. The speaking game keeps its four-turn stages with fading support: a full model, a sentence starter, then café practice. Until recordings are ready, the adult reads understanding prompts aloud. There is no microphone or automatic speech assessment.
+The lesson uses only the teddy, familiar food props, a glass and a tray; the app games are separate optional activities outside the lesson. The new productive chunk is “Je voudrais…” with the four familiar foods. Milo introduces “J’ai faim / J’ai soif” through actions. Chapter 2 has two game squares: understanding (touch responses only) and speaking with a parent. The speaking game keeps its four-turn stages with fading support: a full model, a sentence starter, then café practice. Milo voices the understanding prompts and story, and supplies models/starters in the parent-led speaking game. There is no microphone or automatic speech assessment.
 
 Chapter 1 has two squares (understanding and story); Chapter 2 has three (understanding, speaking with a parent, story). Each game square independently progresses through Stages 1 → 2 → 3. Stages 1/2 complete once and resume if interrupted; Stage 3 remains replayable. Each completed stage earns one star on its card; Stage 3 replays never add duplicate stars. The three cards reuse the original activity-card layout. Existing Chapter 1 progress and Chapter 2 speaking progress are retained. Stories remain independently replayable. Checkpoints and completion events use the existing owner-protected event sync; no database migration is required.
 
-**All new TTS generation is paused, including Session 2.** Saved Linux reference/model/entry-point instructions: [docs/tts-workflow.md](docs/tts-workflow.md). Do not run the older generation examples below until the parent explicitly resumes voice work.
+**Current voice: Milo - On compte (VoxCPM2).** Both app sessions have prepared clips. The parent-led lesson remains entirely screen-free. Generation, reference and validation notes: [docs/tts-workflow.md](docs/tts-workflow.md).
 
 ## Run locally
 
@@ -106,7 +106,7 @@ Parents sign up in the app; Supabase Auth stores credentials, and the protected 
 - Six coherent apple-search story scenes, Éva’s name in the greeting and farewell, prepared French narration, manual page turns, optional autoplay and replay, with no quiz.
 - Separate object/action/combined ratios, guided attempts, motor slips, story engagement and manual speaking observations.
 - Local progress, optional duplicate-safe cloud sync, parent-lesson setting, JSON export.
-- Locally bundled Delius and Nunito fonts and 46 bundled French neural-voice MP3 clips: a new 21-clip Éva pack, the 21 unnamed clips, and four retained legacy named clips. Milo uses `fr-FR-EloiseNeural` at a slightly slower pace, matching FrenchKid’s original no-account workflow. Playback never falls back to a system voice. See the audio preparation instructions below.
+- Locally bundled Delius and Nunito fonts and 68 offline Milo voice MP3s: the complete regenerated Session 1 pack and 22 Session 2 IDs. All use the same approved synthetic Milo reference with VoxCPM2. Playback never falls back to a system voice. See the audio preparation instructions below.
 
 The web build is currently a browser app, not an offline-installable PWA: native iOS bundles its content for offline use. A service worker and web install manifest can be added separately. The tap and drag controls still need playtesting with your child; simulator/mouse tests do not establish that the gesture is comfortable for a six-year-old.
 
@@ -114,21 +114,15 @@ See [the original design](01_Le_Monde_de_Milo_Design.md), [Week 1 content](Milo_
 
 ## Prepare the French voice clips
 
-FrenchKid used Microsoft Edge neural voices through `edge-tts`: Éloïse for Rosie, Denise for the narrator. Milo currently uses **Éloïse consistently** for greetings, instructions and the six first-person story pages. These are generated files, not live synthesis and not recordings of your child. No speech account or API key is required for this preparation workflow.
+The current audio uses the parent-selected synthetic **Milo - On compte** voice with VoxCPM2. The supplied `~/bin/milo` helper sends text to the parent’s generation machine and copies a WAV back. No model or GPU is needed on the Mac for generation. Its private connection instructions are saved locally.
 
-```sh
-python3 -m venv .venv
-.venv/bin/python -m pip install -r scripts/audio-requirements.txt
-.venv/bin/python scripts/generate-audio.py --sample
-.venv/bin/python scripts/generate-audio.py --prefix eva- --force
-npm run ios:sync
-```
+The complete refresh generated 63 unique whole utterances for 68 IDs. A separate batch entry point reused the loaded model/reference cache while retaining the supplied helper’s seed, CFG, steps, audio normalization and GPU headroom guard. Original generation scripts, reference and live assistant were not changed.
 
-Version 7.3.1 is pinned because the older 7.2.7 installed with FrenchKid could no longer connect after the service changed. Generation requires internet; playback does not. The transcript is `public/audio/phrases.json`; `catalog.json` records each file’s voice, rate and, for new recordings, its content hash. `--prefix eva-` limits generation to the Éva pack and leaves the unnamed files untouched. The sample command previews the whole Éva greeting. Existing matching clips are cached. Audio URLs include the file hash so forced regeneration reaches existing browsers. Use `--force` only to deliberately regenerate. To try Denise, use `--voice fr-FR-DeniseNeural --sample`; rebuild after choosing a voice.
+`public/audio/phrases.json` is the transcript source; `catalog.json` pins the voice and records file hashes, durations and source WAV hashes. Playback uses hashes in its URLs so existing installations receive refreshed clips. Generic and named packs remain separate whole utterances; routine prompts avoid repeatedly using Éva’s name.
 
-A human recording can replace any corresponding MP3 file under the same stable ID. Maintain the transcript and catalog alongside it. The app does not contain or need an ElevenLabs key.
+`scripts/generate-milo-audio.py --corpus <texts.json> --output <staging-folder>` stages clips using the installed helper, or a validated WAV cache with `--seed-cache`. Keep the raw WAVs and previous assets, validate the staged MP3s, then promote them and run `npm run ios:sync`. The older `generate-audio.py` uses Edge voices and is retained as a legacy alternative; it is not the current voice pipeline.
 
-Game feedback waits for its complete recording before advancing or replaying the prompt; a fixed animation delay must never cut off a name.
+Game input becomes valid when the spoken prompt starts. Feedback waits for its whole recording before advancing, so a word or name is not cut off. The app has no speech-synthesis fallback and no speech recognition.
 
 ## Menu music
 

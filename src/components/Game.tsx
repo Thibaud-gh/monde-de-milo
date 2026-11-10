@@ -62,10 +62,8 @@ export function Game({ activity, chapter = 0, onHome }: { activity: ActivityId; 
     return () => observer.disconnect();
   }, [index, trial.food, isComplete]);
   function say(id: string, onEnd?: () => void, onError?: () => void, onStart?: () => void) {
-    // Session 2 is read by the adult until its voice recordings are prepared.
-    // Never substitute an old clip with a different transcript.
-    if (chapter === 1) { onStart?.(); onEnd?.(); return; }
-    const clip = narrationFor(id, name);
+    const clipId = chapter === 1 && /^(show|give)-/.test(id) ? `s2-${id}` : chapter === 1 && id === 'fini' ? 's2-fini' : id;
+    const clip = narrationFor(clipId, name);
     playAudio(clip.audio, clip.text, onEnd, onError, onStart);
   }
   function sayThen(id: string, minimumDelay: number, next: () => void) {
@@ -177,8 +175,7 @@ export function Game({ activity, chapter = 0, onHome }: { activity: ActivityId; 
   }
   if (isComplete) return <main className="completion child-screen"><button className="round home-corner" aria-label="Retour au chapitre" onClick={onHome}><Icon name="left"/></button><Milo happy waving/><h1>Merci pour ton aide !</h1><p>{activity === 'mission' ? 'Tu peux revenir jouer quand tu veux.' : 'L’étape suivante t’attend sur le même carré.'}</p><button className="primary" onClick={onHome}><Icon name="book"/> Au chapitre</button></main>;
   return <main className="game child-screen">
-    <header className="game-header"><button className="round" aria-label="Retour au chapitre" onClick={onHome}><Icon name="left"/></button><div className="prompt"><span className="game-name">{chapter === 1 ? 'Milo commande' : activities.find(a => a.id === activity)?.title} · Étape {activity === 'find' ? 1 : activity === 'give' ? 2 : 3}</span><h1>{feedback || (chapter === 1 ? understandingPrompt(trial) : narrationFor(`${trial.action}-${trial.food}`, name).text)}</h1></div>{chapter === 0 && <button className="round yellow" aria-label="Réécouter" onClick={() => { if (!busy) speak(); }} disabled={busy}><Icon name="sound"/></button>}<button className="round" aria-label="Un petit coup de main" onClick={showHint} disabled={busy}><Icon name="help"/></button></header>
-    {chapter === 1 && <p className="parent-read-notice">L’adulte lit la demande de Milo. Écoute et montre ou donne : tu n’as pas besoin de parler.</p>}
+    <header className="game-header"><button className="round" aria-label="Retour au chapitre" onClick={onHome}><Icon name="left"/></button><div className="prompt"><span className="game-name">{chapter === 1 ? 'Milo commande' : activities.find(a => a.id === activity)?.title} · Étape {activity === 'find' ? 1 : activity === 'give' ? 2 : 3}</span><h1>{feedback || (chapter === 1 ? understandingPrompt(trial) : narrationFor(`${trial.action}-${trial.food}`, name).text)}</h1></div><button className="round yellow" aria-label="Réécouter" onClick={() => { if (!busy) speak(); }} disabled={busy}><Icon name="sound"/></button><button className="round" aria-label="Un petit coup de main" onClick={showHint} disabled={busy}><Icon name="help"/></button></header>
     {audioError && <button className="audio-notice" onClick={speak}><Icon name="sound"/> Touche ici pour écouter.</button>}
     <div className="game-scene" ref={sceneRef}>
       <div className="game-window"><span/><span/></div><div className="game-shelf"><span>bonjour</span><i/></div>
