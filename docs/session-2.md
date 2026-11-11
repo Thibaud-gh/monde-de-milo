@@ -6,7 +6,7 @@ Screen-free, about 25 minutes.
 
 **New words:** lait, fromage. **Review:** pomme, banane, pain, eau; montre / donne.
 
-Milo, the four familiar foods, milk and cheese (real, toy or drawn), two plates and a napkin. Use pretend cheese for the hat! Print the plan, then put screens away.
+Milo, the four familiar foods, milk and cheese (real, toy or drawn), two plates and a napkin. Print the plan, then put screens away.
 
 ## 0–3 min - Hello, familiar foods
 
@@ -44,14 +44,14 @@ Each has an object on a plate. Take turns describing what you have and asking fo
 - **Her turn:** Make two useful statements in her own turn: “J’ai…” and “Je voudrais…”. Serve the request, then swap customer and café keeper.
 - **Help:** Wait a few seconds. Offer a starter or model; serve her anyway. A food word communicates successfully, but record it separately from a complete sentence. No pressure to say both together.
 
-## 17–22 min - The cheese hat
+## 17–22 min - Milo’s snack story
 
-Tell the story below. Put pretend cheese on Milo’s head and a banana under the napkin. She may notice the cheese before the bear does.
+Tell the story below with Milo, an apple and a glass of water.
 
-- **You:** Milo cherche son fromage…
-- **Milo:** J’ai du pain. Je voudrais du fromage. Où est mon fromage ?
-- **Her turn:** Enjoy the silly search. Laugh, point or join in if she wants. The story is not another test.
-- **Help:** Let the surprise breathe. Do not stop on each page for questions. Finish by making the pretend sandwich and offering Milo milk.
+- **You:** C’est l’heure du goûter !
+- **Milo:** J’ai faim ! Je voudrais une pomme.
+- **Her turn:** Enjoy the story, help Milo with his snack or join in if she wants.
+- **Help:** Let the story flow without questions on every page. Offer Milo the apple and then the water.
 
 ## 22–25 min - My snack and goodbye
 
@@ -62,31 +62,31 @@ Return to a real or pretend snack-time choice. End while it is still enjoyable, 
 - **Her turn:** Try either or both phrases with the help she needs, then wave goodbye. Eating or drinking is optional.
 - **Help:** On paper, note an exact example of each phrase and whether it was independent, after a starter, or after a model. Tomorrow, use both phrases naturally at snack time for two minutes.
 
-## Story - The cheese hat
+## Story - Milo’s snack
 
-**Milo:** J’ai du pain. Je voudrais du fromage. Où est mon fromage ?
+**Milo:** C’est l’heure du goûter. J’ai faim !
 
-Give Milo bread. Put the pretend cheese on his head, where she can spot it before he does.
+Rub Milo’s tummy. Let Éva watch; no question yet.
 
-**Milo:** Sous la serviette ? Oh ! Une banane ! Ce n’est pas mon fromage.
+**Milo:** Je voudrais une pomme.
 
-Milo lifts a napkin and finds a banana. Play his puzzled reaction; let her enjoy knowing more than him.
+Éva can give the real or pretend apple to the bear.
 
-**Milo:** Oh ! J’ai du fromage sur la tête ! Quel drôle de chapeau !
+**Milo:** Merci ! Miam, miam !
 
-Make the bear discover his cheese hat. Pause for a laugh, not a test.
+Make Milo nibble his apple. Enjoy the story without testing.
 
-**Milo:** Du pain, du fromage… Voilà mon sandwich ! Miam !
+**Milo:** Maintenant, j’ai soif. Je voudrais de l’eau.
 
-Move the cheese from his head onto the bread. Make a pretend sandwich.
+Milo looks for his glass. Mime drinking.
 
-**Milo:** J’ai mon sandwich. Je voudrais du lait pour mon goûter.
+**Milo:** Merci ! Et toi, tu voudrais quoi ?
 
-Milo asks for a drink to go with the sandwich. Offer the real or pretend milk.
+Optional invitation: accept a word, expand it into a request, then serve her.
 
-**Milo:** Merci ! J’ai du lait. Et plus de fromage sur la tête ! À bientôt !
+**Milo:** Quel bon goûter ! À bientôt !
 
-Milo checks his head with relief and waves. No compulsory question at the end.
+Wave together. The story can be read again whenever she wants.
 
 ## Observing without testing
 

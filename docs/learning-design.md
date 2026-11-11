@@ -13,12 +13,12 @@ Before adding a game, ask: could a child get every answer right while ignoring t
 
 A story needs a small problem, anticipation, a playful surprise and a resolution. It should not be the game repeated without interaction. Target phrases belong naturally inside the plot; avoid a quiz at every page.
 
-Session 2: Milo wants cheese for his bread but cannot find it. The child can spot his cheese hat before he can. The napkin hides a banana instead, then Milo discovers his hat, makes a sandwich and asks for milk. The ending recalls the joke.
+Session 2 uses a simple snack story: Milo asks for an apple, enjoys it, then asks for water and shares the moment with the child.
 
 ## Revised Session 2
 
 Two new foods: milk and cheese, alongside apple, banana, bread and water.
 
-Understanding: introduce the new nouns; learn the has/wants contrast with visual support; listen without visual hints; practise with six foods. Speaking: describe a chosen possession, then request something different, using a whole model, a starter, and eventually no supplied model.
+Understanding now has three distinct stages: (1) Milo holds an object under a cloth and requests a different familiar food; an intentional answer reveals the possession in his paw, with a child-controlled Continue. (2) A four-food menu (apple, banana, milk, cheese) mixes “Je voudrais”, “Donne-moi” and “Montre-moi”; tap to show, drag to give. (3) All six foods combine concealed possessions with all three instruction forms. New milk/cheese turns are introduced with support. No possession picture is displayed before the first answer, even during help. Speaking: describe a chosen possession, then request something different, using a whole model, a starter, and eventually no supplied model.
 
-The revised Session 2 uses new progress keys. Previous attempts remain in the journal, but finishing the former noun-matching lesson does not bypass the new sentence lesson. Session 1 keeps its original progress and four foods. The separate parent lesson remains screen-free.
+The revised listening progression uses v3 keys; the speaking progression keeps its v2 keys. Previous attempts remain in the journal, but finishing the former noun-matching lesson does not bypass the new sentence lesson. Session 1 keeps its original progress and four foods. The separate parent lesson remains screen-free.

@@ -84,29 +84,29 @@ export function SessionTwoStory({ onHome }: { onHome: () => void }) {
   const current = snackStory[page];
   function narratePage() {
     setAudioError(false);
-    playAudio(`cafe-story-${page + 1}`, current.text, undefined, () => setAudioError(true));
+    playAudio(`s2-story-${page + 1}`, current.text, undefined, () => setAudioError(true));
   }
   function replayPage() {
-    record({ kind: 'engagement', contentId: 'milo-cheese-hat', sessionId, event: 'story_audio_replay', page });
+    record({ kind: 'engagement', contentId: 'milo-snack', sessionId, event: 'story_audio_replay', page });
     narratePage();
   }
   useEffect(() => {
     const start = Date.now();
-    const familiar = getStore().events.some(e => e.payload.kind === 'engagement' && e.payload.contentId === 'milo-cheese-hat' && e.payload.event === 'story_open');
-    record({ kind: 'engagement', contentId: 'milo-cheese-hat', sessionId, event: 'story_open', familiar });
-    return () => { stopAudio(); record({ kind: 'engagement', contentId: 'milo-cheese-hat', sessionId, event: 'story_close', durationSeconds: Math.round((Date.now() - start) / 1000), familiar }); };
+    const familiar = getStore().events.some(e => e.payload.kind === 'engagement' && e.payload.contentId === 'milo-snack' && e.payload.event === 'story_open');
+    record({ kind: 'engagement', contentId: 'milo-snack', sessionId, event: 'story_open', familiar });
+    return () => { stopAudio(); record({ kind: 'engagement', contentId: 'milo-snack', sessionId, event: 'story_close', durationSeconds: Math.round((Date.now() - start) / 1000), familiar }); };
   }, [sessionId]);
   useEffect(() => {
     narratePage();
     visited.current.add(page);
-    record({ kind: 'engagement', contentId: 'milo-cheese-hat', sessionId, event: 'story_page', page });
+    record({ kind: 'engagement', contentId: 'milo-snack', sessionId, event: 'story_page', page });
     if (visited.current.size === snackStory.length && !complete.current) {
       complete.current = true;
-      record({ kind: 'engagement', contentId: 'milo-cheese-hat', sessionId, event: 'story_complete' });
+      record({ kind: 'engagement', contentId: 'milo-snack', sessionId, event: 'story_complete' });
     }
     return stopAudio;
     // Page narration owns its audio; callbacks from older pages are cancelled.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, sessionId]);
-  return <main className="read-together child-screen"><header className="story-header"><button className="round" onClick={onHome} aria-label="Retour au chapitre"><Icon name="left"/></button><h1>Le drôle de chapeau</h1><span>{page + 1} / {snackStory.length}</span></header><p className="parent-read-notice">Installe-toi et écoute Milo.</p><div className={`snack-illustration snack-${current.scene}`} role="img" aria-label={current.scene === 'search' ? 'Milo cherche son fromage, posé sur sa tête, avec du pain devant lui.' : current.scene === 'napkin' ? 'Milo trouve une banane sous la serviette ; le fromage est toujours sur sa tête.' : current.scene === 'hat' ? 'Milo découvre son drôle de chapeau de fromage.' : current.scene === 'sandwich' ? 'Milo prépare un sandwich avec le pain et le fromage.' : current.scene === 'request' ? 'Le sandwich est prêt ; Milo demande du lait.' : 'Milo a son sandwich et du lait. Sa tête est libre !'}><div className="snack-window"/><Milo happy={page > 1} waving={page === 5}/>{page < 3 && <div className="cheese-hat"><FoodArt food="cheese"/></div>}{page === 2 && <span className="hat-surprise" aria-hidden="true">!</span>}{page < 3 ? <div className="snack-food"><FoodArt food={page === 1 ? 'banana' : 'bread'}/></div> : <div className="snack-sandwich"><FoodArt food="bread"/><FoodArt food="cheese"/></div>}{page === 1 && <div className="snack-napkin" aria-hidden="true"/>}{page === 5 && <div className="snack-drink"><FoodArt food="milk"/></div>}<div className="snack-table"/></div><div className="story-caption"><p>{current.text.replace(/ ([!?])/g, '\u202f$1')}</p><button className="round yellow" aria-label="Réécouter la page" onClick={replayPage}><Icon name="sound"/></button></div>{audioError && <button className="audio-notice" onClick={replayPage}>Touche ici pour écouter.</button>}<nav className="story-controls" aria-label="Les pages"><button className="round" disabled={page === 0} aria-label="Page précédente" onClick={() => setPage(p => p - 1)}><Icon name="left"/></button>{page === snackStory.length - 1 ? <button className="primary" onClick={() => { visited.current.clear(); complete.current = false; record({ kind: 'engagement', contentId: 'milo-cheese-hat', sessionId, event: 'story_replay' }); setPage(0); }}><Icon name="refresh"/> Encore !</button> : <button className="round" aria-label="Page suivante" onClick={() => setPage(p => p + 1)}><Icon name="right"/></button>}</nav></main>;
+  return <main className="read-together child-screen"><header className="story-header"><button className="round" onClick={onHome} aria-label="Retour au chapitre"><Icon name="left"/></button><h1>Le goûter de Milo</h1><span>{page + 1} / {snackStory.length}</span></header><p className="parent-read-notice">Installe-toi et écoute Milo.</p><div className="snack-illustration"><div className="snack-window"/><Milo happy={page > 1} waving={page === 5}/>{current.food && <div className="snack-food"><FoodArt food={current.food}/></div>}<div className="snack-table"/></div><div className="story-caption"><p>{current.text}</p><button className="round yellow" aria-label="Réécouter la page" onClick={replayPage}><Icon name="sound"/></button></div>{audioError && <button className="audio-notice" onClick={replayPage}>Touche ici pour écouter.</button>}<nav className="story-controls" aria-label="Les pages"><button className="round" disabled={page === 0} aria-label="Page précédente" onClick={() => setPage(p => p - 1)}><Icon name="left"/></button>{page === snackStory.length - 1 ? <button className="primary" onClick={() => { visited.current.clear(); complete.current = false; record({ kind: 'engagement', contentId: 'milo-snack', sessionId, event: 'story_replay' }); setPage(0); }}><Icon name="refresh"/> Encore !</button> : <button className="round" aria-label="Page suivante" onClick={() => setPage(p => p + 1)}><Icon name="right"/></button>}</nav></main>;
 }

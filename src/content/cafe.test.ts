@@ -1,39 +1,58 @@
 import { describe, expect, it } from 'vitest';
-import { cafeClip, cafeFoods, cafeHasSupport, cafeText, makeCafeTrials, makeSpeakingTrials } from './cafe';
+import { assessCafe, cafeClip, cafeFoods, smallCafeFoods, cafeHasSupport, cafeText, makeCafeTrials, makeSpeakingTrials } from './cafe';
 import { have, request, snackStory } from './session2';
-import { foodLayout, makeTrials } from './week1';
+import { foodLayout, makeTrials, phrase } from './week1';
 import { narrationFor } from './narration';
 import { metrics, type LearningEvent, type Attempt } from '../lib/model';
 
 describe('a contrast that requires listening to the sentence', () => {
-  it.each(['give', 'mission'] as const)('%s defeats first/last noun, a favourite food and fixed-position shortcuts', stage => {
+  it.each(['find', 'mission'] as const)('%s defeats first/last noun and fixed-picture shortcuts', stage => {
     const plan = makeCafeTrials(stage, () => .42);
-    const firstNounWins = plan.filter(t => t.cafe.requestFirst).length;
-    expect(firstNounWins).toBe(plan.length / 2);
+    expect(plan.filter(t => t.cafe.requestFirst)).toHaveLength(plan.length / 2);
     for (const food of new Set(plan.map(t => t.food))) {
-      expect(plan.filter(t => t.food === food).length).toBe(plan.filter(t => t.cafe.held === food).length);
+      expect(plan.filter(t => t.food === food)).toHaveLength(plan.filter(t => t.cafe.held === food).length);
     }
     for (const t of plan) {
       expect(t.food).not.toBe(t.cafe.held);
       expect(t.cafe.choices).toContain(t.food);
       expect(t.cafe.choices).toContain(t.cafe.held);
-      expect(t.guided).toBe(false);
       expect(cafeText(t)).toContain(have(t.cafe.held));
-      expect(cafeText(t)).toContain(request(t.food));
+      expect(cafeText(t)).toContain(t.cafe.form === 'want' ? request(t.food) : phrase(t.action, t.food));
     }
-    const slots = plan.map(t => t.cafe.choices.indexOf(t.food));
-    expect(new Set(slots).size).toBeGreaterThan(1);
-    // For each unordered pair the SAME two nouns have both possible answers.
-    const first = plan[0];
-    expect(plan.some(t => t.food === first.cafe.held && t.cafe.held === first.food)).toBe(true);
+    expect(new Set(plan.map(t => t.cafe.choices.indexOf(t.food))).size).toBeGreaterThan(1);
+    for (const t of plan) expect(plan.some(other => other.food === t.cafe.held && other.cafe.held === t.food && other.cafe.form === t.cafe.form)).toBe(true);
   });
-  it('teaches new nouns before the contrast and keeps first contrasts familiar', () => {
-    const plan = makeCafeTrials('find');
-    expect(plan.slice(0, 2).every(t => t.guided && t.cafe.kind === 'word')).toBe(true);
-    expect(plan.slice(2, 4).every(t => !t.guided && t.cafe.kind === 'word')).toBe(true);
-    expect(new Set(plan.slice(0, 4).map(t => t.food))).toEqual(new Set(['milk', 'cheese']));
-    expect(plan.slice(4).every(t => t.guided && ['apple', 'banana'].includes(t.food))).toBe(true);
-    expect(makeCafeTrials('mission').every(t => t.cafe.choices.length === 6)).toBe(true);
+  it('starts with hidden possessions and familiar foods, then introduces a small mixed menu', () => {
+    const first = makeCafeTrials('find');
+    expect(first).toHaveLength(8);
+    expect(first.every(t => t.cafe.kind === 'contrast' && t.cafe.form === 'want' && t.action === 'give' && t.cafe.choices.length === 2)).toBe(true);
+    expect(first.filter(t => t.guided)).toHaveLength(1);
+    expect(first.every(t => !['milk', 'cheese'].includes(t.food))).toBe(true);
+    const second = makeCafeTrials('give');
+    expect(second).toHaveLength(12);
+    expect(second.slice(0, 2).map(t => t.food)).toEqual(['milk', 'cheese']);
+    expect(second.slice(0, 2).every(t => t.guided)).toBe(true);
+    for (const food of smallCafeFoods) {
+      const turns = second.filter(t => t.food === food);
+      expect(new Set(turns.map(t => t.cafe.form))).toEqual(new Set(['want', 'show', 'give']));
+      for (const turn of turns) expect(new Set(turn.cafe.choices)).toEqual(new Set(smallCafeFoods));
+    }
+  });
+  it('combines hidden possessions with every request form and all six objects in stage three', () => {
+    const plan = makeCafeTrials('mission');
+    expect(plan).toHaveLength(18);
+    expect(plan.every(t => t.cafe.kind === 'contrast' && !t.guided && t.cafe.choices.length === 6)).toBe(true);
+    for (const food of cafeFoods) expect(new Set(plan.filter(t => t.food === food).map(t => t.cafe.form))).toEqual(new Set(['want', 'give', 'show']));
+  });
+  it('requires a tap for montre and a delivery for voudrais/donne without penalising stray drops', () => {
+    for (const t of [...makeCafeTrials('give'), ...makeCafeTrials('mission')]) {
+      expect(assessCafe(t, t.food, 'incomplete').outcome).toBe('motor');
+      expect(assessCafe(t, t.food, t.cafe.form === 'show' ? 'tap' : 'give').combinedCorrect).toBe(true);
+      if (t.cafe.form === 'show') expect(assessCafe(t, t.food, 'give').combinedCorrect).toBe(false);
+      else expect(assessCafe(t, t.food, 'tap').outcome).toBe('motor');
+      const other = t.cafe.choices.find(f => f !== t.food)!;
+      expect(assessCafe(t, other, t.action).combinedCorrect).toBe(false);
+    }
   });
   it('leaves chapter one at four foods and its original show/give progression', () => {
     expect(foodLayout()).toHaveLength(4);
@@ -51,19 +70,19 @@ describe('a contrast that requires listening to the sentence', () => {
       expect(narrationFor(`s2-request-${food}`).text).toBe(request(food));
     }
   });
-  it('has a story reveal, then resolves the missing cheese before the drink', () => {
-    expect(snackStory.map(p => p.scene)).toEqual(['search', 'napkin', 'hat', 'sandwich', 'request', 'goodbye']);
-    expect(snackStory[2].text).toContain('sur la tête');
-    expect(snackStory.at(-1)?.text).toContain('plus de fromage sur la tête');
+  it('keeps the snack story coherent and in sequence', () => {
+    expect(snackStory).toHaveLength(6);
+    expect(snackStory[1].food).toBe('apple');
+    expect(snackStory[3].food).toBe('water');
   });
 });
 describe('honest learning observations', () => {
   it('remembers a visual hint across leaving and resuming the same turn', () => {
-    const trial = makeCafeTrials('give')[0];
+    const trial = makeCafeTrials('give')[2];
     const hint: LearningEvent = { id: 'hint', profileId: 'test', ownerId: null, synced: false, createdAt: new Date().toISOString(), payload: { kind: 'engagement', contentId: 'test', sessionId: 'test', event: 'activity_hint', trialId: trial.id } };
     expect(cafeHasSupport([], trial)).toBe(false);
     expect(cafeHasSupport([hint], trial)).toBe(true);
-    expect(cafeHasSupport([hint], makeCafeTrials('give')[0])).toBe(false);
+    expect(cafeHasSupport([hint], makeCafeTrials('give')[2])).toBe(false);
   });
   it('does not label sentence contrast errors as noun or gesture errors', () => {
     const payload: Attempt = { kind: 'attempt', interactionVersion: 'cafe-contrast-v1', learningTarget: 'have-want', chapter: 'session-2', activity: 'give', sessionId: 'test', trialId: 'test', phrase: 'J’ai une pomme. Je voudrais une banane.', targetObject: 'banana', heldObject: 'apple', targetAction: 'give', selectedObject: 'apple', performedAction: 'give', assisted: false, attemptNumber: 1, objectCorrect: false, actionCorrect: null, combinedCorrect: false, outcome: 'retry' };

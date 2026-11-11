@@ -23,7 +23,7 @@ describe('one-time introductions and repeatable practice', () => {
     expect(canStartActivity([first, second], 1, 'give')).toBe(false);
   });
   it('retains old session-two history without treating it as the revised curriculum', () => {
-    const old = [event('chapter-2:find', 'activity_complete'), event('chapter-2:understanding:find', 'activity_complete')];
+    const old = [event('chapter-2:v2:understanding:find', 'activity_complete'), event('chapter-2:find', 'activity_complete'), event('chapter-2:understanding:find', 'activity_complete')];
     expect(gameStage(old, 1, 'understanding')).toBe(1);
     expect(gameStage(old, 1, 'speaking')).toBe(1);
   });
@@ -50,12 +50,12 @@ describe('one-time introductions and repeatable practice', () => {
 describe('independent game squares', () => {
   it('advances each game square through its own stages and holds at three', () => {
     const speaking = [event('chapter-2:v2:find', 'activity_complete'), event('chapter-2:v2:give', 'activity_complete')];
-    const understanding = [event('chapter-2:v2:understanding:find', 'activity_complete')];
+    const understanding = [event('chapter-2:v3:understanding:find', 'activity_complete')];
     expect(gameStage([], 1, 'understanding')).toBe(1);
     expect(gameStage(speaking, 1, 'speaking')).toBe(3);
     expect(gameStage(speaking, 1, 'understanding')).toBe(1);
     expect(gameStage([...speaking, ...understanding], 1, 'understanding')).toBe(2);
-    const all = [...speaking, ...understanding, event('chapter-2:v2:understanding:give', 'activity_complete'), event('chapter-2:v2:understanding:mission', 'activity_complete')];
+    const all = [...speaking, ...understanding, event('chapter-2:v3:understanding:give', 'activity_complete'), event('chapter-2:v3:understanding:mission', 'activity_complete')];
     expect(gameStage(all, 1, 'understanding')).toBe(3);
     expect(gameStage(all, 1, 'speaking')).toBe(3);
     expect(canStartActivity(all, 1, 'mission', 'understanding')).toBe(true);

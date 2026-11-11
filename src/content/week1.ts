@@ -12,7 +12,7 @@ export type Food = keyof typeof foods;
 export const weekOneFoods: Food[] = ['apple', 'banana', 'water', 'bread'];
 export type Action = 'show' | 'give';
 export type ActivityId = 'find' | 'give' | 'mission';
-export type Trial = { id: string; food: Food; action: Action; guided: boolean; cafe?: { kind: 'word' | 'contrast'; held: Food; requestFirst: boolean; choices: Food[] }; frame?: 'have' | 'want' };
+export type Trial = { id: string; food: Food; action: Action; guided: boolean; cafe?: { kind: 'word' | 'contrast' | 'instruction'; form?: 'want' | 'give' | 'show'; held: Food; requestFirst: boolean; choices: Food[] }; frame?: 'have' | 'want' };
 export const activities: {
   id: ActivityId; title: string; description: string; lesson: number;
   icon: 'hand' | 'basket' | 'flag'; food: Food; instruction: string;

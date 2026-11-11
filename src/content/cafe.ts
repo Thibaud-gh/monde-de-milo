@@ -1,36 +1,63 @@
-import type { LearningEvent } from '../lib/model';
-import { shuffled, type ActivityId, type Food, type Trial } from './week1';
+import { assess, type LearningEvent, type PerformedAction } from '../lib/model';
+import { phrase, shuffled, type ActivityId, type Food, type Trial } from './week1';
 import { request, have } from './session2';
 export const cafeFoods: Food[] = ['apple', 'banana', 'bread', 'water', 'milk', 'cheese'];
+export const smallCafeFoods: Food[] = ['apple', 'banana', 'milk', 'cheese'];
 export const contrastPairs: [Food, Food][] = [['apple', 'banana'], ['bread', 'water'], ['milk', 'cheese']];
 export type CafeTrial = Trial & { cafe: NonNullable<Trial['cafe']> };
-export function contrastText(held: Food, wanted: Food, requestFirst: boolean) {
-  return requestFirst ? `${request(wanted)} ${have(held)}` : `${have(held)} ${request(wanted)}`;
+export type CafeForm = 'want' | 'give' | 'show';
+export function contrastText(held: Food, wanted: Food, requestFirst: boolean, form: CafeForm = 'want') {
+  const instruction = form === 'want' ? request(wanted) : phrase(form, wanted);
+  return requestFirst ? `${instruction} ${have(held)}` : `${have(held)} ${instruction}`;
 }
 export function cafeClip(trial: CafeTrial) {
-  return trial.cafe.kind === 'word' ? `cafe-word-${trial.food}` : `cafe-${trial.cafe.held}-${trial.food}-${trial.cafe.requestFirst ? 'want-first' : 'have-first'}`;
+  const form = trial.cafe.form ?? 'want';
+  if (trial.cafe.kind === 'word') return `cafe-word-${trial.food}`;
+  if (trial.cafe.kind === 'instruction') return form === 'want' ? `s2-request-${trial.food}` : `${form}-${trial.food}`;
+  return `cafe-${trial.cafe.held}-${trial.food}-${form === 'want' ? '' : `${form}-`}${trial.cafe.requestFirst ? 'want-first' : 'have-first'}`;
 }
 export function cafeText(trial: CafeTrial) {
-  return trial.cafe.kind === 'word' ? `Voici ${trial.food === 'milk' ? 'du lait' : 'du fromage'}. Donne-moi ${trial.food === 'milk' ? 'le lait' : 'le fromage'} !` : contrastText(trial.cafe.held, trial.food, trial.cafe.requestFirst);
+  const form = trial.cafe.form ?? 'want';
+  if (trial.cafe.kind === 'word') return `Voici ${trial.food === 'milk' ? 'du lait' : 'du fromage'}. Donne-moi ${trial.food === 'milk' ? 'le lait' : 'le fromage'} !`;
+  if (trial.cafe.kind === 'instruction') return form === 'want' ? request(trial.food) : phrase(form, trial.food);
+  return contrastText(trial.cafe.held, trial.food, trial.cafe.requestFirst, form);
 }
-// Every pair appears in both roles and both sentence orders. Neither the noun,
-// the first/last mention nor the picture's position can solve the whole round.
 export function makeCafeTrials(activity: ActivityId, random = Math.random): CafeTrial[] {
-  const pairs = activity === 'find' ? contrastPairs.slice(0, 1) : activity === 'give' ? contrastPairs.slice(0, 2) : contrastPairs;
-  const contrasts = pairs.flatMap(([a, b]) => [false, true].flatMap(requestFirst => [[a, b], [b, a]].map(([held, food]) => ({
-    id: crypto.randomUUID(), food, action: 'give' as const, guided: activity === 'find',
-    cafe: { kind: 'contrast' as const, held, requestFirst, choices: shuffled(activity === 'mission' ? cafeFoods : [a, b], random) },
-  }))));
-  const intro: CafeTrial[] = activity === 'find' ? [true, false].flatMap(guided => shuffled(['milk', 'cheese'] as Food[], random).map(food => ({
-    id: crypto.randomUUID(), food, action: 'give', guided,
-    cafe: { kind: 'word', held: food === 'milk' ? 'cheese' : 'milk', requestFirst: false, choices: shuffled(['milk', 'cheese'] as Food[], random) },
-  }))) : [];
-  return [...intro, ...shuffled(contrasts, random)];
+  if (activity === 'give') {
+    const turns = smallCafeFoods.flatMap(food => (['want', 'give', 'show'] as const).map(form => ({
+      id: crypto.randomUUID(), food, action: form === 'show' ? 'show' as const : 'give' as const, guided: false,
+      cafe: { kind: 'instruction' as const, form, held: food, requestFirst: false, choices: shuffled(smallCafeFoods, random) },
+    })));
+    // Two supported introductions to the new nouns; then all three request forms.
+    const intro = [turns.find(t => t.food === 'milk' && t.cafe.form === 'show')!, turns.find(t => t.food === 'cheese' && t.cafe.form === 'give')!];
+    intro.forEach(t => { t.guided = true; });
+    return [...intro, ...shuffled(turns.filter(t => !intro.includes(t)), random)];
+  }
+  const pairs = activity === 'find' ? contrastPairs.slice(0, 2) : contrastPairs;
+  const forms: CafeForm[] = activity === 'find' ? ['want'] : ['want', 'give', 'show'];
+  const turns: CafeTrial[] = pairs.flatMap(([a, b]) => forms.flatMap(form => {
+    // Keep both clause orders for every form; swap the roles of the same nouns.
+    // The paired foods share a shuffled layout so position cannot solve the pair.
+    const first = random() < .5;
+    const roles: [Food, Food, boolean][] = activity === 'find'
+      ? [[a, b, false], [b, a, false], [a, b, true], [b, a, true]]
+      : [[a, b, first], [b, a, !first]];
+    const choices = shuffled(activity === 'mission' ? cafeFoods : [a, b], random);
+    return roles.map(([held, food, requestFirst]) => ({
+      id: crypto.randomUUID(), food, action: form === 'show' ? 'show' : 'give', guided: false,
+      cafe: { kind: 'contrast', form, held, requestFirst, choices: [...choices] },
+    }));
+  }));
+  const plan = shuffled(turns, random);
+  if (activity === 'find') plan[0].guided = true;
+  return plan;
+}
+export function assessCafe(trial: CafeTrial, selected: Food, performed: PerformedAction) {
+  return assess(trial, selected, performed);
 }
 export function makeSpeakingTrials(): Trial[] {
   return Array.from({ length: 6 }, (_, i) => ({ id: crypto.randomUUID(), food: 'apple', action: 'give', guided: false, frame: i % 2 === 0 ? 'have' : 'want' }));
 }
-
 export function cafeHasSupport(events: LearningEvent[], trial: CafeTrial) {
   return trial.guided || events.some(({ payload: p }) =>
     (p.kind === 'attempt' && p.trialId === trial.id && (p.assisted || p.outcome === 'retry')) ||

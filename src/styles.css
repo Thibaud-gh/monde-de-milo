@@ -84,3 +84,14 @@
 @media(max-width:480px){.cafe-customer{left:4%;width:165px;height:190px}.cafe-model{right:2%}.cafe-model>div{width:78px}.cafe-caption{font-size:22px}.cheese-hat{bottom:218px;left:calc(50% - 65px);width:100px;height:80px}.snack-illustration{height:330px}.hat-surprise{bottom:200px;left:calc(50% + 65px)}.snack-drink{left:5%;width:85px}.snack-sandwich{width:125px;left:calc(50% + 25px)}.snack-napkin{left:auto;right:0;width:65px}}
 .cafe-model>div>svg+svg{width:26px;height:26px;position:absolute;bottom:-14px;right:7px}
 .story-caption p{text-wrap:pretty}
+/* Concealed possessions stay in Milo's paw until the child answers. */
+.cafe-possession{position:absolute;left:-14px;bottom:75px;width:85px;height:85px;z-index:2}
+.cafe-possession svg{width:100%;height:100%}.cafe-possession.revealed{animation:uncover-food .4s ease-out}
+.cafe-customer .cafe-delivered{left:auto;right:-14px;bottom:75px;width:85px;height:85px}
+.cafe-reveal-caption{position:absolute;bottom:168px;left:50%;transform:translateX(-50%);padding:7px 16px;background:var(--paper);border-radius:12px;font-family:Delius,cursive;font-size:22px;white-space:nowrap}
+.cafe-foods button.shown{outline:3px solid #65885c;background:#f8d76780}
+.cafe-game .game-footer>.primary{margin-left:auto;min-height:48px}.cafe-game .game-footer:has(.primary)>.text-button{margin-left:0}
+@keyframes uncover-food{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:760px){.cafe-possession,.cafe-customer .cafe-delivered{bottom:65px;width:72px;height:72px}.cafe-possession{left:-8px}.cafe-customer .cafe-delivered{right:-8px}.cafe-reveal-caption{bottom:195px;left:calc(12% + 95px);font-size:18px}.cafe-game .game-footer{flex-wrap:wrap}.cafe-game .game-footer .primary{font-size:15px}}
+@media(max-width:480px){.cafe-possession,.cafe-customer .cafe-delivered{bottom:58px;width:62px;height:62px}.cafe-reveal-caption{left:calc(4% + 82px)}}
+@media(prefers-reduced-motion:reduce){.cafe-possession.revealed{animation:none}}

@@ -43,11 +43,11 @@ export function FoodArt({ food, className = '' }: { food: Food; className?: stri
     </g>}
   </svg>;
 }
-export function Milo({ waving = false, happy = false, className = '' }: { waving?: boolean; happy?: boolean; className?: string }) {
+export function Milo({ waving = false, happy = false, serving = false, className = '' }: { waving?: boolean; happy?: boolean; serving?: boolean; className?: string }) {
   return <svg className={className} viewBox="0 0 320 350" aria-hidden="true">
     <g fill="#B47D4F"><ellipse cx="105" cy="321" rx="43" ry="24"/><ellipse cx="218" cy="321" rx="43" ry="24"/></g>
-    <path d="M93 184c-38 24-44 76-27 83 24 10 42-23 48-38" fill="#C18B58"/>
-    <path d={waving ? 'M225 190c26-6 39-45 61-30 23 17-12 65-46 67' : 'M225 184c38 24 44 76 27 83-24 10-42-23-48-38'} fill="#C18B58"/>
+    <path d={serving ? 'M93 184C65 180 54 205 33 201C10 196 10 220 32 225C69 239 96 227 114 229' : 'M93 184c-38 24-44 76-27 83 24 10 42-23 48-38'} fill="#C18B58"/>
+    <path d={serving ? 'M225 184C255 180 266 205 287 201C310 196 310 220 288 225C251 239 224 227 206 229' : waving ? 'M225 190c26-6 39-45 61-30 23 17-12 65-46 67' : 'M225 184c38 24 44 76 27 83-24 10-42-23-48-38'} fill="#C18B58"/>
     <path d="M88 199c5-23 29-43 72-43s68 20 73 43l16 99c-36 32-140 32-177 0Z" fill="#C18B58"/>
     <path d="m110 183 12 46h77l13-46 12 9-12 46 14 73c-35 13-97 14-132 0l14-73-12-46Z" fill="#365878"/>
     <path d="M136 266h50v30c-15 8-35 8-50 0Z" fill="#F8D767"/>
