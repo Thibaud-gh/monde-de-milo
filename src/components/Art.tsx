@@ -23,6 +23,18 @@ export function FoodArt({ food, className = '' }: { food: Food; className?: stri
       <path d="m62 54 7 71" stroke="white" strokeWidth="6" strokeLinecap="round"/>
       <path d="M110 94v19" stroke="#D9EFF3" strokeWidth="4" strokeLinecap="round"/>
     </>}
+    {food === 'milk' && <>
+      <path d="m54 48 17-24h44l17 24v107H54Z" fill="#FFF9ED" stroke="#6D929D" strokeWidth="4" strokeLinejoin="round"/>
+      <path d="m71 24 17 24h44l-17-24Z" fill="#A9C8D0"/><path d="M88 48v107h44V48Z" fill="#D5E6E6"/>
+      <path d="M54 62h34v69H54Z" fill="#6D929D"/><path d="M71 80c-18 24-15 32 0 32s18-8 0-32" fill="#FFF9ED"/>
+      <path d="M71 24v-9h44v9" stroke="#6D929D" strokeWidth="5" strokeLinejoin="round"/>
+    </>}
+    {food === 'cheese' && <>
+      <path d="m28 91 91-47 39 49v53H28Z" fill="#E8B742" stroke="#C39035" strokeWidth="4" strokeLinejoin="round"/>
+      <path d="m28 91 91-47 39 49Z" fill="#F8D767"/><path d="M28 91h130v53H28Z" fill="#F4C653"/>
+      <ellipse cx="86" cy="73" rx="10" ry="5" fill="#D5A239"/><ellipse cx="125" cy="82" rx="8" ry="4" fill="#D5A239"/>
+      <circle cx="52" cy="112" r="8" fill="#D5A239"/><circle cx="103" cy="124" r="11" fill="#D5A239"/><circle cx="141" cy="108" r="6" fill="#D5A239"/>
+    </>}
     {food === 'bread' && <g transform="rotate(-28 90 90)">
       <path d="M13 104C9 74 39 59 79 59h43c25 0 45 15 46 34 2 22-18 38-42 38H59c-24 0-43-10-46-27Z" fill="#C28743"/>
       <path d="M14 94c5-21 30-31 65-31h45c19 0 34 7 39 21-2 23-23 33-49 33H58c-21 0-38-7-44-23Z" fill="#EDBD6E"/>

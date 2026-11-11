@@ -1,105 +1,93 @@
-# Session 2 - Milo’s café, without screens
+# Session 2 - What I have, what I want
 
-About 25 minutes. Milo, an apple, a banana, some bread (real or pretend), an empty or small glass of water, a tray and a cloth. Print the plan beforehand; put screens away for the whole lesson.
+Screen-free, about 25 minutes.
 
-## One main speaking goal
+**Two speaking and listening goals:** J’ai… / Je voudrais…
 
-**Je voudrais une pomme / une banane / du pain / de l’eau.**
+**New words:** lait, fromage. **Review:** pomme, banane, pain, eau; montre / donne.
 
-Review the familiar foods and montre / donne. Introduce J’ai faim / J’ai soif through Milo’s actions; understanding them is enough today. S’il te plaît is optional.
+Milo, the four familiar foods, milk and cheese (real, toy or drawn), two plates and a napkin. Use pretend cheese for the hat! Print the plan, then put screens away.
 
-If she says only “pomme”: acknowledge her choice, pause, offer “Je voudrais…”, then one full model if needed. Say it together if she wants. Serve her anyway. Avoid repeatedly demanding a perfect sentence. Never require eating or drinking.
+## 0–3 min - Hello, familiar foods
 
-## Your screen-free plan
+Set out pomme, banane, pain and eau. Give a few familiar show/give instructions; let her direct Milo too.
 
-### 1. Hello and familiar words - 0–4 min
+- **You:** Montre-moi la pomme. Donne-moi la banane.
+- **Milo:** Bonjour ! Donne-moi le pain !
+- **Her turn:** Show or give. Invite one familiar instruction to Milo; a word is welcome too.
+- **Help:** Model the whole instruction once if she wants to give Milo a turn. Keep this short: she already knows these foods.
 
-Sit Milo at the table with the four familiar foods. Use real foods or toys. Give four quick instructions, changing show and give for the same food.
+## 3–6 min - Two new things on the menu
 
-- **You, as yourself:** Bonjour Milo ! Montre-moi la banane. Donne-moi le pain.
-- **You, as Milo:** Bonjour ! Montre-moi la pomme. Maintenant, donne-moi la pomme.
-- **Her turn:** Show or give, then take a turn telling you or Milo what to do: “Donne-moi la banane !” A food word is a useful starting point.
-- **If she needs help:** If she only says “banane”, model “Donne-moi la banane” once and follow her request. Do not spend the whole warm-up testing food names she already knows.
+Introduce milk and cheese separately. Show and name each, then place them beside familiar objects.
 
-### 2. Milo asks for a snack - 4–7 min
+- **You:** Voici du lait. Voici du fromage. Montre-moi le lait.
+- **Milo:** Donne-moi le fromage ! Merci !
+- **Her turn:** Handle or point to each new object, then try naming it. This part teaches the nouns, before sentence contrasts.
+- **Help:** Show the object while naming it first. If unsure later, name it again without turning it into a repeated quiz.
 
-You are the café keeper; Milo is the customer. Rub the bear’s tummy for hunger. Mime drinking for thirst. Model two short exchanges, then let her become the customer.
+## 6–10 min - What I have, what I want
 
-- **You, as yourself:** Bonjour Milo ! Tu voudrais quoi ? Et toi, tu voudrais quoi ?
-- **You, as Milo:** J’ai faim ! Je voudrais une pomme. […] J’ai soif ! Je voudrais de l’eau.
-- **Her turn:** Serve Milo first, then choose something for herself and try making a request. Today’s main speaking target is “Je voudrais…”; she only needs to understand the hunger and thirst lines.
-- **If she needs help:** Offer the whole request once, in your own voice: “Tu peux dire : Je voudrais une banane.” Say it together if she wants. Keep “s’il te plaît” optional.
+Use the familiar apple and banana. Give Milo the apple: touch it for “J’ai”. Reach towards the banana for “Je voudrais”. Then give her an object and swap roles.
 
-### 3. Silly Milo gets it wrong - 7–11 min
+- **You:** Tu as quoi ? Tu voudrais quoi ?
+- **Milo:** J’ai une pomme. Je voudrais une banane.
+- **Her turn:** Try “J’ai…” for the thing in her hands, then “Je voudrais…” for something she chooses. Practise separately before linking them.
+- **Help:** Offer the right starter, then a whole model if needed. When listening, later hide what Milo has and vary which clause comes first so the pictures or last word cannot answer for her.
 
-Let her choose a food and ask Milo for it. Deliberately have Milo offer a different food once or twice, with a puzzled look. Keep it playful, never a test.
+## 10–17 min - Our little café
 
-- **You, as yourself:** Tu voudrais une pomme ou une banane ? Dis à Milo ce que tu voudrais.
-- **You, as Milo:** Voilà la banane ! […] Ah, la pomme ! Voilà !
-- **Her turn:** Correct the silly bear: “Non, une pomme !” Then try her original request again: “Je voudrais une pomme.” Repeat with a different food only if she enjoys the joke.
-- **If she needs help:** If she points, respond to her meaning and model “Non, une pomme !” once. Give her the chosen food even if she does not repeat. Avoid multiple wrong offers that could frustrate her.
+Each has an object on a plate. Take turns describing what you have and asking for something different. Bring in milk and cheese when the familiar-food exchanges feel comfortable.
 
-### 4. Open Milo’s café - 11–18 min
+- **You:** Qu’est-ce que tu as ? Tu voudrais quoi en plus ?
+- **Milo:** J’ai du pain. Je voudrais du fromage. […] Je voudrais du lait. J’ai une banane.
+- **Her turn:** Make two useful statements in her own turn: “J’ai…” and “Je voudrais…”. Serve the request, then swap customer and café keeper.
+- **Help:** Wait a few seconds. Offer a starter or model; serve her anyway. A food word communicates successfully, but record it separately from a complete sentence. No pressure to say both together.
 
-Put the four foods on a tray as a little menu. Milo serves; she orders. Aim for four to six short exchanges, using different foods she actually chooses. There are no stages or scores to complete.
+## 17–22 min - The cheese hat
 
-- **You, as yourself:** Le café de Milo est ouvert ! Choisis ton goûter.
-- **You, as Milo:** Bonjour ! Tu voudrais quoi ? […] Voilà !
-- **Her turn:** Ask for her choice: “Je voudrais une pomme / une banane / du pain / de l’eau.” Start with a whole model, then a starter, then a fresh invitation without help if comfortable.
-- **If she needs help:** Wait about five seconds before helping. If needed, say “Je voudrais…” and pause; then offer one full model. Serve her anyway. Finish by swapping roles: Milo orders and she serves, perhaps saying “Voilà !”.
+Tell the story below. Put pretend cheese on Milo’s head and a banana under the napkin. She may notice the cheese before the bear does.
 
-### 5. Act out the teddy story - 18–23 min
+- **You:** Milo cherche son fromage…
+- **Milo:** J’ai du pain. Je voudrais du fromage. Où est mon fromage ?
+- **Her turn:** Enjoy the silly search. Laugh, point or join in if she wants. The story is not another test.
+- **Help:** Let the surprise breathe. Do not stop on each page for questions. Finish by making the pretend sandwich and offering Milo milk.
 
-Tell Le goûter de Milo from the printed script, using the bear and foods. Make Milo nibble the apple and sip from the glass. No book, recording or screen is needed.
+## 22–25 min - My snack and goodbye
 
-- **You, as yourself:** C’est l’heure du goûter. On écoute Milo.
-- **You, as Milo:** J’ai faim ! Je voudrais une pomme. […] Maintenant, j’ai soif. Je voudrais de l’eau.
-- **Her turn:** Help the bear by handing him the props. Join a familiar line if she wants. When Milo asks “Et toi, tu voudrais quoi ?”, she can make one real request.
-- **If she needs help:** Do not pause after every line to quiz. Tell it again only if she wants; on a repeat, leave a small gap before a food word for her to fill in.
+Return to a real or pretend snack-time choice. End while it is still enjoyable, or stop sooner.
 
-### 6. One last request and goodbye - 23–25 min
+- **You:** Tu as quoi ? Tu voudrais quoi ?
+- **Milo:** Voilà ! Merci ! À bientôt !
+- **Her turn:** Try either or both phrases with the help she needs, then wave goodbye. Eating or drinking is optional.
+- **Help:** On paper, note an exact example of each phrase and whether it was independent, after a starter, or after a model. Tomorrow, use both phrases naturally at snack time for two minutes.
 
-Offer a final real or pretend snack-time choice. Finish while it is still fun; stop earlier or omit a middle activity if she is tired.
+## Story - The cheese hat
 
-- **You, as yourself:** Tu voudrais quoi pour ton goûter ?
-- **You, as Milo:** Voilà ! Merci d’être venue au café. Au revoir !
-- **Her turn:** Try one request with the help she needs, then wave goodbye to Milo. Eating or drinking is not required.
-- **If she needs help:** After the lesson, jot down one exact utterance on paper and whether it followed a model, a starter, or no help. Tomorrow, invite one real request at snack time for about two minutes.
+**Milo:** J’ai du pain. Je voudrais du fromage. Où est mon fromage ?
 
-## Teddy story - Le goûter de Milo
+Give Milo bread. Put the pretend cheese on his head, where she can spot it before he does.
 
-Tell this with the bear and props. No screen or recording is needed.
+**Milo:** Sous la serviette ? Oh ! Une banane ! Ce n’est pas mon fromage.
 
-**Moment 1 - Milo:** C’est l’heure du goûter. J’ai faim !
+Milo lifts a napkin and finds a banana. Play his puzzled reaction; let her enjoy knowing more than him.
 
-Rub Milo’s tummy. Let Éva watch; no question yet.
+**Milo:** Oh ! J’ai du fromage sur la tête ! Quel drôle de chapeau !
 
-**Moment 2 - Milo:** Je voudrais une pomme.
+Make the bear discover his cheese hat. Pause for a laugh, not a test.
 
-Éva can give the real or pretend apple to the bear.
+**Milo:** Du pain, du fromage… Voilà mon sandwich ! Miam !
 
-**Moment 3 - Milo:** Merci ! Miam, miam !
+Move the cheese from his head onto the bread. Make a pretend sandwich.
 
-Make Milo nibble his apple. Enjoy the story without testing.
+**Milo:** J’ai mon sandwich. Je voudrais du lait pour mon goûter.
 
-**Moment 4 - Milo:** Maintenant, j’ai soif. Je voudrais de l’eau.
+Milo asks for a drink to go with the sandwich. Offer the real or pretend milk.
 
-Milo looks for his glass. Mime drinking.
+**Milo:** Merci ! J’ai du lait. Et plus de fromage sur la tête ! À bientôt !
 
-**Moment 5 - Milo:** Merci ! Et toi, tu voudrais quoi ?
+Milo checks his head with relief and waves. No compulsory question at the end.
 
-Optional invitation: accept a word, expand it into a request, then serve her.
+## Observing without testing
 
-**Moment 6 - Milo:** Quel bon goûter ! À bientôt !
-
-Wave together. The story can be read again whenever she wants.
-
-## After the lesson
-
-On paper, note one exact utterance and whether it was spontaneous, after a starter, or after a full model. Add it to the parent journal later only if useful. Tomorrow, invite one real request at snack time (about two minutes).
-
-The app games are separate optional activities outside this lesson. No app, game stages, stars, recordings or screen time are needed to teach this session. The optional app activities now have prepared Milo recordings; this printed lesson still uses only you, the teddy and real objects.
-
-## Basis for the approach
-
-Modelling, gradual support and role-play are informed by [DfE guidance on exploring language](https://help-for-early-years-providers.education.gov.uk/areas-of-learning/communication-and-language/exploring-language). This particular plan is our adaptation for this family’s French practice, not an evaluated programme or developmental assessment.
+A word or gesture communicates successfully; respond and serve her. Model the full phrase once if useful. Note a phrase as independent only when no starter or model was supplied. Track J’ai and Je voudrais separately. The app is optional outside this lesson.

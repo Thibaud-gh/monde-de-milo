@@ -13,8 +13,9 @@ export type ActivityState = 'locked' | 'ready' | 'resume' | 'done';
 export function activityKey(chapter: number, activity: ActivityId, kind?: GameKind) {
   // Preserve the identifiers already stored by Chapter 1 on existing devices.
   if (chapter === 0) return activity;
-  // The original Session 2 activities were speaking: retain that progress.
-  return kind === 'understanding' ? `chapter-${chapter + 1}:understanding:${activity}` : `chapter-${chapter + 1}:${activity}`;
+  // Revised curriculum has different objectives. Retain old events as history,
+  // but do not count the previous food-matching game as have/want learning.
+  return kind === 'understanding' ? `chapter-${chapter + 1}:v2:understanding:${activity}` : `chapter-${chapter + 1}:v2:${activity}`;
 }
 export function completedActivity(events: LearningEvent[], chapter: number, activity: ActivityId, kind?: GameKind) {
   return events.some(e => e.payload.kind === 'engagement' && e.payload.contentId === activityKey(chapter, activity, kind) && e.payload.event === 'activity_complete');

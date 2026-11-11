@@ -56,3 +56,31 @@
   .game:has(.parent-read-notice) .game-scene { min-height: 340px; }
   .game .parent-read-notice { font-size: 12px; padding: 8px 15px; }
 }
+
+/* The second café: one quiet serving counter; teaching clues disappear in practice. */
+.cafe-game{display:flex;flex-direction:column;background:var(--paper);min-height:100dvh}
+.cafe-game .game-header{min-height:105px;height:auto}
+.cafe-room{position:relative;isolation:isolate;flex:1;min-height:510px;background:repeating-linear-gradient(90deg,#eaf0e4 0 49px,#e0e8da 50px 51px);overflow:hidden}
+.cafe-awning{height:25px;background:repeating-linear-gradient(90deg,#365878 0 65px,#f8d767 65px 130px);border-radius:0 0 12px 12px}
+.cafe-caption{position:relative;z-index:2;font-family:Delius,cursive;font-size:clamp(22px,2.5vw,30px);text-align:center;background:var(--paper);width:fit-content;max-width:90%;padding:12px 24px;margin:16px auto;border-radius:5px 18px 8px 15px}
+.cafe-customer{position:absolute;width:225px;height:250px;left:calc(50% - 112px);bottom:170px;border-radius:45%;transition:background .15s}
+.cafe-customer>svg{width:100%;height:100%}.cafe-customer.receiving{outline:3px dashed #65885c;background:#f8d76780}
+.cafe-delivered{position:absolute;left:70px;bottom:12px;width:90px;height:90px}.cafe-delivered svg{width:100%;height:100%}
+.cafe-model{position:absolute;right:max(3%,calc(50% - 450px));bottom:210px;display:flex;gap:12px}
+.cafe-model>div{position:relative;display:flex;flex-direction:column;align-items:center;padding:12px;background:#fff9ed;border:2px solid #9db2c1;border-radius:10px 18px 9px 16px;width:115px}
+.cafe-model span{font-family:Delius,cursive;font-size:20px}.cafe-model>div>svg{width:80px;height:80px}.cafe-model>div>.icon{width:26px;height:26px;position:absolute;bottom:-15px;right:0}
+.cafe-counter{position:absolute;bottom:0;left:0;right:0;min-height:160px;background:repeating-linear-gradient(90deg,transparent 0 26px,#a9c8d04d 26px 52px),repeating-linear-gradient(0deg,#fff9ed 0 26px,#dce9e5 26px 52px);border-top:12px solid #bf9064;padding:10px 20px}
+.cafe-foods{display:flex;justify-content:center;align-items:center;gap:clamp(8px,2vw,25px);max-width:1000px;margin:auto}
+.cafe-foods button{background:transparent;width:clamp(80px,12vw,140px);height:140px;padding:0;touch-action:none;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;border-radius:35%;opacity:1!important}
+.cafe-foods svg{width:100%;height:100%;pointer-events:none}.cafe-foods .drag-source svg{opacity:.25}
+.speaking-foods.six-foods{flex-wrap:wrap;gap:12px}.speaking-foods.six-foods button{width:105px;height:105px}
+.my-plate{display:flex;flex-direction:column;align-items:center;background:#e4f0ed;border-radius:50%;padding:15px;flex-shrink:0}.my-plate span{font-size:12px}.my-plate>svg{width:85px;height:85px}
+.cheese-hat{position:absolute;left:calc(50% - 90px);width:120px;height:90px;bottom:265px;transform:rotate(-12deg)}
+.cheese-hat svg{width:100%;height:100%}.snack-illustration{height:380px}.hat-surprise{position:absolute;bottom:245px;left:calc(50% + 65px);font-family:Delius;font-size:65px;color:#365878;transform:rotate(12deg)}
+.snack-sandwich{position:absolute;width:160px;height:110px;bottom:5px;left:calc(50% + 40px)}.snack-sandwich svg{position:absolute;width:100%;height:100%}.snack-sandwich svg+svg{width:95px;height:85px;left:27px;top:-15px;transform:rotate(-10deg)}
+.snack-drink{position:absolute;width:110px;height:140px;bottom:5px;left:calc(50% - 235px)}.snack-drink svg{width:100%;height:100%}
+.snack-napkin{position:absolute;bottom:17px;left:calc(50% + 180px);width:90px;height:75px;background:repeating-linear-gradient(90deg,#e4f0ed 0 18px,#a9c8d0 18px 21px);transform:rotate(20deg);border-radius:5px 35px 5px 15px}
+@media(max-width:760px){.cafe-game .game-header{padding:15px;gap:10px}.cafe-game .prompt h1{font-size:25px}.cafe-room{min-height:550px}.cafe-customer{left:12%;bottom:205px;width:190px;height:215px}.cafe-model{right:3%;bottom:210px;gap:5px}.cafe-model>div{width:90px;padding:8px}.cafe-model span{font-size:17px}.cafe-model>div>svg{width:65px;height:65px}.cafe-foods{flex-wrap:wrap;gap:5px 15px;max-width:440px}.cafe-foods button{height:90px;width:100px}.cafe-counter{min-height:190px}.cafe-game .game-footer{padding:10px 15px;height:auto}.cafe-game .game-footer p{font-size:14px}.speaking-scene{flex-wrap:wrap}.my-plate{padding:8px;position:relative}.my-plate>svg{width:60px;height:60px}.speaking-foods.six-foods{max-width:450px;margin:auto}.speaking-foods.six-foods button{width:95px;height:90px}}
+@media(max-width:480px){.cafe-customer{left:4%;width:165px;height:190px}.cafe-model{right:2%}.cafe-model>div{width:78px}.cafe-caption{font-size:22px}.cheese-hat{bottom:218px;left:calc(50% - 65px);width:100px;height:80px}.snack-illustration{height:330px}.hat-surprise{bottom:200px;left:calc(50% + 65px)}.snack-drink{left:5%;width:85px}.snack-sandwich{width:125px;left:calc(50% + 25px)}.snack-napkin{left:auto;right:0;width:65px}}
+.cafe-model>div>svg+svg{width:26px;height:26px;position:absolute;bottom:-14px;right:7px}
+.story-caption p{text-wrap:pretty}

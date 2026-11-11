@@ -5,11 +5,14 @@ export const foods = {
   banana: { name: 'la banane', label: 'Une banane', english: 'Banana' },
   water: { name: 'l’eau', label: 'De l’eau', english: 'Water' },
   bread: { name: 'le pain', label: 'Du pain', english: 'Bread' },
+  milk: { name: 'le lait', label: 'Du lait', english: 'Milk' },
+  cheese: { name: 'le fromage', label: 'Du fromage', english: 'Cheese' },
 } as const;
 export type Food = keyof typeof foods;
+export const weekOneFoods: Food[] = ['apple', 'banana', 'water', 'bread'];
 export type Action = 'show' | 'give';
 export type ActivityId = 'find' | 'give' | 'mission';
-export type Trial = { id: string; food: Food; action: Action; guided: boolean };
+export type Trial = { id: string; food: Food; action: Action; guided: boolean; cafe?: { kind: 'word' | 'contrast'; held: Food; requestFirst: boolean; choices: Food[] }; frame?: 'have' | 'want' };
 export const activities: {
   id: ActivityId; title: string; description: string; lesson: number;
   icon: 'hand' | 'basket' | 'flag'; food: Food; instruction: string;
@@ -30,7 +33,7 @@ export const story = storyForLearner(learner.firstName);
 export function phrase(action: Action, food: Food) {
   return `${action === 'show' ? 'Montre-moi' : 'Donne-moi'} ${foods[food].name} !`;
 }
-function shuffled<T>(items: T[], random = Math.random): T[] {
+export function shuffled<T>(items: T[], random = Math.random): T[] {
   const result = [...items];
   for (let i = result.length - 1; i > 0; i--) {
     const j = Math.floor(random() * (i + 1));
@@ -39,7 +42,7 @@ function shuffled<T>(items: T[], random = Math.random): T[] {
   return result;
 }
 export function makeTrials(id: ActivityId, random = Math.random): Trial[] {
-  const foodIds = Object.keys(foods) as Food[];
+  const foodIds = weekOneFoods;
   let pairs: { food: Food; action: Action }[];
   if (id === 'mission') {
     const mixed = foodIds.flatMap(food => [
@@ -54,5 +57,5 @@ export function makeTrials(id: ActivityId, random = Math.random): Trial[] {
   return pairs.map((p, i) => ({ ...p, id: crypto.randomUUID(), guided: i === 0 }));
 }
 export function foodLayout(): Food[] {
-  return shuffled(Object.keys(foods)) as Food[];
+  return shuffled(weekOneFoods);
 }

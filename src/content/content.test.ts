@@ -4,13 +4,12 @@ import { hasEvaRecordings, narrationFor } from './narration';
 import { describe, expect, it } from 'vitest';
 import { readFileSync, existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
-import { foods, phrase, story, storyForLearner } from './week1';
-import type { Food } from './week1';
+import { weekOneFoods, phrase, story, storyForLearner } from './week1';
 const audio = new URL('../../public/audio/', import.meta.url);
 const phrases = JSON.parse(readFileSync(new URL('phrases.json', audio), 'utf8'));
 describe('prepared French voice content', () => {
   it('covers both instructions for every food, with the same transcript as the game', () => {
-    for (const food of Object.keys(foods) as Food[]) for (const action of ['show', 'give'] as const) {
+    for (const food of weekOneFoods) for (const action of ['show', 'give'] as const) {
       expect(phrases[`${action}-${food}`]).toBe(phrase(action, food));
     }
   });
@@ -27,7 +26,7 @@ describe('prepared French voice content', () => {
   it('uses personal greetings and goodbyes without repeating Éva on every turn', () => {
     const ids = ['bonjour', 'merci', 'bravo', 'encore', 'showHint', 'giveHint', 'fini',
       ...Array.from({ length: 6 }, (_, index) => `story-${index + 1}`),
-      ...Object.keys(foods).flatMap(food => [`show-${food}`, `give-${food}`])];
+      ...weekOneFoods.flatMap(food => [`show-${food}`, `give-${food}`])];
     for (const id of ids) {
       const named = narrationFor(id, 'Éva');
       const generic = narrationFor(id, 'Alex');
@@ -55,7 +54,7 @@ describe('prepared French voice content', () => {
 // Understanding uses a request plus an action; the response remains a gesture.
 describe('Session 2 understanding requests', () => {
   it('names every food and differentiates show from give without asking for speech', () => {
-    for (const food of Object.keys(foods) as Food[]) {
+    for (const food of weekOneFoods) {
       expect(understandingPrompt({ food, action: 'show' })).toBe(`${request(food)} Montre-moi !`);
       expect(understandingPrompt({ food, action: 'give' })).toBe(`${request(food)} Donne-moi !`);
     }
@@ -64,16 +63,16 @@ describe('Session 2 understanding requests', () => {
 
 describe('approved Milo recordings for both sessions', () => {
   it('covers every Session 2 request, story caption and speaking scaffold', () => {
-    for (const food of Object.keys(foods) as Food[]) {
+    for (const food of weekOneFoods) {
       for (const action of ['show', 'give'] as const) {
         expect(narrationFor(`s2-${action}-${food}`).text).toBe(understandingPrompt({ food, action }));
       }
       expect(narrationFor(`s2-request-${food}`).text).toBe(request(food));
     }
-    snackStory.forEach((page, index) => expect(narrationFor(`s2-story-${index + 1}`).text).toBe(page.text));
+    snackStory.forEach((page, index) => expect(narrationFor(`cafe-story-${index + 1}`).text).toBe(page.text));
     expect(narrationFor('s2-question').text).toBe('Tu voudrais quoi ?');
     expect(narrationFor('s2-starter').text).toBe('Je voudrais…');
-    expect(narrationFor('s2-fini').text).toBe(snackStory.at(-1)?.text);
+    expect(narrationFor('s2-fini').text).toBe('Quel bon goûter ! À bientôt !');
   });
   it('versions all clips with their actual bytes and keeps one pinned voice and transcript', () => {
     const catalog = JSON.parse(readFileSync(new URL('catalog.json', audio), 'utf8'));

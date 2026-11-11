@@ -10,8 +10,8 @@ export function Chapter({ index, onHome, onActivity, onStory }: { index: number;
   const chapter = chapters[index];
   const { events } = useProgress();
   const games: { kind: GameKind; title: string; description: string; food: 'apple' | 'banana' }[] = [
-    { kind: 'understanding', title: index === 0 ? 'Le panier de Milo' : 'Milo commande', description: 'Écoute Milo. Montre ou donne.', food: 'apple' },
-    ...(index === 1 ? [{ kind: 'speaking' as const, title: 'Le petit café', description: 'Parle avec Milo, accompagné d’un adulte.', food: 'banana' as const }] : []),
+    { kind: 'understanding', title: index === 0 ? 'Le panier de Milo' : 'Le goûter de Milo', description: index === 0 ? 'Écoute Milo. Montre ou donne.' : 'Il a déjà quelque chose… Que voudrait-il ?', food: 'apple' },
+    ...(index === 1 ? [{ kind: 'speaking' as const, title: 'Le petit café', description: 'J’ai… Je voudrais… À toi de parler avec Milo.', food: 'banana' as const }] : []),
   ];
   return <main className="chapter child-screen"><header className="chapter-header"><button className="round" onClick={onHome} aria-label="Tous les chapitres"><Icon name="left"/></button><span>Chapitre {index + 1}</span><MusicButton/></header>
     <div className="chapter-welcome"><div><h1>{chapter.title}</h1><p>{index === 0 ? 'Un jeu et une histoire' : 'Deux jeux et une histoire'}</p></div><Milo waving/></div>
@@ -30,7 +30,7 @@ export function Chapter({ index, onHome, onActivity, onStory }: { index: number;
           <span className="choice-start"><Icon name="play" size={18}/>Étape {stage} · {action}</span>
         </button>;
       })}
-      <button className="game-choice game-choice-mission story-card" onClick={onStory} aria-label={`Histoire : ${chapter.story}`}><span className="choice-label">L’histoire</span><div className="choice-picture"><BookArt/><span><Icon name="book" size={30}/></span></div><strong>{chapter.story}</strong><small>{index === 1 ? 'Un goûter à partager avec Milo.' : 'Une pomme à retrouver au café…'}</small><span className="choice-start"><Icon name="sound" size={18}/>Écouter</span></button>
+      <button className="game-choice game-choice-mission story-card" onClick={onStory} aria-label={`Histoire : ${chapter.story}`}><span className="choice-label">L’histoire</span><div className="choice-picture"><BookArt/><span><Icon name="book" size={30}/></span></div><strong>{chapter.story}</strong><small>{index === 1 ? 'Mais où est passé le fromage ?' : 'Une pomme à retrouver au café…'}</small><span className="choice-start"><Icon name="sound" size={18}/>Écouter</span></button>
     </div> : <p className="coming-soon">Milo prépare de nouvelles aventures. À bientôt !</p>}
     <footer className="home-footer"><span className="little-dash"/> Chaque jeu avance à ton rythme. À l’étape 3, on rejoue ! <span className="little-dash"/></footer>
   </main>;

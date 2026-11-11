@@ -7,12 +7,13 @@ export type Attempt = {
   performedAction: PerformedAction; assisted: boolean; attemptNumber: number;
   objectCorrect: boolean; actionCorrect: boolean | null; combinedCorrect: boolean;
   outcome: 'correct' | 'retry' | 'motor';
-  interactionVersion?: 'tap-show-v2';
+  interactionVersion?: 'tap-show-v2' | 'cafe-contrast-v1';
+  learningTarget?: 'vocabulary' | 'have-want'; heldObject?: Food;
 };
 export type Engagement = {
   kind: 'engagement'; contentId: string; sessionId: string;
-  event: 'activity_checkpoint' | 'activity_open' | 'activity_complete' | 'activity_close' | 'story_open' | 'story_page' | 'story_complete' | 'story_replay' | 'story_audio_replay' | 'story_close';
-  page?: number; durationSeconds?: number; familiar?: boolean;
+  event: 'activity_hint' | 'activity_checkpoint' | 'activity_open' | 'activity_complete' | 'activity_close' | 'story_open' | 'story_page' | 'story_complete' | 'story_replay' | 'story_audio_replay' | 'story_close';
+  trialId?: string; page?: number; durationSeconds?: number; familiar?: boolean;
   trials?: Trial[]; completedTurns?: number;
 };
 export type Assessment = {
@@ -39,7 +40,13 @@ export function metrics(events: LearningEvent[]) {
   const independent = attempts.filter(p => !p.assisted && p.outcome !== 'motor');
   const guided = attempts.filter(p => p.assisted && p.outcome !== 'motor');
   const ratio = (list: Attempt[], key: 'objectCorrect' | 'actionCorrect' | 'combinedCorrect') => ({ correct: list.filter(p => p[key] === true).length, total: list.length });
-  return { attempts, independent, guided, objects: ratio(independent, 'objectCorrect'), actions: ratio(independent, 'actionCorrect'), combined: ratio(independent, 'combinedCorrect'), motor: attempts.filter(p => p.outcome === 'motor').length };
+  const words = independent.filter(p => p.learningTarget !== 'have-want');
+  const gestures = independent.filter(p => p.interactionVersion !== 'cafe-contrast-v1');
+  const contrasts = independent.filter(p => p.learningTarget === 'have-want');
+  return { attempts, independent, guided, words, gestures, contrasts,
+    objects: ratio(words, 'objectCorrect'), actions: ratio(gestures, 'actionCorrect'),
+    combined: ratio(gestures, 'combinedCorrect'), wants: ratio(contrasts, 'combinedCorrect'),
+    motor: attempts.filter(p => p.outcome === 'motor').length };
 }
 export function mergeEvents(local: LearningEvent[], remote: LearningEvent[]): LearningEvent[] {
   const all = new Map(local.map(e => [e.id, e]));
