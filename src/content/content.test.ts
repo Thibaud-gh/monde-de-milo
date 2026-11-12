@@ -69,7 +69,7 @@ describe('approved Milo recordings for both sessions', () => {
       }
       expect(narrationFor(`s2-request-${food}`).text).toBe(request(food));
     }
-    snackStory.forEach((page, index) => expect(narrationFor(`s2-story-${index + 1}`).text).toBe(page.text));
+    snackStory.forEach(page => expect(narrationFor(page.audio).text).toBe(page.text));
     expect(narrationFor('s2-question').text).toBe('Tu voudrais quoi ?');
     expect(narrationFor('s2-starter').text).toBe('Je voudrais…');
     expect(narrationFor('s2-fini').text).toBe('Quel bon goûter ! À bientôt !');

@@ -1521,6 +1521,18 @@
       "sourceWavHash": "c8360c5999c6b4cae0a6932630eb52096f339396d9a3950c984ca47bdce5fa73",
       "durationSeconds": 3.2,
       "generation": "whole-utterance"
+    },
+    "s2-story-apple-received": {
+      "file": "s2-story-apple-received.mp3",
+      "text": "Maintenant, j’ai une pomme. Miam, miam !",
+      "voice": "Milo — On compte",
+      "model": "openbmb/VoxCPM2",
+      "rate": "reference",
+      "signature": "a7e332bfde1dac3f568398ea03e263223347b0bf268681140048f3c66e993040",
+      "contentHash": "9a286c3490a5605ad6b9915f8b0e3e48dde6b6afdba6715b9bb6aaa8eb737d59",
+      "sourceWavHash": "7b14e5171ce6f40b41381351747b9f4cf136eafa725b704aac2bd06f427cb05f",
+      "durationSeconds": 3.52,
+      "generation": "whole-utterance"
     }
   }
 }

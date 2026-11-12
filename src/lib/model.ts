@@ -9,6 +9,7 @@ export type Attempt = {
   outcome: 'correct' | 'retry' | 'motor';
   interactionVersion?: 'tap-show-v2' | 'cafe-contrast-v1' | 'cafe-actions-v2';
   learningTarget?: 'vocabulary' | 'instructions' | 'have-want'; heldObject?: Food;
+  selectedHeldObject?: Food; heldObjectCorrect?: boolean;
 };
 export type Engagement = {
   kind: 'engagement'; contentId: string; sessionId: string;

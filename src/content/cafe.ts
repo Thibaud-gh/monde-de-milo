@@ -34,7 +34,7 @@ export function makeCafeTrials(activity: ActivityId, random = Math.random): Cafe
     return [...intro, ...shuffled(turns.filter(t => !intro.includes(t)), random)];
   }
   const pairs = activity === 'find' ? contrastPairs.slice(0, 2) : contrastPairs;
-  const forms: CafeForm[] = activity === 'find' ? ['want'] : ['want', 'give', 'show'];
+  const forms: CafeForm[] = activity === 'find' ? ['want'] : ['want', 'give'];
   const turns: CafeTrial[] = pairs.flatMap(([a, b]) => forms.flatMap(form => {
     // Keep both clause orders for every form; swap the roles of the same nouns.
     // The paired foods share a shuffled layout so position cannot solve the pair.
@@ -44,7 +44,7 @@ export function makeCafeTrials(activity: ActivityId, random = Math.random): Cafe
       : [[a, b, first], [b, a, !first]];
     const choices = shuffled(activity === 'mission' ? cafeFoods : [a, b], random);
     return roles.map(([held, food, requestFirst]) => ({
-      id: crypto.randomUUID(), food, action: form === 'show' ? 'show' : 'give', guided: false,
+      id: crypto.randomUUID(), food, action: 'give', guided: false,
       cafe: { kind: 'contrast', form, held, requestFirst, choices: [...choices] },
     }));
   }));
@@ -54,6 +54,21 @@ export function makeCafeTrials(activity: ActivityId, random = Math.random): Cafe
 }
 export function assessCafe(trial: CafeTrial, selected: Food, performed: PerformedAction) {
   return assess(trial, selected, performed);
+}
+export type CafeChoices = { held: Food | null; given: Food | null };
+
+export function assessCafeChoices(trial: CafeTrial, { held, given }: CafeChoices) {
+  if (!held || !given) return undefined;
+  const result = assessCafe(trial, given, 'give');
+  const heldObjectCorrect = held === trial.cafe.held;
+  const combinedCorrect = result.combinedCorrect && heldObjectCorrect;
+  return {
+    ...result,
+    selectedHeldObject: held,
+    heldObjectCorrect,
+    combinedCorrect,
+    outcome: combinedCorrect ? 'correct' as const : 'retry' as const,
+  };
 }
 export function makeSpeakingTrials(): Trial[] {
   return Array.from({ length: 6 }, (_, i) => ({ id: crypto.randomUUID(), food: 'apple', action: 'give', guided: false, frame: i % 2 === 0 ? 'have' : 'want' }));

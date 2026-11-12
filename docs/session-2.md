@@ -46,12 +46,12 @@ Each has an object on a plate. Take turns describing what you have and asking fo
 
 ## 17–22 min - Milo’s snack story
 
-Tell the story below with Milo, an apple and a glass of water.
+Tell the story below with Milo, an apple, a glass of water and a toy or paper piece of cheese.
 
 - **You:** C’est l’heure du goûter !
 - **Milo:** J’ai faim ! Je voudrais une pomme.
 - **Her turn:** Enjoy the story, help Milo with his snack or join in if she wants.
-- **Help:** Let the story flow without questions on every page. Offer Milo the apple and then the water.
+- **Help:** Let the story flow without questions on every page. Offer Milo the apple and water, then let her spot the cheese on his head.
 
 ## 22–25 min - My snack and goodbye
 
@@ -72,9 +72,9 @@ Rub Milo’s tummy. Let Éva watch; no question yet.
 
 Éva can give the real or pretend apple to the bear.
 
-**Milo:** Merci ! Miam, miam !
+**Milo:** Maintenant, j’ai une pomme. Miam, miam !
 
-Make Milo nibble his apple. Enjoy the story without testing.
+Make Milo hold and nibble his apple.
 
 **Milo:** Maintenant, j’ai soif. Je voudrais de l’eau.
 
@@ -83,6 +83,14 @@ Milo looks for his glass. Mime drinking.
 **Milo:** Merci ! Et toi, tu voudrais quoi ?
 
 Optional invitation: accept a word, expand it into a request, then serve her.
+
+**Milo:** Je voudrais du fromage.
+
+Put a toy or paper piece of cheese on Milo’s head. Pause so Éva can spot it.
+
+**Milo:** Oh ! J’ai du fromage sur la tête ! Quel drôle de chapeau !
+
+Have Milo feel his head with his paw and discover the cheese.
 
 **Milo:** Quel bon goûter ! À bientôt !
 

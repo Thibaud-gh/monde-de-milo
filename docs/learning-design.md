@@ -13,12 +13,12 @@ Before adding a game, ask: could a child get every answer right while ignoring t
 
 A story needs a small problem, anticipation, a playful surprise and a resolution. It should not be the game repeated without interaction. Target phrases belong naturally inside the plot; avoid a quiz at every page.
 
-Session 2 uses a simple snack story: Milo asks for an apple, enjoys it, then asks for water and shares the moment with the child.
+In the Session 2 story, Milo asks for an apple and water, then discovers the cheese he wants is already on his head.
 
 ## Revised Session 2
 
 Two new foods: milk and cheese, alongside apple, banana, bread and water.
 
-Understanding now has three distinct stages: (1) Milo holds an object under a cloth and requests a different familiar food; an intentional answer reveals the possession in his paw, with a child-controlled Continue. (2) A four-food menu (apple, banana, milk, cheese) mixes “Je voudrais”, “Donne-moi” and “Montre-moi”; tap to show, drag to give. (3) All six foods combine concealed possessions with all three instruction forms. New milk/cheese turns are introduced with support. No possession picture is displayed before the first answer, even during help. Speaking: describe a chosen possession, then request something different, using a whole model, a starter, and eventually no supplied model.
+Understanding has three stages. In stage 1, the child taps what Milo has under the cloth and drags him the familiar food he requests. Either choice can come first and be changed until both are made. The game then reveals what Milo has and marks both choices. Stage 2 mixes “Je voudrais”, “Donne-moi” and “Montre-moi” with apple, banana, milk and cheese. Stage 3 returns to the two-choice interaction with all six foods and both give request forms. Speaking: describe a chosen possession, then request something different, using a whole model, a starter, and eventually no supplied model.
 
 The revised listening progression uses v3 keys; the speaking progression keeps its v2 keys. Previous attempts remain in the journal, but finishing the former noun-matching lesson does not bypass the new sentence lesson. Session 1 keeps its original progress and four foods. The separate parent lesson remains screen-free.

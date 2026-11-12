@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { assessCafe, cafeClip, cafeFoods, smallCafeFoods, cafeHasSupport, cafeText, makeCafeTrials, makeSpeakingTrials } from './cafe';
+import { assessCafe, assessCafeChoices, cafeClip, cafeFoods, smallCafeFoods, cafeHasSupport, cafeText, makeCafeTrials, makeSpeakingTrials } from './cafe';
 import { have, request, snackStory } from './session2';
 import { foodLayout, makeTrials, phrase } from './week1';
 import { narrationFor } from './narration';
@@ -38,11 +38,27 @@ describe('a contrast that requires listening to the sentence', () => {
       for (const turn of turns) expect(new Set(turn.cafe.choices)).toEqual(new Set(smallCafeFoods));
     }
   });
-  it('combines hidden possessions with every request form and all six objects in stage three', () => {
+  it('uses all six objects with give requests in stage three', () => {
     const plan = makeCafeTrials('mission');
-    expect(plan).toHaveLength(18);
-    expect(plan.every(t => t.cafe.kind === 'contrast' && !t.guided && t.cafe.choices.length === 6)).toBe(true);
-    for (const food of cafeFoods) expect(new Set(plan.filter(t => t.food === food).map(t => t.cafe.form))).toEqual(new Set(['want', 'give', 'show']));
+    expect(plan).toHaveLength(12);
+    expect(plan.every(t => t.cafe.kind === 'contrast' && t.action === 'give' && !t.guided && t.cafe.choices.length === 6)).toBe(true);
+    for (const food of cafeFoods) expect(new Set(plan.filter(t => t.food === food).map(t => t.cafe.form))).toEqual(new Set(['want', 'give']));
+  });
+  it.each(['find', 'mission'] as const)('grades both choices together in %s', activity => {
+    const trial = makeCafeTrials(activity)[0];
+    const held = trial.cafe.held;
+    const given = trial.food;
+    expect(assessCafeChoices(trial, { held, given: null })).toBeUndefined();
+    expect(assessCafeChoices(trial, { held: null, given })).toBeUndefined();
+    expect(assessCafeChoices(trial, { held: given, given })).toMatchObject({
+      heldObjectCorrect: false, objectCorrect: true, outcome: 'retry',
+    });
+    expect(assessCafeChoices(trial, { held, given: held })).toMatchObject({
+      heldObjectCorrect: true, objectCorrect: false, outcome: 'retry',
+    });
+    expect(assessCafeChoices(trial, { held, given })).toMatchObject({
+      heldObjectCorrect: true, objectCorrect: true, outcome: 'correct',
+    });
   });
   it('requires a tap for montre and a delivery for voudrais/donne without penalising stray drops', () => {
     for (const t of [...makeCafeTrials('give'), ...makeCafeTrials('mission')]) {
@@ -71,9 +87,12 @@ describe('a contrast that requires listening to the sentence', () => {
     }
   });
   it('keeps the snack story coherent and in sequence', () => {
-    expect(snackStory).toHaveLength(6);
+    expect(snackStory).toHaveLength(8);
     expect(snackStory[1].food).toBe('apple');
+    expect(snackStory[2].text).toContain('j’ai une pomme');
     expect(snackStory[3].food).toBe('water');
+    expect(snackStory[5]).toMatchObject({ hat: true, text: 'Je voudrais du fromage.' });
+    expect(snackStory[6].hat).toBe(true);
   });
 });
 describe('honest learning observations', () => {
