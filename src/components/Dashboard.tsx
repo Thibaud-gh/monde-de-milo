@@ -2,13 +2,14 @@ import { LessonPlan } from './LessonPlan';
 import { ParentAuth } from './ParentAuth';
 import { useEffect, useMemo, useState } from 'react';
 import { activities, foods, story } from '../content/week1';
+import { serviceOffer, serviceScenes } from '../content/session3';
 import { metrics } from '../lib/model';
 import type { Assessment, Attempt, Engagement } from '../lib/model';
 import { exportProgress, getPersistenceError, record, setLesson, useProgress } from '../lib/store';
 import { cloudStatus, isConfigured, session, supabase, sync } from '../lib/cloud';
 import { Icon } from './Icon';
 import { Milo } from './Art';
-const terms = ['Je voudrais une pomme.', 'Je voudrais une banane.', 'Je voudrais du pain.', 'Je voudrais de l’eau.', 'Je voudrais du lait.', 'Je voudrais du fromage.', 'J’ai une pomme.', 'J’ai une banane.', 'J’ai du pain.', 'J’ai de l’eau.', 'J’ai du lait.', 'J’ai du fromage.', 'Du lait', 'Du fromage', 'J’ai faim.', 'J’ai soif.', 'Une pomme', 'Une banane', 'De l’eau', 'Du pain', 'Montre-moi…', 'Donne-moi…', 'Bonjour !', 'Au revoir !'];
+const terms = ['Je voudrais une pomme.', 'Je voudrais une banane.', 'Je voudrais du pain.', 'Je voudrais de l’eau.', 'Je voudrais du lait.', 'Je voudrais du fromage.', 'J’ai une pomme.', 'J’ai une banane.', 'J’ai du pain.', 'J’ai de l’eau.', 'J’ai du lait.', 'J’ai du fromage.', 'Du lait', 'Du fromage', 'J’ai faim.', 'J’ai soif.', 'Je mange.', 'Je bois.', ...Object.keys(foods).map(food => serviceOffer(food as keyof typeof foods)), 'Une pomme', 'Une banane', 'De l’eau', 'Du pain', 'Montre-moi…', 'Donne-moi…', 'Bonjour !', 'Au revoir !'];
 function fraction({ correct, total }: { correct: number; total: number }) { return total ? `${correct} / ${total}` : '—'; }
 function date(value: string) { return new Date(value).toLocaleString('en-GB', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }); }
 function pairedObservation(attempt: Attempt) {
@@ -37,6 +38,8 @@ export function Dashboard({ onHome, onRestartCafe }: { onHome: () => void; onRes
   const filtered = useMemo(() => progress.events.filter(e => filter === 'all' || (e.payload.kind === 'attempt' && e.payload.activity === filter)), [progress.events, filter]);
   const result = metrics(filtered);
   const engagements = progress.events.filter(e => e.payload.kind === 'engagement').map(e => e.payload as Engagement);
+  const serviceResponses = progress.events.filter(e => e.payload.kind === 'engagement' &&
+    e.payload.event === 'listening_response' && e.payload.listening).slice(-12).reverse();
   const stories = engagements.filter(e => [story.id, 'milo-snack', 'milo-cheese-hat'].includes(e.contentId));
   const storyOpens = stories.filter(e => e.event === 'story_open').length;
   const completions = stories.filter(e => e.event === 'story_complete').length;
@@ -60,12 +63,37 @@ export function Dashboard({ onHome, onRestartCafe }: { onHome: () => void; onRes
     </details><div className={`sync-banner ${!isConfigured() ? 'local' : ''}`} role="status"><span className="status-dot"/>{cloudStatus()} {isConfigured() && session() && <button onClick={() => void sync()}>Sync now</button>}</div>{getPersistenceError() && <p className="error-banner" role="alert">{getPersistenceError()}</p>}
     {isConfigured() && !session() ? <ParentAuth/> : <>
     {tab === 'plan' && <LessonPlan/>}
-    {tab === 'overview' && <><div className="dashboard-heading"><div><p className="journal-date">The first little discoveries</p><h1>Learning, at their pace.</h1><p>Listening in the café. Speaking together at home.</p></div><div className="lesson-picker"><label htmlFor="lesson-select">Latest parent lesson</label><select id="lesson-select" value={progress.lesson} onChange={e => setLesson(Number(e.target.value))}>{['First discoveries', 'Requests at the café', 'Next session'].map((title, i) => <option value={i + 1} key={title}>Session {i + 1} · {title}</option>)}</select></div></div>
+    {tab === 'overview' && <><div className="dashboard-heading"><div><p className="journal-date">The first little discoveries</p><h1>Learning, at their pace.</h1><p>Listening in the café. Speaking together at home.</p></div><div className="lesson-picker"><label htmlFor="lesson-select">Latest parent lesson</label><select id="lesson-select" value={progress.lesson} onChange={e => setLesson(Number(e.target.value))}>{['First discoveries', 'Requests at the café', 'Last service at the café'].map((title, i) => <option value={i + 1} key={title}>Session {i + 1} · {title}</option>)}</select></div></div>
     <section className="journal-overview"><div><span className="journal-number">{completedActivities.size || '—'}</span><span>game stages explored to the end</span></div><div><span className="journal-number">{minutes || '—'}</span><span>minutes in finished sessions</span></div><div><span className="journal-number">{storyOpens || '—'}</span><span>story visits</span></div></section>
     <section className="dashboard-section"><div className="section-heading"><div><h2>What did they understand?</h2><p>Independent attempts. Food words, gestures and the have/want contrast are kept separate.</p></div><label className="filter-label">Activity<select aria-label="Filter activity" value={filter} onChange={e => setFilter(e.target.value)}><option value="all">All activities</option>{activities.map(a => <option value={a.id} key={a.id}>Understanding · Stage {a.lesson}</option>)}</select></label></div>
     <div className="comprehension-grid">{([{ title: 'The object', value: result.objects, description: 'Recognised the requested food', color: 'blue' }, { title: 'The action', value: result.actions, description: 'Showed or gave as requested', color: 'yellow' }, { title: 'Has or asks for?', value: result.wants, description: 'Chose the requested food among the foods Milo names', color: 'green' }]).map(item => <div className="comprehension" key={item.title}><h3>{item.title}</h3><strong>{fraction(item.value)}</strong><div className={`metric-track ${item.color}`}><span style={{ width: item.value.total ? `${100 * item.value.correct / item.value.total}%` : '0%' }}/></div><p>{item.description}</p></div>)}</div>
     {!result.attempts.length && <div className="empty-observation"><Icon name="basket" size={30}/><p>Play a little, then come back.</p><span>Observations will appear here after a game.</span></div>}
     <div className="assistance-line"><span><strong>{result.guided.length}</strong> guided attempts ({guidedCorrect} completed correctly)</span><span><strong>{result.motor}</strong> unfinished gestures, excluded from language ratios</span></div><p className="data-caution">These are observations across attempts, including retries, not a mastery score. Small samples and gesture confusion need a parent’s judgement.</p></section>
+    {serviceResponses.length > 0 && <section className="dashboard-section">
+      <h2>Session 3 · At Milo’s table</h2>
+      <div className="table-scroll"><table>
+        <thead><tr><th>Instruction</th><th>Response</th><th>Support</th><th>Observation</th></tr></thead>
+        <tbody>{serviceResponses.map(event => {
+          const payload = event.payload;
+          if (payload.kind !== 'engagement' || !payload.listening) return null;
+          const result = payload.listening;
+          const choices = [
+            result.answer.scene && serviceScenes[result.answer.scene].text,
+            result.answer.food && foods[result.answer.food].english,
+            result.answer.action && (result.answer.action === 'give' ? 'Gave' : 'Showed'),
+          ].filter(Boolean).join(' · ');
+          const missed = [
+            result.sceneCorrect === false && 'scene',
+            result.foodCorrect === false && 'food or drink',
+            result.actionCorrect === false && 'show or give',
+          ].filter(Boolean).join(', ');
+          return <tr key={event.id}>
+            <td>{result.phrase}</td><td>{choices}</td><td>{result.assisted ? 'Supported' : 'Independent'}</td>
+            <td>{result.correct ? 'Matched' : `Revisit ${missed}`}</td>
+          </tr>;
+        })}</tbody>
+      </table></div>
+    </section>}
     <section className="review-note"><span className="brand-flower"><Icon name="flower" size={32}/></span><div><h2>For your next moment together</h2><p>{suggestion}</p></div></section>
     <div className="journal-columns"><section className="dashboard-section story-journal"><h2>Stories, enjoyed together.</h2><h3>Les histoires de Milo</h3><dl><div><dt>Opened</dt><dd>{storyOpens}</dd></div><div><dt>All pages visited</dt><dd>{completions}</dd></div><div><dt>Replay visits</dt><dd>{storyReplays}</dd></div><div><dt>Familiar / new visits</dt><dd>{familiar} / {storyOpens - familiar}</dd></div></dl><p>Engagement only. Page visits and replays don’t measure comprehension.</p></section><section className="dashboard-section"><h2>The words to revisit</h2><div className="word-observations">{(Object.keys(foods) as (keyof typeof foods)[]).map(food => { const attempts = result.words.filter(p => p.targetObject === food); return <div key={food}><span>{foods[food].label}</span><small>{attempts.length ? `${attempts.filter(p => p.objectCorrect).length} / ${attempts.length} recognised` : 'No independent observations yet'}</small></div>; })}</div></section></div>
     <section className="dashboard-section"><h2>Recent observations</h2>{progress.events.some(e => e.payload.kind === 'attempt') ? <div className="table-scroll"><table><thead><tr><th>When</th><th>Instruction</th><th>Response</th><th>Support</th><th>Observation</th></tr></thead><tbody>{filtered.filter(e => e.payload.kind === 'attempt').slice(-20).reverse().map(e => { const p = e.payload; if (p.kind !== 'attempt') return null; return <tr key={e.id}><td>{date(e.createdAt)}</td><td>{p.phrase}</td><td>{p.selectedHeldObject && <>Has: {foods[p.selectedHeldObject].english} · </>}{foods[p.selectedObject].english} · {p.performedAction}</td><td>{p.assisted ? 'Guided' : 'Independent'}</td><td>{p.selectedHeldObject ? pairedObservation(p) : p.learningTarget === 'have-want' ? !p.objectCorrect ? 'Revisit has / asks for (not a noun-only test)' : p.actionCorrect === false ? 'Requested food recognised; revisit show / give' : 'Requested food recognised' : p.learningTarget === 'vocabulary' ? p.combinedCorrect ? 'Recognised the new food word' : 'Revisit the food word' : p.outcome === 'motor' ? 'Control slip' : p.combinedCorrect ? 'Object + action' : !p.objectCorrect && !p.actionCorrect ? 'Revisit object + action' : !p.objectCorrect ? 'Revisit object' : 'Revisit action'}</td></tr>; })}</tbody></table></div> : <p className="muted">Your first observations will appear after play.</p>}</section></>}

@@ -9,6 +9,8 @@ import { getStore, record } from './lib/store';
 import { SessionTwoGame, SessionTwoStory } from './components/SessionTwo';
 import { CafeGame } from './components/CafeGame';
 import { Game } from './components/Game';
+import { ServiceListening } from './components/ServiceListening';
+import { ServiceSpeaking } from './components/ServiceSpeaking';
 import { Story } from './components/Story';
 import { Dashboard } from './components/Dashboard';
 import { ParentGate } from './components/ParentGate';
@@ -45,6 +47,14 @@ export default function App() {
   if (screen === 'chapter') return <Chapter index={chapterIndex} onHome={goHome} onActivity={(kind, id) => {
     if (canStartActivity(getStore().events, chapterIndex, id, kind)) { setGameKind(kind); go(id); }
   }} onStory={() => go('story')}/>;
-  if (screen !== 'home') return gameKind === 'speaking' ? <SessionTwoGame key={screen} activity={screen} onHome={() => go('chapter')}/> : chapterIndex === 1 ? <CafeGame key={screen} activity={screen} onHome={() => go('chapter')}/> : <Game key={`${chapterIndex}-${screen}`} chapter={chapterIndex} activity={screen} onHome={() => go('chapter')}/>;
+  if (screen !== 'home') {
+    const back = () => go('chapter');
+    if (chapterIndex === 2) {
+      return gameKind === 'speaking' ? <ServiceSpeaking onHome={back}/> : <ServiceListening key={screen} activity={screen} onHome={back}/>;
+    }
+    if (gameKind === 'speaking') return <SessionTwoGame key={screen} activity={screen} onHome={back}/>;
+    if (chapterIndex === 1) return <CafeGame key={screen} activity={screen} onHome={back}/>;
+    return <Game key={screen} chapter={chapterIndex} activity={screen} onHome={back}/>;
+  }
   return <Home onChapter={openChapter} onParent={openParent}/>;
 }

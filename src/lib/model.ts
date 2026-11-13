@@ -1,5 +1,6 @@
 import type { Action, ActivityId, Food, Trial } from '../content/week1';
 import { phrase } from '../content/week1';
+import type { ServiceAnswer, ServiceScene, ServiceTurn } from '../content/session3';
 export type PerformedAction = Action | 'tap' | 'incomplete';
 export type Attempt = {
   kind: 'attempt'; activity: ActivityId; chapter: 'week-1' | 'session-2'; sessionId: string; trialId: string;
@@ -13,9 +14,14 @@ export type Attempt = {
 };
 export type Engagement = {
   kind: 'engagement'; contentId: string; sessionId: string;
-  event: 'activity_hint' | 'activity_checkpoint' | 'activity_open' | 'activity_complete' | 'activity_close' | 'activity_reset' | 'story_open' | 'story_page' | 'story_complete' | 'story_replay' | 'story_audio_replay' | 'story_close';
+  event: 'activity_hint' | 'activity_checkpoint' | 'activity_open' | 'activity_complete' | 'activity_close' | 'activity_reset' | 'listening_response' | 'story_open' | 'story_page' | 'story_complete' | 'story_replay' | 'story_audio_replay' | 'story_close';
   trialId?: string; page?: number; durationSeconds?: number; familiar?: boolean; resetId?: string;
-  trials?: Trial[]; completedTurns?: number;
+  trials?: Trial[];
+  serviceTurns?: ServiceTurn[];
+  listening?: {
+    phrase: string; targetScene: ServiceScene; answer: ServiceAnswer; correct: boolean; assisted: boolean;
+    sceneCorrect?: boolean; foodCorrect?: boolean; actionCorrect?: boolean;
+  }; completedTurns?: number;
 };
 export type Assessment = {
   kind: 'assessment'; term: string; level: 'independent' | 'prompted' | 'not-yet';

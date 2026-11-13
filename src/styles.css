@@ -294,3 +294,153 @@
     left: min(calc(50% + 84px), calc(100% - 88px));
   }
 }
+
+.service-game {
+  min-height: 100dvh;
+  padding-bottom: 22px;
+  background: var(--paper);
+}
+.service-game .game-header {
+  min-height: 88px;
+  height: auto;
+}
+.service-instructions, .service-audio-caption {
+  margin: 0;
+  padding: 10px 18px;
+  text-align: center;
+}
+.service-instructions {
+  background: #dce9e3;
+}
+.service-audio-caption {
+  font-family: Delius, cursive;
+}
+.service-room {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(10px, 3vw, 36px);
+  width: min(100%, 1080px);
+  margin: auto;
+  padding: 16px;
+}
+.service-customer {
+  position: relative;
+  flex: 0 1 300px;
+  width: min(300px, 78vw);
+  border: 3px dashed transparent;
+  border-radius: 26px;
+}
+.service-customer > svg {
+  display: block;
+  width: 100%;
+}
+.service-customer.service-receiving {
+  border-color: #65885c;
+  background: #e4f0d9;
+}
+.service-customer .service-served {
+  position: absolute;
+  right: 12%;
+  bottom: 18%;
+  width: 23%;
+}
+.service-scenes {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(8px, 2vw, 18px);
+  width: min(100%, 480px);
+}
+.service-room-scene .service-scenes {
+  width: min(100%, 560px);
+}
+.service-scenes button, .service-counter button {
+  padding: 4px;
+  border: 3px solid #a9c2ca;
+  border-radius: 18px;
+  background: #f5f7ef;
+}
+.service-scenes button > svg, .service-counter button > svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  pointer-events: none;
+}
+.service-scenes button[aria-pressed="true"], .service-counter button[aria-pressed="true"] {
+  border-color: var(--blue);
+  background: #fdf0b8;
+}
+.service-scenes button[data-result="correct"], .service-counter button[data-result="correct"] {
+  border-color: #4b7944;
+  background: #e4f0d9;
+  opacity: 1;
+}
+.service-scenes button[data-result="wrong"], .service-counter button[data-result="wrong"] {
+  border-color: #ae5141;
+  background: #fce1d6;
+  opacity: 1;
+}
+.service-counter {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px;
+  border-top: 9px solid #bf9064;
+  background: repeating-linear-gradient(90deg, transparent 0 26px, #a9c8d04d 26px 52px),
+    repeating-linear-gradient(0deg, #fff9ed 0 26px, #dce9e5 26px 52px);
+}
+.service-counter button {
+  width: clamp(74px, 13vw, 112px);
+  touch-action: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+.service-counter button.service-dragging {
+  opacity: .35;
+}
+.service-speaking .speaking-scene > svg {
+  width: min(310px, 45vw);
+  height: auto;
+}
+.service-speaking .adult-response > .primary {
+  margin-top: 8px;
+}
+.service-speaking .adult-response details {
+  margin-top: 12px;
+}
+.service-speaking .adult-response details > div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+.service-speaking-action {
+  display: flex;
+  justify-content: center;
+  padding: 16px;
+}
+.service-speaking-action .primary > svg:first-child {
+  width: 32px;
+  height: 32px;
+}
+@media (max-width: 600px) {
+  .service-game .game-header, .service-speaking .game-header {
+    padding-inline: 12px;
+    gap: 8px;
+  }
+  .service-room-combined .service-customer {
+    flex-basis: 40%;
+  }
+  .service-room-combined .service-scenes {
+    width: 58%;
+  }
+  .service-room-combined .service-scenes button {
+    border-width: 2px;
+    border-radius: 12px;
+    padding: 1px;
+  }
+  .service-room-need .service-customer {
+    flex-basis: 225px;
+  }
+}

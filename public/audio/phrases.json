@@ -125,5 +125,17 @@
   "cafe-cheese-milk-show-want-first": "Montre-moi le lait ! J’ai du fromage.",
   "cafe-cheese-milk-give-have-first": "J’ai du fromage. Donne-moi le lait !",
   "cafe-cheese-milk-give-want-first": "Donne-moi le lait ! J’ai du fromage.",
-  "s2-story-apple-received": "Maintenant, j’ai une pomme. Miam, miam !"
+  "s2-story-apple-received": "Maintenant, j’ai une pomme. Miam, miam !",
+  "s3-hungry": "J’ai faim.",
+  "s3-thirsty": "J’ai soif.",
+  "s3-eating": "Je mange.",
+  "s3-drinking": "Je bois.",
+  "s3-offer-apple": "Tu veux une pomme ?",
+  "s3-offer-banana": "Tu veux une banane ?",
+  "s3-offer-bread": "Tu veux du pain ?",
+  "s3-offer-water": "Tu veux de l’eau ?",
+  "s3-offer-milk": "Tu veux du lait ?",
+  "s3-offer-cheese": "Tu veux du fromage ?",
+  "s3-yes": "Oui, s’il te plaît.",
+  "s3-no": "Non, merci."
 }
