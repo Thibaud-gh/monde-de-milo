@@ -186,6 +186,11 @@
     right: 12px;
     transform: none;
   }
+  .cafe-room-pair .cafe-reveal-pair {
+    max-width: calc(100% - 24px);
+    white-space: normal;
+    text-align: center;
+  }
 }
 
 

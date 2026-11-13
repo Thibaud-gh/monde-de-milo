@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import type { PointerEvent } from 'react';
 import { foods, type ActivityId, type Food } from '../content/week1';
-import { assessCafe, assessCafeChoices, cafeClip, cafeText, cafeHasSupport, makeCafeTrials, type CafeChoices, type CafeTrial } from '../content/cafe';
+import { assessCafe, assessCafeChoices, cafeClip, cafeText, cafeHasSupport, cafeHavePairClip, cafeHavePairText, makeCafeTrials, type CafeChoices, type CafeTrial } from '../content/cafe';
 import { activityKey, checkpoint, listeningResetId } from '../lib/progression';
 import { getStore, record } from '../lib/store';
 import { playAudio, stopAudio } from '../lib/audio';
@@ -26,6 +26,7 @@ export function CafeGame({ activity, onHome }: { activity: ActivityId; onHome: (
   const complete = index >= trials.length;
   const trial = trials[Math.min(index, trials.length - 1)];
   const guessAndGive = trial.cafe.kind === 'contrast';
+  const namesBothObjects = activity === 'find' && guessAndGive;
   const choicesRef = useRef<CafeChoices>(emptyChoices);
   const [choices, setChoices] = useState<CafeChoices>(emptyChoices);
   const [help, setHelp] = useState(trial.guided);
@@ -105,7 +106,8 @@ export function CafeGame({ activity, onHome }: { activity: ActivityId; onHome: (
       setReceived(food);
       record({ kind: 'engagement', contentId, sessionId, event: index + 1 === trials.length ? 'activity_complete' : 'activity_checkpoint', trials, completedTurns: index + 1, resetId });
     }
-    const successClip = guessAndGive ? `cafe-have-${trial.cafe.held}` : trial.action === 'give' ? 'merci' : 'bravo';
+    const successClip = namesBothObjects ? cafeHavePairClip(trial.cafe.held, food) :
+      guessAndGive ? `cafe-have-${trial.cafe.held}` : trial.action === 'give' ? 'merci' : 'bravo';
     const clip = narrationFor(correct ? successClip : 'encore');
     let finished = false;
     const finish = () => {
@@ -197,7 +199,9 @@ export function CafeGame({ activity, onHome }: { activity: ActivityId; onHome: (
         )}
         {!guessAndGive && received && trial.action === 'give' && <div className="cafe-delivered"><FoodArt food={received}/></div>}
       </div>
-      {revealed && trial.cafe.kind === 'contrast' && <div className="cafe-reveal-caption" role="status">J’ai {foods[trial.cafe.held].label.toLocaleLowerCase('fr')}.</div>}
+      {revealed && trial.cafe.kind === 'contrast' && <div className={`cafe-reveal-caption${namesBothObjects && received ? ' cafe-reveal-pair' : ''}`} role="status">
+        {namesBothObjects && received ? cafeHavePairText(trial.cafe.held, received) : `J’ai ${foods[trial.cafe.held].label.toLocaleLowerCase('fr')}.`}
+      </div>}
       {!guessAndGive && help && !received && <div className="cafe-model" aria-label="Un modèle pour apprendre"><div><span>{trial.action === 'show' ? 'Montre…' : 'Donne…'}</span><FoodArt food={trial.food}/><Icon name="hand" size={26}/></div></div>}
       <div className="cafe-counter"><div className="cafe-foods" aria-label="Les aliments à servir">{trial.cafe.choices.map(food => <button key={food} data-testid={`food-${food}`} aria-label={foods[food].label} className={`${drag?.food === food ? 'drag-source' : ''} ${received === food && trial.action === 'show' ? 'shown' : ''} ${guessAndGive && help && !feedback && food === trial.food ? 'cafe-hinted' : ''}`} disabled={!ready || !!feedback} onPointerDown={e => begin(e, food)} onPointerMove={move} onPointerUp={e => end(e)} onPointerCancel={e => end(e, true)} onLostPointerCapture={e => end(e, true)} onContextMenu={e => e.preventDefault()} onKeyDown={e => { if (['Enter', ' '].includes(e.key)) { e.preventDefault(); respond(food, 'tap'); } else if (e.key.toLowerCase() === 'g') { e.preventDefault(); respond(food, 'give'); } }}><FoodArt food={food}/></button>)}</div></div>
     </div>

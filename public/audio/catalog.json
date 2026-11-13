@@ -1677,6 +1677,54 @@
       "sourceWavHash": "3164eb981779c9977ac173b06c6388f28d8404e4818a846e4000799a10b14793",
       "durationSeconds": 1.28,
       "generation": "whole-utterance"
+    },
+    "cafe-have-apple-and-banana": {
+      "file": "cafe-have-apple-and-banana.mp3",
+      "text": "J’ai une pomme et une banane.",
+      "voice": "Milo — On compte",
+      "model": "openbmb/VoxCPM2",
+      "rate": "reference",
+      "signature": "60f9ef541b46210e5bf4ef449c48fa682e56369605b117d2a155491e26e52c5f",
+      "contentHash": "455ddbb17941292634ceaeb918b34a9681129e0159e6a16467a8855f4c9f8578",
+      "sourceWavHash": "9cdfd934b5c48c21b9ce141ec26c4e31ad60e4cb89a37ab01d48df1984d102ca",
+      "durationSeconds": 2.08,
+      "generation": "whole-utterance"
+    },
+    "cafe-have-banana-and-apple": {
+      "file": "cafe-have-banana-and-apple.mp3",
+      "text": "J’ai une banane et une pomme.",
+      "voice": "Milo — On compte",
+      "model": "openbmb/VoxCPM2",
+      "rate": "reference",
+      "signature": "f48b00a2866e18dfed32c271e31af0d18cf6ea84ee201388ede5d8cc2af2800a",
+      "contentHash": "57d437e0265ad8c522dabab3f03ba01af41117abde0eec136385bfb1a87b24be",
+      "sourceWavHash": "7e610dded73743584c8239440635b822073a2ca97314984402872309751ce00f",
+      "durationSeconds": 2.08,
+      "generation": "whole-utterance"
+    },
+    "cafe-have-bread-and-water": {
+      "file": "cafe-have-bread-and-water.mp3",
+      "text": "J’ai du pain et de l’eau.",
+      "voice": "Milo — On compte",
+      "model": "openbmb/VoxCPM2",
+      "rate": "reference",
+      "signature": "cf693a077f3bac2fc5c640626df8af27cb2e3a60f2860ebbc471752f7c332ee4",
+      "contentHash": "3cb5c3ca1b0f5cea6a31f1b6916b15f3d59cd3ea7e098ab9b853fdb90c682605",
+      "sourceWavHash": "b068fd2b443bc7913b0e1ac05962412941b10f21881b7c9ba24bcd8552757b3e",
+      "durationSeconds": 1.6,
+      "generation": "whole-utterance"
+    },
+    "cafe-have-water-and-bread": {
+      "file": "cafe-have-water-and-bread.mp3",
+      "text": "J’ai de l’eau et du pain.",
+      "voice": "Milo — On compte",
+      "model": "openbmb/VoxCPM2",
+      "rate": "reference",
+      "signature": "807e2f69971101e6daec11624dc91570435bff65c0a96b26911d2ed272625371",
+      "contentHash": "68d0247b021db050fe2616276a86c81121f5dc4a9c5a718655943b1f6c6cd8cd",
+      "sourceWavHash": "32f9afc98144cfff927d56c3454969c54d6af21c3807a5e71a2a005d935add55",
+      "durationSeconds": 1.76,
+      "generation": "whole-utterance"
     }
   }
 }

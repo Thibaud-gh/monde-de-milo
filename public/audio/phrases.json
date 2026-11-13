@@ -137,5 +137,9 @@
   "s3-offer-milk": "Tu veux du lait ?",
   "s3-offer-cheese": "Tu veux du fromage ?",
   "s3-yes": "Oui, s’il te plaît.",
-  "s3-no": "Non, merci."
+  "s3-no": "Non, merci.",
+  "cafe-have-apple-and-banana": "J’ai une pomme et une banane.",
+  "cafe-have-banana-and-apple": "J’ai une banane et une pomme.",
+  "cafe-have-bread-and-water": "J’ai du pain et de l’eau.",
+  "cafe-have-water-and-bread": "J’ai de l’eau et du pain."
 }

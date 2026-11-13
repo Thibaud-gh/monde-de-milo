@@ -1,6 +1,6 @@
 import { assess, type LearningEvent, type PerformedAction } from '../lib/model';
 import { phrase, shuffled, type ActivityId, type Food, type Trial } from './week1';
-import { request, have } from './session2';
+import { request, have, requestFood } from './session2';
 export const cafeFoods: Food[] = ['apple', 'banana', 'bread', 'water', 'milk', 'cheese'];
 export const smallCafeFoods: Food[] = ['apple', 'banana', 'milk', 'cheese'];
 export const contrastPairs: [Food, Food][] = [['apple', 'banana'], ['bread', 'water'], ['milk', 'cheese']];
@@ -21,6 +21,12 @@ export function cafeText(trial: CafeTrial) {
   if (trial.cafe.kind === 'word') return `Voici ${trial.food === 'milk' ? 'du lait' : 'du fromage'}. Donne-moi ${trial.food === 'milk' ? 'le lait' : 'le fromage'} !`;
   if (trial.cafe.kind === 'instruction') return form === 'want' ? request(trial.food) : phrase(form, trial.food);
   return contrastText(trial.cafe.held, trial.food, trial.cafe.requestFirst, form);
+}
+export function cafeHavePairClip(held: Food, given: Food) {
+  return `cafe-have-${held}-and-${given}`;
+}
+export function cafeHavePairText(held: Food, given: Food) {
+  return `J’ai ${requestFood[held]} et ${requestFood[given]}.`;
 }
 export function makeCafeTrials(activity: ActivityId, random = Math.random): CafeTrial[] {
   if (activity === 'give') {

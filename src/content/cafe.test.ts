@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { assessCafe, assessCafeChoices, cafeClip, cafeFoods, smallCafeFoods, cafeHasSupport, cafeText, makeCafeTrials, makeSpeakingTrials } from './cafe';
+import { assessCafe, assessCafeChoices, cafeClip, cafeFoods, smallCafeFoods, cafeHasSupport, cafeHavePairClip, cafeHavePairText, cafeText, makeCafeTrials, makeSpeakingTrials } from './cafe';
 import { have, request, snackStory } from './session2';
 import { foodLayout, makeTrials, phrase } from './week1';
 import { narrationFor } from './narration';
@@ -95,6 +95,12 @@ describe('a contrast that requires listening to the sentence', () => {
       expect(narrationFor(`cafe-have-${food}`).text).toBe(have(food));
       expect(narrationFor(`s2-request-${food}`).text).toBe(request(food));
     }
+  });
+  it('names the hidden and delivered objects together for every first-stage turn', () => {
+    for (const { cafe, food } of makeCafeTrials('find')) {
+      expect(narrationFor(cafeHavePairClip(cafe.held, food)).text).toBe(cafeHavePairText(cafe.held, food));
+    }
+    expect(cafeHavePairText('bread', 'water')).toBe('J’ai du pain et de l’eau.');
   });
   it('keeps the snack story coherent and in sequence', () => {
     expect(snackStory).toHaveLength(8);
