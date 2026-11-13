@@ -11,14 +11,14 @@ export const speakingStages = [
   { id: 'mission' as ActivityId, title: 'Le petit café', instruction: 'Commande ton goûter à Milo.', food: 'bread' as Food, icon: 'basket' as const },
 ];
 export const snackStory = [
-  { audio: 's2-story-1', food: null, hat: false, speaker: 'Milo', text: 'C’est l’heure du goûter. J’ai faim !', direction: 'Rub Milo’s tummy. Let Éva watch; no question yet.' },
-  { audio: 's2-story-2', food: 'apple', hat: false, speaker: 'Milo', text: 'Je voudrais une pomme.', direction: 'Éva can give the real or pretend apple to the bear.' },
-  { audio: 's2-story-apple-received', food: 'apple', hat: false, speaker: 'Milo', text: 'Maintenant, j’ai une pomme. Miam, miam !', direction: 'Make Milo hold and nibble his apple.' },
-  { audio: 's2-story-4', food: 'water', hat: false, speaker: 'Milo', text: 'Maintenant, j’ai soif. Je voudrais de l’eau.', direction: 'Milo looks for his glass. Mime drinking.' },
-  { audio: 's2-story-5', food: 'water', hat: false, speaker: 'Milo', text: 'Merci ! Et toi, tu voudrais quoi ?', direction: 'Optional invitation: accept a word, expand it into a request, then serve her.' },
-  { audio: 's2-request-cheese', food: null, hat: true, speaker: 'Milo', text: 'Je voudrais du fromage.', direction: 'Put a toy or paper piece of cheese on Milo’s head. Pause so Éva can spot it.' },
-  { audio: 'cafe-story-3', food: null, hat: true, speaker: 'Milo', text: 'Oh ! J’ai du fromage sur la tête ! Quel drôle de chapeau !', direction: 'Have Milo feel his head with his paw and discover the cheese.' },
-  { audio: 's2-story-6', food: null, hat: false, speaker: 'Milo', text: 'Quel bon goûter ! À bientôt !', direction: 'Wave together. The story can be read again whenever she wants.' },
+  { audio: 's2-story-1', food: null, thought: null, hat: false, speaker: 'Milo', text: 'C’est l’heure du goûter. J’ai faim !', direction: 'Rub Milo’s tummy. Let Éva watch; no question yet.' },
+  { audio: 's2-story-2', food: null, thought: 'apple', hat: false, speaker: 'Milo', text: 'Je voudrais une pomme.', direction: 'Éva can give the real or pretend apple to the bear.' },
+  { audio: 's2-story-apple-received', food: 'apple', thought: null, hat: false, speaker: 'Milo', text: 'Maintenant, j’ai une pomme. Miam, miam !', direction: 'Make Milo hold and nibble his apple.' },
+  { audio: 's2-story-4', food: null, thought: 'water', hat: false, speaker: 'Milo', text: 'Maintenant, j’ai soif. Je voudrais de l’eau.', direction: 'Milo looks for his glass. Mime drinking.' },
+  { audio: 's2-story-5', food: 'water', thought: null, hat: false, speaker: 'Milo', text: 'Merci ! Et toi, tu voudrais quoi ?', direction: 'Optional invitation: accept a word, expand it into a request, then serve her.' },
+  { audio: 's2-request-cheese', food: null, thought: 'cheese', hat: true, speaker: 'Milo', text: 'Je voudrais du fromage.', direction: 'Put a toy or paper piece of cheese on Milo’s head. Pause so Éva can spot it.' },
+  { audio: 'cafe-story-3', food: null, thought: null, hat: true, speaker: 'Milo', text: 'Oh ! J’ai du fromage sur la tête ! Quel drôle de chapeau !', direction: 'Have Milo feel his head with his paw and discover the cheese.' },
+  { audio: 's2-story-6', food: null, thought: null, hat: false, speaker: 'Milo', text: 'Quel bon goûter ! À bientôt !', direction: 'Wave together. The story can be read again whenever she wants.' },
 ] as const;
 export const lessonMaterials = 'Milo, the four familiar foods, milk and cheese (real, toy or drawn), two plates and a napkin. Print the plan, then put screens away.';
 export const lessonSteps = [

@@ -54,8 +54,11 @@ export function updateStore(change: (current: Store) => Store) {
   });
   listeners.forEach(fn => fn());
 }
+export function createLearningEvent(payload: Payload): LearningEvent {
+  return { id: crypto.randomUUID(), profileId: data.profileId, ownerId: data.profileOwner, createdAt: new Date().toISOString(), payload, synced: false };
+}
 export function record(payload: Payload) {
-  const event: LearningEvent = { id: crypto.randomUUID(), profileId: data.profileId, ownerId: data.profileOwner, createdAt: new Date().toISOString(), payload, synced: false };
+  const event = createLearningEvent(payload);
   updateStore(current => ({ ...current, events: [...current.events, event] }));
   window.dispatchEvent(new Event('milo-event'));
   return event;

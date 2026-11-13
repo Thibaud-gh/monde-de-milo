@@ -38,10 +38,20 @@ describe('a contrast that requires listening to the sentence', () => {
       for (const turn of turns) expect(new Set(turn.cafe.choices)).toEqual(new Set(smallCafeFoods));
     }
   });
-  it('uses all six objects with give requests in stage three', () => {
+  it('draws two other foods alongside the named foods in every stage-three turn', () => {
     const plan = makeCafeTrials('mission');
     expect(plan).toHaveLength(12);
-    expect(plan.every(t => t.cafe.kind === 'contrast' && t.action === 'give' && !t.guided && t.cafe.choices.length === 6)).toBe(true);
+    for (const trial of plan) {
+      expect(trial).toMatchObject({ action: 'give', guided: false, cafe: { kind: 'contrast' } });
+      expect(new Set(trial.cafe.choices).size).toBe(4);
+      expect(trial.cafe.choices).toHaveLength(4);
+      expect(trial.cafe.choices).toEqual(expect.arrayContaining([trial.food, trial.cafe.held]));
+      expect(trial.cafe.choices.every(food => cafeFoods.includes(food))).toBe(true);
+    }
+    const distractors = (random: () => number) => makeCafeTrials('mission', random)
+      .find(t => t.food === 'apple' && t.cafe.form === 'want')!.cafe.choices
+      .filter(food => food !== 'apple' && food !== 'banana').sort();
+    expect(distractors(() => 0)).not.toEqual(distractors(() => .99));
     for (const food of cafeFoods) expect(new Set(plan.filter(t => t.food === food).map(t => t.cafe.form))).toEqual(new Set(['want', 'give']));
   });
   it.each(['find', 'mission'] as const)('grades both choices together in %s', activity => {
@@ -88,10 +98,12 @@ describe('a contrast that requires listening to the sentence', () => {
   });
   it('keeps the snack story coherent and in sequence', () => {
     expect(snackStory).toHaveLength(8);
-    expect(snackStory[1].food).toBe('apple');
+    expect(snackStory[1]).toMatchObject({ food: null, thought: 'apple' });
+    expect(snackStory[2]).toMatchObject({ food: 'apple', thought: null });
     expect(snackStory[2].text).toContain('j’ai une pomme');
-    expect(snackStory[3].food).toBe('water');
-    expect(snackStory[5]).toMatchObject({ hat: true, text: 'Je voudrais du fromage.' });
+    expect(snackStory[3]).toMatchObject({ food: null, thought: 'water' });
+    expect(snackStory[4]).toMatchObject({ food: 'water', thought: null });
+    expect(snackStory[5]).toMatchObject({ hat: true, thought: 'cheese', text: 'Je voudrais du fromage.' });
     expect(snackStory[6].hat).toBe(true);
   });
 });

@@ -9,11 +9,12 @@ export function stopAudio() {
   setMusicNarrating(false);
   if (current) { current.pause(); current.onended = null; current.onerror = null; current.onplaying = null; current = null; }
 }
-export function playAudio(id: string, caption: string, onEnd?: () => void, onError?: () => void, onStart?: () => void) {
+export function playAudio(id: string, caption: string, onEnd?: () => void, onError?: () => void, onStart?: () => void, player?: HTMLAudioElement) {
   stopAudio();
   const token = generation;
   const clip = clips[id];
-  const audio = new Audio(`${import.meta.env.BASE_URL}audio/${clip?.file ?? `${id}.mp3`}?v=${(clip?.contentHash ?? clip?.signature)?.slice(0, 12) ?? 'missing'}`);
+  const audio = player ?? new Audio();
+  audio.src = `${import.meta.env.BASE_URL}audio/${clip?.file ?? `${id}.mp3`}?v=${(clip?.contentHash ?? clip?.signature)?.slice(0, 12) ?? 'missing'}`;
   current = audio;
   setMusicNarrating(true);
   audio.onended = () => { if (token === generation) { current = null; setMusicNarrating(false); onEnd?.(); } };

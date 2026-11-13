@@ -42,7 +42,10 @@ export function makeCafeTrials(activity: ActivityId, random = Math.random): Cafe
     const roles: [Food, Food, boolean][] = activity === 'find'
       ? [[a, b, false], [b, a, false], [a, b, true], [b, a, true]]
       : [[a, b, first], [b, a, !first]];
-    const choices = shuffled(activity === 'mission' ? cafeFoods : [a, b], random);
+    const distractors = activity === 'mission'
+      ? shuffled(cafeFoods.filter(food => food !== a && food !== b), random).slice(0, 2)
+      : [];
+    const choices = shuffled([a, b, ...distractors], random);
     return roles.map(([held, food, requestFirst]) => ({
       id: crypto.randomUUID(), food, action: 'give', guided: false,
       cafe: { kind: 'contrast', form, held, requestFirst, choices: [...choices] },

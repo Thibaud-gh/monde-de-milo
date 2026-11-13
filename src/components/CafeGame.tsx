@@ -3,20 +3,26 @@ import type { PointerEvent } from 'react';
 import { foods, type ActivityId, type Food } from '../content/week1';
 import { assessCafe, assessCafeChoices, cafeClip, cafeText, cafeHasSupport, makeCafeTrials, type CafeChoices, type CafeTrial } from '../content/cafe';
 import { activityKey, checkpoint } from '../lib/progression';
-import { getStore, record } from '../lib/store';
+import { getStore, record as saveEvent } from '../lib/store';
 import { playAudio, stopAudio } from '../lib/audio';
-import type { PerformedAction } from '../lib/model';
+import type { LearningEvent, Payload, PerformedAction } from '../lib/model';
 import { narrationFor } from '../content/narration';
 import { FoodArt, Milo } from './Art';
 import { Icon } from './Icon';
 
 const emptyChoices: CafeChoices = { held: null, given: null };
 
-export function CafeGame({ activity, onHome }: { activity: ActivityId; onHome: () => void }) {
-  const [saved] = useState(() => checkpoint(getStore().events, 1, activity, 'understanding'));
+export function CafeGame({ activity, onHome, replay }: {
+  activity: ActivityId;
+  onHome: () => void;
+  replay?: { events: LearningEvent[]; record: (payload: Payload) => void };
+}) {
+  const record = replay?.record ?? saveEvent;
+  const [saved] = useState(() => checkpoint(replay?.events ?? getStore().events, 1, activity, 'understanding'));
   const [trials] = useState<CafeTrial[]>(() => saved?.trials.every(t => t.cafe) ? saved.trials as CafeTrial[] : makeCafeTrials(activity));
   const [index, setIndex] = useState(saved?.completedTurns ?? 0);
   const [sessionId] = useState(() => crypto.randomUUID());
+  const [player] = useState(() => new Audio());
   const contentId = activityKey(1, activity, 'understanding');
   const complete = index >= trials.length;
   const trial = trials[Math.min(index, trials.length - 1)];
@@ -43,7 +49,7 @@ export function CafeGame({ activity, onHome }: { activity: ActivityId; onHome: (
   }
   function speak() {
     setAudioError(false); setReady(false);
-    playAudio(cafeClip(trial), cafeText(trial), undefined, () => setAudioError(true), () => setReady(true));
+    playAudio(cafeClip(trial), cafeText(trial), undefined, () => setAudioError(true), () => setReady(true), player);
   }
   useEffect(() => {
     const start = Date.now();
@@ -57,10 +63,10 @@ export function CafeGame({ activity, onHome }: { activity: ActivityId; onHome: (
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [contentId, sessionId]);
   useEffect(() => {
-    blocked.current = false; attempts.current = 0; assisted.current = cafeHasSupport(getStore().events, trial);
+    blocked.current = false; attempts.current = 0; assisted.current = cafeHasSupport(replay?.events ?? getStore().events, trial);
     clearChoices();
     setHelp(assisted.current); setRevealed(false); setReceived(null); setFeedback(''); setDrag(null); setOver(false);
-    if (complete) { const clip = narrationFor('s2-fini'); playAudio(clip.audio, clip.text); }
+    if (complete) { const clip = narrationFor('s2-fini'); playAudio(clip.audio, clip.text, undefined, undefined, undefined, player); }
     else speak();
     return () => { stopAudio(); clearTimeout(timer.current); gesture.current = null; };
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -99,16 +105,19 @@ export function CafeGame({ activity, onHome }: { activity: ActivityId; onHome: (
     if (correct) {
       setReceived(food);
       record({ kind: 'engagement', contentId, sessionId, event: index + 1 === trials.length ? 'activity_complete' : 'activity_checkpoint', trials, completedTurns: index + 1 });
-      const clip = narrationFor(trial.cafe.kind === 'contrast' ? `cafe-have-${trial.cafe.held}` : trial.action === 'give' ? 'merci' : 'bravo');
-      playAudio(clip.audio, clip.text, undefined, () => setAudioError(true));
-      return; // The child controls how long to look at the revealed object.
     }
-    const clip = narrationFor('encore');
+    const successClip = guessAndGive ? `cafe-have-${trial.cafe.held}` : trial.action === 'give' ? 'merci' : 'bravo';
+    const clip = narrationFor(correct ? successClip : 'encore');
     let finished = false;
     const finish = () => {
       if (finished) return;
       finished = true;
+      clearTimeout(timer.current);
       timer.current = setTimeout(() => {
+        if (correct) {
+          setIndex(turn => turn + 1);
+          return;
+        }
         assisted.current = true;
         setHelp(true);
         if (guessAndGive) {
@@ -120,7 +129,9 @@ export function CafeGame({ activity, onHome }: { activity: ActivityId; onHome: (
         speak();
       }, 300);
     };
-    playAudio(clip.audio, clip.text, finish, finish);
+    // A stalled clip must not leave the game waiting indefinitely.
+    timer.current = setTimeout(finish, 5000);
+    playAudio(clip.audio, clip.text, finish, finish, undefined, player);
   }
   function inside(x: number, y: number) {
     const r = target.current?.getBoundingClientRect();
@@ -152,7 +163,7 @@ export function CafeGame({ activity, onHome }: { activity: ActivityId; onHome: (
   if (complete) return <main className="completion child-screen"><Milo happy waving/><h1>Merci pour le goûter !</h1><p>{activity === 'mission' ? 'Le café reste ouvert. Reviens quand tu veux !' : 'Une étoile de plus ! La suite t’attend sur le même carré.'}</p><button className="primary" onClick={onHome}><Icon name="book"/> Au chapitre</button></main>;
   return <main className="cafe-game child-screen">
     <header className="game-header"><button className="round" aria-label="Retour au chapitre" onClick={onHome}><Icon name="left"/></button><div className="prompt"><span className="game-name">Le goûter de Milo · Étape {activity === 'find' ? 1 : activity === 'give' ? 2 : 3} · {index + 1} / {trials.length}</span><h1 aria-live="polite">{feedback || 'Écoute bien Milo.'}</h1></div><button className="round yellow" aria-label="Réécouter" disabled={!!feedback} onClick={speak}><Icon name="sound"/></button><button className="round" aria-label="Un petit coup de main" disabled={!!feedback} onClick={hint}><Icon name="help"/></button></header>
-    {audioError && <button className="audio-notice" onClick={() => { if (received) { const clip = narrationFor(trial.cafe.kind === 'contrast' ? `cafe-have-${trial.cafe.held}` : trial.action === 'give' ? 'merci' : 'bravo'); setAudioError(false); playAudio(clip.audio, clip.text, undefined, () => setAudioError(true)); } else speak(); }}>Touche ici pour écouter Milo.</button>}
+    {audioError && <button className="audio-notice" onClick={speak}>Touche ici pour écouter Milo.</button>}
     <div className={guessAndGive ? "cafe-room cafe-room-pair" : "cafe-room"}>
       <div className="cafe-awning" aria-hidden="true"/>
       <p className="cafe-caption" aria-live="polite">{cafeText(trial)}</p>
@@ -191,7 +202,7 @@ export function CafeGame({ activity, onHome }: { activity: ActivityId; onHome: (
       {!guessAndGive && help && !received && <div className="cafe-model" aria-label="Un modèle pour apprendre"><div><span>{trial.action === 'show' ? 'Montre…' : 'Donne…'}</span><FoodArt food={trial.food}/><Icon name="hand" size={26}/></div></div>}
       <div className="cafe-counter"><div className="cafe-foods" aria-label="Les aliments à servir">{trial.cafe.choices.map(food => <button key={food} data-testid={`food-${food}`} aria-label={foods[food].label} className={`${drag?.food === food ? 'drag-source' : ''} ${received === food && trial.action === 'show' ? 'shown' : ''} ${guessAndGive && help && !feedback && food === trial.food ? 'cafe-hinted' : ''}`} disabled={!ready || !!feedback} onPointerDown={e => begin(e, food)} onPointerMove={move} onPointerUp={e => end(e)} onPointerCancel={e => end(e, true)} onLostPointerCapture={e => end(e, true)} onContextMenu={e => e.preventDefault()} onKeyDown={e => { if (['Enter', ' '].includes(e.key)) { e.preventDefault(); respond(food, 'tap'); } else if (e.key.toLowerCase() === 'g') { e.preventDefault(); respond(food, 'give'); } }}><FoodArt food={food}/></button>)}</div></div>
     </div>
-    <footer className="game-footer"><Icon name="hand"/><p>{guessAndGive ? 'Choisis ce que Milo a. Glisse vers lui ce qu’il demande.' : 'Touche pour montrer. Glisse pour donner.'}</p>{received && <button className="primary" onClick={() => setIndex(i => i + 1)}>Continuer <Icon name="right"/></button>}<button className="text-button" onClick={onHome}>À bientôt !</button></footer>
+    <footer className="game-footer"><Icon name="hand"/><p>{guessAndGive ? 'Choisis ce que Milo a. Glisse vers lui ce qu’il demande.' : 'Touche pour montrer. Glisse pour donner.'}</p><button className="text-button" onClick={onHome}>À bientôt !</button></footer>
     {drag && <div className="drag-ghost" style={{ left: drag.x, top: drag.y }}><FoodArt food={drag.food}/></div>}
   </main>;
 }

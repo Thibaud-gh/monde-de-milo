@@ -35,4 +35,18 @@ describe('responsive voice playback', () => {
     expect(staleReady).not.toHaveBeenCalled(); expect(nextReady).not.toHaveBeenCalled();
     instances[1].onplaying?.(); expect(nextReady).toHaveBeenCalledTimes(1);
   });
+  it('can carry the same audio player from one story page to the next', async () => {
+    const { playAudio } = await import('./audio');
+    const player = new Audio();
+    const firstEnded = vi.fn();
+    const nextEnded = vi.fn();
+    playAudio('s2-story-1', 'First page', firstEnded, undefined, undefined, player);
+    instances[0].onended?.();
+    expect(firstEnded).toHaveBeenCalledTimes(1);
+    playAudio('s2-story-2', 'Next page', nextEnded, undefined, undefined, player);
+    expect(instances).toHaveLength(1);
+    expect(instances[0].src).toContain('s2-story-2.mp3');
+    instances[0].onended?.();
+    expect(nextEnded).toHaveBeenCalledTimes(1);
+  });
 });
