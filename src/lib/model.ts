@@ -13,8 +13,8 @@ export type Attempt = {
 };
 export type Engagement = {
   kind: 'engagement'; contentId: string; sessionId: string;
-  event: 'activity_hint' | 'activity_checkpoint' | 'activity_open' | 'activity_complete' | 'activity_close' | 'story_open' | 'story_page' | 'story_complete' | 'story_replay' | 'story_audio_replay' | 'story_close';
-  trialId?: string; page?: number; durationSeconds?: number; familiar?: boolean;
+  event: 'activity_hint' | 'activity_checkpoint' | 'activity_open' | 'activity_complete' | 'activity_close' | 'activity_reset' | 'story_open' | 'story_page' | 'story_complete' | 'story_replay' | 'story_audio_replay' | 'story_close';
+  trialId?: string; page?: number; durationSeconds?: number; familiar?: boolean; resetId?: string;
   trials?: Trial[]; completedTurns?: number;
 };
 export type Assessment = {

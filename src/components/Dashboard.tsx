@@ -55,7 +55,7 @@ export function Dashboard({ onHome, onRestartCafe }: { onHome: () => void; onRes
     <div className="dashboard-main"><header className="dashboard-topbar"><span>Le journal de Milo</span><button className="text-button" onClick={exportProgress}><Icon name="download" size={18}/> Export records</button></header>
     <details className="parent-practice-options">
       <summary>Practice tools</summary>
-      <p>Start the café listening game from stage 1 until you close or reload the app. Saved progress and the learning journal stay intact.</p>
+      <p>Restart the café listening game at stage 1 and save the reset. Earlier activity remains in the learning journal.</p>
       <button className="secondary" onClick={onRestartCafe}>Restart café listening game</button>
     </details><div className={`sync-banner ${!isConfigured() ? 'local' : ''}`} role="status"><span className="status-dot"/>{cloudStatus()} {isConfigured() && session() && <button onClick={() => void sync()}>Sync now</button>}</div>{getPersistenceError() && <p className="error-banner" role="alert">{getPersistenceError()}</p>}
     {isConfigured() && !session() ? <ParentAuth/> : <>

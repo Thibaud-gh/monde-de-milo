@@ -2,23 +2,22 @@ import { useEffect, useRef, useState } from 'react';
 import type { PointerEvent } from 'react';
 import { foods, type ActivityId, type Food } from '../content/week1';
 import { assessCafe, assessCafeChoices, cafeClip, cafeText, cafeHasSupport, makeCafeTrials, type CafeChoices, type CafeTrial } from '../content/cafe';
-import { activityKey, checkpoint } from '../lib/progression';
-import { getStore, record as saveEvent } from '../lib/store';
+import { activityKey, cafeResetId, checkpoint } from '../lib/progression';
+import { getStore, record } from '../lib/store';
 import { playAudio, stopAudio } from '../lib/audio';
-import type { LearningEvent, Payload, PerformedAction } from '../lib/model';
+import type { PerformedAction } from '../lib/model';
 import { narrationFor } from '../content/narration';
 import { FoodArt, Milo } from './Art';
 import { Icon } from './Icon';
 
 const emptyChoices: CafeChoices = { held: null, given: null };
 
-export function CafeGame({ activity, onHome, replay }: {
-  activity: ActivityId;
-  onHome: () => void;
-  replay?: { events: LearningEvent[]; record: (payload: Payload) => void };
-}) {
-  const record = replay?.record ?? saveEvent;
-  const [saved] = useState(() => checkpoint(replay?.events ?? getStore().events, 1, activity, 'understanding'));
+export function CafeGame({ activity, onHome }: { activity: ActivityId; onHome: () => void }) {
+  const [{ saved, resetId }] = useState(() => {
+    const { events } = getStore();
+    // A reset that syncs while this round is open must not inherit its progress.
+    return { saved: checkpoint(events, 1, activity, 'understanding'), resetId: cafeResetId(events) };
+  });
   const [trials] = useState<CafeTrial[]>(() => saved?.trials.every(t => t.cafe) ? saved.trials as CafeTrial[] : makeCafeTrials(activity));
   const [index, setIndex] = useState(saved?.completedTurns ?? 0);
   const [sessionId] = useState(() => crypto.randomUUID());
@@ -54,7 +53,7 @@ export function CafeGame({ activity, onHome, replay }: {
   useEffect(() => {
     const start = Date.now();
     record({ kind: 'engagement', contentId, sessionId, event: 'activity_open' });
-    if (activity !== 'mission') record({ kind: 'engagement', contentId, sessionId, event: 'activity_checkpoint', trials, completedTurns: index });
+    if (activity !== 'mission') record({ kind: 'engagement', contentId, sessionId, event: 'activity_checkpoint', trials, completedTurns: index, resetId });
     return () => {
       stopAudio(); clearTimeout(timer.current);
       record({ kind: 'engagement', contentId, sessionId, event: 'activity_close', durationSeconds: Math.round((Date.now() - start) / 1000) });
@@ -63,7 +62,7 @@ export function CafeGame({ activity, onHome, replay }: {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [contentId, sessionId]);
   useEffect(() => {
-    blocked.current = false; attempts.current = 0; assisted.current = cafeHasSupport(replay?.events ?? getStore().events, trial);
+    blocked.current = false; attempts.current = 0; assisted.current = cafeHasSupport(getStore().events, trial);
     clearChoices();
     setHelp(assisted.current); setRevealed(false); setReceived(null); setFeedback(''); setDrag(null); setOver(false);
     if (complete) { const clip = narrationFor('s2-fini'); playAudio(clip.audio, clip.text, undefined, undefined, undefined, player); }
@@ -104,7 +103,7 @@ export function CafeGame({ activity, onHome, replay }: {
     setFeedback(correct ? trial.action === 'give' ? 'Merci !' : 'Bravo !' : 'Écoutons encore.');
     if (correct) {
       setReceived(food);
-      record({ kind: 'engagement', contentId, sessionId, event: index + 1 === trials.length ? 'activity_complete' : 'activity_checkpoint', trials, completedTurns: index + 1 });
+      record({ kind: 'engagement', contentId, sessionId, event: index + 1 === trials.length ? 'activity_complete' : 'activity_checkpoint', trials, completedTurns: index + 1, resetId });
     }
     const successClip = guessAndGive ? `cafe-have-${trial.cafe.held}` : trial.action === 'give' ? 'merci' : 'bravo';
     const clip = narrationFor(correct ? successClip : 'encore');

@@ -3,13 +3,12 @@ import { chapters } from '../content/chapters';
 import { activityState, gameStage, stageActivities, stageCompletions } from '../lib/progression';
 import type { GameKind } from '../lib/progression';
 import type { ActivityId } from '../content/week1';
-import type { LearningEvent } from '../lib/model';
 import { useProgress } from '../lib/store';
 import { BookArt, FoodArt, Milo } from './Art';
 import { Icon } from './Icon';
-export function Chapter({ index, cafeReplay, onHome, onActivity, onStory }: { index: number; cafeReplay?: LearningEvent[]; onHome: () => void; onActivity: (kind: GameKind, id: ActivityId) => void; onStory: () => void }) {
+export function Chapter({ index, onHome, onActivity, onStory }: { index: number; onHome: () => void; onActivity: (kind: GameKind, id: ActivityId) => void; onStory: () => void }) {
   const chapter = chapters[index];
-  const { events: savedEvents } = useProgress();
+  const { events } = useProgress();
   const games: { kind: GameKind; title: string; description: string; food: 'apple' | 'banana' }[] = [
     { kind: 'understanding', title: index === 0 ? 'Le panier de Milo' : 'Le goûter de Milo', description: index === 0 ? 'Écoute Milo. Montre ou donne.' : 'Il a déjà quelque chose… Que voudrait-il ?', food: 'apple' },
     ...(index === 1 ? [{ kind: 'speaking' as const, title: 'Le petit café', description: 'J’ai… Je voudrais… À toi de parler avec Milo.', food: 'banana' as const }] : []),
@@ -18,7 +17,6 @@ export function Chapter({ index, cafeReplay, onHome, onActivity, onStory }: { in
     <div className="chapter-welcome"><div><h1>{chapter.title}</h1><p>{index === 0 ? 'Un jeu et une histoire' : 'Deux jeux et une histoire'}</p></div><Milo waving/></div>
     {chapter.available ? <div className={`game-choices chapter-card-grid ${index === 0 ? 'two-cards' : ''}`}>
       {games.map((game, i) => {
-        const events = index === 1 && game.kind === 'understanding' ? cafeReplay ?? savedEvents : savedEvents;
         const stage = gameStage(events, index, game.kind);
         const activity = stageActivities[stage - 1];
         const state = activityState(events, index, activity, game.kind);

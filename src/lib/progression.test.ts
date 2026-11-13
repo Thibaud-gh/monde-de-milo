@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import type { Engagement, LearningEvent } from './model';
+import { mergeEvents, type Engagement, type LearningEvent } from './model';
 import type { Trial } from '../content/week1';
 import { activityKey, activityState, canStartActivity, checkpoint, gameStage, stageCompletions } from './progression';
 const event = (contentId: string, name: Engagement['event'], extra: Partial<Engagement> = {}): LearningEvent => ({ id: crypto.randomUUID(), profileId: 'p', ownerId: null, synced: false, createdAt: new Date().toISOString(), payload: { kind: 'engagement', contentId, sessionId: 's', event: name, ...extra } });
@@ -79,5 +79,40 @@ describe('stage stars', () => {
     expect(stageCompletions(events, 1, 'speaking')).toEqual([true, true, true]);
     expect(stageCompletions(events, 1, 'understanding')).toEqual([false, false, false]);
     expect(gameStage(events, 1, 'speaking')).toBe(3);
+  });
+});
+
+describe('lasting café reset', () => {
+  const cafeKey = (activity: TrialActivity) => activityKey(1, activity, 'understanding');
+  type TrialActivity = Parameters<typeof activityKey>[1];
+  const reset = (createdAt: string) => ({ ...event(cafeKey('find'), 'activity_reset'), createdAt });
+
+  it('starts at stage 1 after reopening and resumes progress made after the reset', () => {
+    const previous = ['find', 'give', 'mission'].map(activity =>
+      event(cafeKey(activity as TrialActivity), 'activity_complete'));
+    const restart = reset('2026-11-13T08:00:00.000Z');
+    const saved = JSON.parse(JSON.stringify([...previous, restart])) as LearningEvent[];
+    expect(gameStage(saved, 1, 'understanding')).toBe(1);
+    expect(stageCompletions(saved, 1, 'understanding')).toEqual([false, false, false]);
+    expect(canStartActivity(saved, 1, 'give', 'understanding')).toBe(false);
+    const turn = event(cafeKey('find'), 'activity_checkpoint', { resetId: restart.id, trials: plan, completedTurns: 2 });
+    expect(checkpoint([...saved, turn], 1, 'find', 'understanding')).toEqual({ trials: plan, completedTurns: 2 });
+    const finish = event(cafeKey('find'), 'activity_complete', { resetId: restart.id });
+    expect(gameStage([...saved, turn, finish], 1, 'understanding')).toBe(2);
+  });
+
+  it('discards older café rounds from progress after another reset or a late sync', () => {
+    const first = reset('2026-11-13T08:00:00.000Z');
+    const latest = reset('2026-11-13T09:00:00.000Z');
+    const staleRound = event(cafeKey('find'), 'activity_checkpoint', { resetId: first.id, trials: plan, completedTurns: 3 });
+    const lateFinish = event(cafeKey('find'), 'activity_complete', { resetId: first.id });
+    const speaking = event(activityKey(1, 'find', 'speaking'), 'activity_complete');
+    const chapterOne = event(activityKey(0, 'find', 'understanding'), 'activity_complete');
+    const events = mergeEvents([latest, speaking, chapterOne], [first, staleRound, lateFinish]);
+    expect(checkpoint(events, 1, 'find', 'understanding')).toBeUndefined();
+    expect(gameStage(events, 1, 'understanding')).toBe(1);
+    expect(gameStage(events, 1, 'speaking')).toBe(2);
+    expect(gameStage(events, 0, 'understanding')).toBe(2);
+    expect(events).toContainEqual(lateFinish);
   });
 });

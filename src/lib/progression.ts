@@ -17,14 +17,35 @@ export function activityKey(chapter: number, activity: ActivityId, kind?: GameKi
   // but do not count the previous food-matching game as have/want learning.
   return kind === 'understanding' ? `chapter-${chapter + 1}:v3:understanding:${activity}` : `chapter-${chapter + 1}:v2:${activity}`;
 }
+export function cafeResetId(events: LearningEvent[]) {
+  const contentId = activityKey(1, 'find', 'understanding');
+  let latest: LearningEvent | undefined;
+  let latestTime = -Infinity;
+  for (const event of events) {
+    const { payload } = event;
+    if (payload.kind !== 'engagement' || payload.event !== 'activity_reset' || payload.contentId !== contentId) continue;
+    const time = Date.parse(event.createdAt);
+    if (time > latestTime || (time === latestTime && latest && event.id > latest.id)) {
+      latest = event;
+      latestTime = time;
+    }
+  }
+  return latest?.id;
+}
 export function completedActivity(events: LearningEvent[], chapter: number, activity: ActivityId, kind?: GameKind) {
-  return events.some(e => e.payload.kind === 'engagement' && e.payload.contentId === activityKey(chapter, activity, kind) && e.payload.event === 'activity_complete');
+  const contentId = activityKey(chapter, activity, kind);
+  const resetId = chapter === 1 && kind === 'understanding' ? cafeResetId(events) : undefined;
+  return events.some(({ payload }) => payload.kind === 'engagement' && payload.contentId === contentId &&
+    payload.event === 'activity_complete' && payload.resetId === resetId);
 }
 export function checkpoint(events: LearningEvent[], chapter: number, activity: ActivityId, kind?: GameKind): { trials: Trial[]; completedTurns: number } | undefined {
   if (activity === 'mission') return undefined; // Practice always starts a fresh round.
+  const contentId = activityKey(chapter, activity, kind);
+  const resetId = chapter === 1 && kind === 'understanding' ? cafeResetId(events) : undefined;
   const candidates = events.flatMap(e => {
     const p = e.payload;
-    if (p.kind !== 'engagement' || p.contentId !== activityKey(chapter, activity, kind) || p.event !== 'activity_checkpoint' || !p.trials?.length || !Number.isInteger(p.completedTurns)) return [];
+    if (p.kind !== 'engagement' || p.contentId !== contentId || p.event !== 'activity_checkpoint' ||
+      p.resetId !== resetId || !p.trials?.length || !Number.isInteger(p.completedTurns)) return [];
     if (p.completedTurns! < 0 || p.completedTurns! >= p.trials.length) return [];
     return [{ trials: p.trials, completedTurns: p.completedTurns! }];
   });
