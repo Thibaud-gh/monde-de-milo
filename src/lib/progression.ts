@@ -18,8 +18,8 @@ export function activityKey(chapter: number, activity: ActivityId, kind?: GameKi
   // but do not count the previous food-matching game as have/want learning.
   return kind === 'understanding' ? `chapter-${chapter + 1}:v3:understanding:${activity}` : `chapter-${chapter + 1}:v2:${activity}`;
 }
-export function cafeResetId(events: LearningEvent[]) {
-  const contentId = activityKey(1, 'find', 'understanding');
+export function listeningResetId(events: LearningEvent[], chapter: number) {
+  const contentId = activityKey(chapter, 'find', 'understanding');
   let latest: LearningEvent | undefined;
   let latestTime = -Infinity;
   for (const event of events) {
@@ -35,7 +35,7 @@ export function cafeResetId(events: LearningEvent[]) {
 }
 export function completedActivity(events: LearningEvent[], chapter: number, activity: ActivityId, kind?: GameKind) {
   const contentId = activityKey(chapter, activity, kind);
-  const resetId = chapter === 1 && kind === 'understanding' ? cafeResetId(events) : undefined;
+  const resetId = kind === 'understanding' ? listeningResetId(events, chapter) : undefined;
   return events.some(({ payload }) => payload.kind === 'engagement' && payload.contentId === contentId &&
     payload.event === 'activity_complete' && payload.resetId === resetId);
 }
@@ -51,7 +51,7 @@ function savedTurns<T>(
 ): { trials: T[]; completedTurns: number } | undefined {
   if (activity === 'mission') return undefined;
   const contentId = activityKey(chapter, activity, kind);
-  const resetId = chapter === 1 && kind === 'understanding' ? cafeResetId(events) : undefined;
+  const resetId = kind === 'understanding' ? listeningResetId(events, chapter) : undefined;
   const candidates = events.flatMap(({ payload }) => {
     if (payload.kind !== 'engagement' || payload.contentId !== contentId || payload.event !== 'activity_checkpoint' ||
       payload.resetId !== resetId || !Number.isInteger(payload.completedTurns)) return [];

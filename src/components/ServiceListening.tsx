@@ -8,14 +8,17 @@ import { foods, type ActivityId, type Food } from '../content/week1';
 import { narrationFor } from '../content/narration';
 import { playAudio, stopAudio } from '../lib/audio';
 import type { PerformedAction } from '../lib/model';
-import { activityKey, serviceCheckpoint } from '../lib/progression';
+import { activityKey, listeningResetId, serviceCheckpoint } from '../lib/progression';
 import { getStore, record } from '../lib/store';
 import { FoodArt, Milo } from './Art';
 import { Icon } from './Icon';
 import { ServiceArt } from './ServiceArt';
 
 export function ServiceListening({ activity, onHome }: { activity: ActivityId; onHome: () => void }) {
-  const [saved] = useState(() => serviceCheckpoint(getStore().events, activity));
+  const [{ saved, resetId }] = useState(() => {
+    const { events } = getStore();
+    return { saved: serviceCheckpoint(events, activity), resetId: listeningResetId(events, 2) };
+  });
   const [turns] = useState(() => saved?.trials ?? makeServiceTurns(activity));
   const [index, setIndex] = useState(saved?.completedTurns ?? 0);
   const [sessionId] = useState(() => crypto.randomUUID());
@@ -97,7 +100,7 @@ export function ServiceListening({ activity, onHome }: { activity: ActivityId; o
       const completedTurns = index + 1;
       const event = completedTurns === turns.length ? 'activity_complete' : 'activity_checkpoint';
       if (event === 'activity_complete' || activity !== 'mission') {
-        record({ kind: 'engagement', contentId, sessionId, event, serviceTurns: turns, completedTurns });
+        record({ kind: 'engagement', contentId, sessionId, event, serviceTurns: turns, completedTurns, resetId });
       }
     }
     let clip = 'encore';

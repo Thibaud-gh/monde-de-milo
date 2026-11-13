@@ -17,7 +17,7 @@ function pairedObservation(attempt: Attempt) {
   if (!attempt.objectCorrect && !attempt.heldObjectCorrect) return 'Revisit both foods';
   return attempt.heldObjectCorrect ? 'Revisit the requested food' : 'Revisit what Milo has';
 }
-export function Dashboard({ onHome, onRestartCafe }: { onHome: () => void; onRestartCafe: () => void }) {
+export function Dashboard({ onHome }: { onHome: () => void }) {
   const progress = useProgress();
   const [tab, setTab] = useState<'overview' | 'plan' | 'notes' | 'connection'>('overview');
   const [, render] = useState(0);
@@ -56,11 +56,7 @@ export function Dashboard({ onHome, onRestartCafe }: { onHome: () => void; onRes
   const suggestion = result.gestures.length < 10 ? 'Keep exploring together. There are too few independent attempts to draw conclusions yet.' : actionMistakes.length > objectMistakes.length ? 'Try showing and giving the same real object together. Watch for gesture confusion before interpreting an action mistake.' : objectMistakes.length ? 'Revisit the food words with real objects at snack time, then try a short familiar game.' : 'Try the next parent-led lesson when it feels comfortable. The practice game and stories remain available.';
   return <main className="dashboard"><aside className="dashboard-sidebar"><button className="dashboard-brand" onClick={onHome}><span className="brand-flower"><Icon name="flower" size={32}/></span> Milo<span>Le coin des parents</span></button><nav aria-label="Parent dashboard"><button className={tab === 'plan' ? 'active' : ''} onClick={() => setTab('plan')}><Icon name="book"/> Session 2 · Lesson plan</button><button className={tab === 'overview' ? 'active' : ''} onClick={() => setTab('overview')}><Icon name="book"/> Learning journal</button><button className={tab === 'notes' ? 'active' : ''} onClick={() => setTab('notes')}><Icon name="hand"/> Speaking & notes</button><button className={tab === 'connection' ? 'active' : ''} onClick={() => setTab('connection')}><Icon name="refresh"/> Connection</button></nav><div className="sidebar-illustration"><Milo waving/><p>A little French,<br/>a little more confidence.</p></div><button className="back-to-cafe" onClick={onHome}><Icon name="home"/> Back to the café</button></aside>
     <div className="dashboard-main"><header className="dashboard-topbar"><span>Le journal de Milo</span><button className="text-button" onClick={exportProgress}><Icon name="download" size={18}/> Export records</button></header>
-    <details className="parent-practice-options">
-      <summary>Practice tools</summary>
-      <p>Restart the café listening game at stage 1 and save the reset. Earlier activity remains in the learning journal.</p>
-      <button className="secondary" onClick={onRestartCafe}>Restart café listening game</button>
-    </details><div className={`sync-banner ${!isConfigured() ? 'local' : ''}`} role="status"><span className="status-dot"/>{cloudStatus()} {isConfigured() && session() && <button onClick={() => void sync()}>Sync now</button>}</div>{getPersistenceError() && <p className="error-banner" role="alert">{getPersistenceError()}</p>}
+    <div className={`sync-banner ${!isConfigured() ? 'local' : ''}`} role="status"><span className="status-dot"/>{cloudStatus()} {isConfigured() && session() && <button onClick={() => void sync()}>Sync now</button>}</div>{getPersistenceError() && <p className="error-banner" role="alert">{getPersistenceError()}</p>}
     {isConfigured() && !session() ? <ParentAuth/> : <>
     {tab === 'plan' && <LessonPlan/>}
     {tab === 'overview' && <><div className="dashboard-heading"><div><p className="journal-date">The first little discoveries</p><h1>Learning, at their pace.</h1><p>Listening in the café. Speaking together at home.</p></div><div className="lesson-picker"><label htmlFor="lesson-select">Latest parent lesson</label><select id="lesson-select" value={progress.lesson} onChange={e => setLesson(Number(e.target.value))}>{['First discoveries', 'Requests at the café', 'Last service at the café'].map((title, i) => <option value={i + 1} key={title}>Session {i + 1} · {title}</option>)}</select></div></div>

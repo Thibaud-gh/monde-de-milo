@@ -275,19 +275,35 @@
 .story-autoplay[aria-pressed="true"] {
   background: var(--yellow);
 }
-.parent-practice-options {
-  position: relative;
-  margin: 4px 0 14px;
-  padding: 8px 12px;
+.chapter-header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+}
+.chapter-header > .round {
+  justify-self: start;
+}
+.chapter-header-actions {
+  justify-self: end;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.chapter-reset {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  background: transparent;
+  border-radius: 50%;
   color: #52677c;
-  font-size: 13px;
 }
-.parent-practice-options summary {
-  cursor: pointer;
-  width: fit-content;
+.chapter-reset:hover, .chapter-reset:focus-visible {
+  background: #e4f0ed;
 }
-.parent-practice-options p {
-  margin: 8px 0;
+@media (max-width: 520px) {
+  .chapter-header-actions .music-button span {
+    display: none;
+  }
 }
 @media (max-width: 650px) {
   .snack-thought {

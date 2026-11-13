@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import type { PointerEvent } from 'react';
 import { foods, type ActivityId, type Food } from '../content/week1';
 import { assessCafe, assessCafeChoices, cafeClip, cafeText, cafeHasSupport, makeCafeTrials, type CafeChoices, type CafeTrial } from '../content/cafe';
-import { activityKey, cafeResetId, checkpoint } from '../lib/progression';
+import { activityKey, checkpoint, listeningResetId } from '../lib/progression';
 import { getStore, record } from '../lib/store';
 import { playAudio, stopAudio } from '../lib/audio';
 import type { PerformedAction } from '../lib/model';
@@ -16,7 +16,7 @@ export function CafeGame({ activity, onHome }: { activity: ActivityId; onHome: (
   const [{ saved, resetId }] = useState(() => {
     const { events } = getStore();
     // A reset that syncs while this round is open must not inherit its progress.
-    return { saved: checkpoint(events, 1, activity, 'understanding'), resetId: cafeResetId(events) };
+    return { saved: checkpoint(events, 1, activity, 'understanding'), resetId: listeningResetId(events, 1) };
   });
   const [trials] = useState<CafeTrial[]>(() => saved?.trials.every(t => t.cafe) ? saved.trials as CafeTrial[] : makeCafeTrials(activity));
   const [index, setIndex] = useState(saved?.completedTurns ?? 0);

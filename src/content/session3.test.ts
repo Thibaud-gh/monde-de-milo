@@ -81,4 +81,22 @@ describe('the café finale', () => {
     expect(activityState([...events, complete], 2, 'give', 'understanding')).toBe('ready');
     expect(activityState([...events, complete], 2, 'mission', 'understanding')).toBe('locked');
   });
+
+  it('persists a Session 3 restart and resumes only rounds started after it', () => {
+    const contentId = activityKey(2, 'find', 'understanding');
+    const turns = makeServiceTurns('find');
+    const event = (id: string, payload: Partial<Engagement>): LearningEvent => ({
+      id, profileId: 'test', ownerId: null, createdAt: '2026-11-13T08:00:00Z', synced: false,
+      payload: { kind: 'engagement', contentId, sessionId: 's3', event: 'activity_complete', ...payload },
+    });
+    const cafeComplete = event('cafe', { contentId: activityKey(1, 'find', 'understanding') });
+    const reset = event('reset', { event: 'activity_reset' });
+    const stale = event('stale', { event: 'activity_checkpoint', serviceTurns: turns, completedTurns: 4 });
+    const events = JSON.parse(JSON.stringify([cafeComplete, event('finished', {}), reset, stale])) as LearningEvent[];
+    expect(activityState(events, 2, 'find', 'understanding')).toBe('ready');
+    expect(activityState(events, 2, 'give', 'understanding')).toBe('locked');
+    expect(activityState(events, 1, 'give', 'understanding')).toBe('ready');
+    const fresh = event('fresh', { event: 'activity_checkpoint', serviceTurns: turns, completedTurns: 1, resetId: reset.id });
+    expect(serviceCheckpoint([...events, fresh], 'find')).toEqual({ trials: turns, completedTurns: 1 });
+  });
 });

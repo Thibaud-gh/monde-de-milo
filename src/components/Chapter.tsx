@@ -7,7 +7,10 @@ import { useProgress } from '../lib/store';
 import { BookArt, FoodArt, Milo } from './Art';
 import { serviceTitles } from '../content/session3';
 import { Icon } from './Icon';
-export function Chapter({ index, onHome, onActivity, onStory }: { index: number; onHome: () => void; onActivity: (kind: GameKind, id: ActivityId) => void; onStory: () => void }) {
+export function Chapter({ index, onHome, onActivity, onStory, onRestartListening }: {
+  index: number; onHome: () => void; onActivity: (kind: GameKind, id: ActivityId) => void;
+  onStory: () => void; onRestartListening: () => void;
+}) {
   const chapter = chapters[index];
   const { events } = useProgress();
   const games: { kind: GameKind; title: string; description: string; food: 'apple' | 'banana' }[] = [
@@ -24,7 +27,18 @@ export function Chapter({ index, onHome, onActivity, onStory }: { index: number;
   ];
   if (index === 1) games.push({ kind: 'speaking', title: 'Le petit café', description: 'J’ai… Je voudrais… À toi de parler avec Milo.', food: 'banana' });
   if (index === 2) games.push({ kind: 'speaking', title: 'À toi de servir !', description: 'Propose quelque chose à Milo : « Tu veux… ? »', food: 'banana' });
-  return <main className="chapter child-screen"><header className="chapter-header"><button className="round" onClick={onHome} aria-label="Tous les chapitres"><Icon name="left"/></button><span>Chapitre {index + 1}</span><MusicButton/></header>
+  return <main className="chapter child-screen">
+    <header className="chapter-header">
+      <button className="round" onClick={onHome} aria-label="Tous les chapitres"><Icon name="left"/></button>
+      <span>Chapitre {index + 1}</span>
+      <div className="chapter-header-actions">
+        <MusicButton/>
+        {chapter.available && <button className="chapter-reset" aria-label="Recommencer le jeu d’écoute" title="Recommencer le jeu d’écoute"
+          onClick={() => {
+            if (window.confirm('Recommencer le jeu d’écoute de ce chapitre à l’étape 1 ?')) onRestartListening();
+          }}><Icon name="refresh" size={18}/></button>}
+      </div>
+    </header>
     <div className="chapter-welcome"><div><h1>{chapter.title}</h1><p>{index === 2 ? 'Trois étapes d’écoute et un jeu pour parler' : index === 0 ? 'Un jeu et une histoire' : 'Deux jeux et une histoire'}</p></div><Milo waving/></div>
     {chapter.available ? <div className={`game-choices chapter-card-grid ${index !== 1 ? 'two-cards' : ''}`}>
       {games.map((game, i) => {

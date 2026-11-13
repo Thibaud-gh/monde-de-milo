@@ -33,20 +33,16 @@ export default function App() {
   function openChapter(index: number) { setChapterIndex(index); go('chapter'); }
   function openParent() { setMenuMusicActive(false); if (parentPassed) { go('parent'); history.replaceState(null, '', '#/parent'); } else setGate(true); }
   if (gate) return <><Home onChapter={openChapter} onParent={openParent}/><ParentGate onPass={() => { setParentPassed(true); setGate(false); go('parent'); history.replaceState(null, '', '#/parent'); }} onClose={goHome}/></>;
-  if (screen === 'parent') return <Dashboard onHome={goHome} onRestartCafe={() => {
-    record({
-      kind: 'engagement',
-      contentId: activityKey(1, 'find', 'understanding'),
-      sessionId: crypto.randomUUID(),
-      event: 'activity_reset',
-    });
-    history.replaceState(null, '', location.pathname + location.search);
-    openChapter(1);
-  }}/>;
+  if (screen === 'parent') return <Dashboard onHome={goHome}/>;
   if (screen === 'story') return chapterIndex === 1 ? <SessionTwoStory onHome={() => go('chapter')}/> : <Story onHome={() => go('chapter')}/>;
   if (screen === 'chapter') return <Chapter index={chapterIndex} onHome={goHome} onActivity={(kind, id) => {
     if (canStartActivity(getStore().events, chapterIndex, id, kind)) { setGameKind(kind); go(id); }
-  }} onStory={() => go('story')}/>;
+  }} onStory={() => go('story')} onRestartListening={() => record({
+    kind: 'engagement',
+    contentId: activityKey(chapterIndex, 'find', 'understanding'),
+    sessionId: crypto.randomUUID(),
+    event: 'activity_reset',
+  })}/>;
   if (screen !== 'home') {
     const back = () => go('chapter');
     if (chapterIndex === 2) {
