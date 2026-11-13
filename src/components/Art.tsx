@@ -43,7 +43,12 @@ export function FoodArt({ food, className = '' }: { food: Food; className?: stri
     </g>}
   </svg>;
 }
-export function Milo({ waving = false, happy = false, serving = false, className = '' }: { waving?: boolean; happy?: boolean; serving?: boolean; className?: string }) {
+export function Milo({ waving = false, happy = false, serving = false, expression, className = '' }: {
+  waving?: boolean; happy?: boolean; serving?: boolean;
+  expression?: 'hungry' | 'thirsty' | 'eating' | 'drinking'; className?: string;
+}) {
+  const needsSomething = expression === 'hungry' || expression === 'thirsty';
+  const content = happy || expression === 'eating' || expression === 'drinking';
   return <svg className={className} viewBox="0 0 320 350" aria-hidden="true">
     <g fill="#B47D4F"><ellipse cx="105" cy="321" rx="43" ry="24"/><ellipse cx="218" cy="321" rx="43" ry="24"/></g>
     <path d={serving ? 'M93 184C65 180 54 205 33 201C10 196 10 220 32 225C69 239 96 227 114 229' : 'M93 184c-38 24-44 76-27 83 24 10 42-23 48-38'} fill="#C18B58"/>
@@ -56,9 +61,12 @@ export function Milo({ waving = false, happy = false, serving = false, className
     <circle cx="76" cy="61" r="20" fill="#DEB78B"/><circle cx="246" cy="61" r="20" fill="#DEB78B"/>
     <path d="M56 113c0-58 47-89 104-89s105 32 105 89c0 62-43 97-105 97S56 175 56 113" fill="#C18B58"/>
     <path d="M100 146c0-26 29-43 61-43s60 17 60 43-27 47-60 47-61-21-61-47" fill="#E8C7A0"/>
-    {happy ? <g stroke="#47362F" strokeWidth="6" fill="none" strokeLinecap="round"><path d="M97 108q10-12 20 0M205 108q10-12 20 0"/></g> : <g fill="#47362F"><ellipse cx="108" cy="106" rx="6" ry="8"/><ellipse cx="213" cy="106" rx="6" ry="8"/></g>}
+    {content ? <g stroke="#47362F" strokeWidth="6" fill="none" strokeLinecap="round"><path d="M97 108q10-12 20 0M205 108q10-12 20 0"/></g> : <g fill="#47362F"><ellipse cx="108" cy="106" rx="6" ry="8"/><ellipse cx="213" cy="106" rx="6" ry="8"/></g>}
+    {needsSomething && <path d="m98 93 17-8m91 0 17 8" fill="none" stroke="#775134" strokeWidth="5" strokeLinecap="round"/>}
     <ellipse cx="161" cy="136" rx="16" ry="11" fill="#47362F"/>
-    <path d="M161 145v12m-18 0q9 15 18 0 9 15 18 0" fill="none" stroke="#47362F" strokeWidth="4" strokeLinecap="round"/>
+    {expression === 'eating' ? <ellipse cx="161" cy="162" rx="20" ry="13" fill="#47362F"/> :
+      <path d={needsSomething ? 'M161 145v11m-14 9q14-16 28 0' : 'M161 145v12m-18 0q9 15 18 0 9 15 18 0'}
+        fill="none" stroke="#47362F" strokeWidth="4" strokeLinecap="round"/>}
     <ellipse cx="88" cy="139" rx="14" ry="8" fill="#D59A79"/><ellipse cx="234" cy="139" rx="14" ry="8" fill="#D59A79"/>
     <path d="m135 43 5-7m13 5 3-8" stroke="#A87349" strokeWidth="3" strokeLinecap="round"/>
   </svg>;

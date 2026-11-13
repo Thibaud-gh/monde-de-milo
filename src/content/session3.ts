@@ -5,7 +5,7 @@ import type { PerformedAction } from '../lib/model';
 
 export const serviceScenes = {
   hungry: { text: 'J’ai faim.', label: 'Milo se frotte le ventre devant une assiette vide' },
-  thirsty: { text: 'J’ai soif.', label: 'Milo regarde son verre vide' },
+  thirsty: { text: 'J’ai soif.', label: 'Milo penche son verre vide' },
   eating: { text: 'Je mange.', label: 'Milo prend une bouchée' },
   drinking: { text: 'Je bois.', label: 'Milo prend une gorgée' },
 } as const;

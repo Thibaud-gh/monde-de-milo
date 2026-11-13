@@ -324,6 +324,10 @@
   margin: auto;
   padding: 16px;
 }
+.service-room-scene, .service-room-combined {
+  align-items: end;
+  gap: clamp(24px, 5vw, 62px);
+}
 .service-customer {
   position: relative;
   flex: 0 1 300px;
@@ -345,14 +349,43 @@
   bottom: 18%;
   width: 23%;
 }
+.service-room-scene .service-customer {
+  flex-basis: 200px;
+}
+.service-thought {
+  position: relative;
+  flex: 0 1 640px;
+  min-width: 0;
+  padding: clamp(14px, 2.6vw, 30px);
+  border: 3px solid #7598a4;
+  border-radius: 66px 88px 72px 83px / 56px 65px 61px 57px;
+  background: #fffefa;
+  box-shadow: 0 6px 0 #a9c8d04d;
+}
+.service-thought::before, .service-thought::after {
+  content: '';
+  position: absolute;
+  pointer-events: none;
+  background: #fffefa;
+  border: 2px solid #7598a4;
+  border-radius: 50%;
+}
+.service-thought::before {
+  left: -25px;
+  bottom: 84px;
+  width: 23px;
+  height: 18px;
+}
+.service-thought::after {
+  left: -42px;
+  bottom: 66px;
+  width: 13px;
+  height: 11px;
+}
 .service-scenes {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: clamp(8px, 2vw, 18px);
-  width: min(100%, 480px);
-}
-.service-room-scene .service-scenes {
-  width: min(100%, 560px);
+  gap: clamp(8px, 1.5vw, 16px);
 }
 .service-scenes button, .service-counter button {
   padding: 4px;
@@ -365,6 +398,14 @@
   width: 100%;
   height: auto;
   pointer-events: none;
+}
+.service-scenes button:disabled {
+  opacity: 1;
+}
+@media (min-width: 601px) and (max-height: 850px) {
+  .service-room-scene .service-scenes button > svg {
+    max-height: max(140px, calc((100dvh - 252px) / 2));
+  }
 }
 .service-scenes button[aria-pressed="true"], .service-counter button[aria-pressed="true"] {
   border-color: var(--blue);
@@ -429,13 +470,33 @@
     padding-inline: 12px;
     gap: 8px;
   }
-  .service-room-combined .service-customer {
-    flex-basis: 40%;
+  .service-game .game-header > .round:last-child {
+    display: grid;
   }
-  .service-room-combined .service-scenes {
-    width: 58%;
+  .service-room-scene, .service-room-combined {
+    flex-direction: column-reverse;
+    align-items: stretch;
+    gap: 20px;
   }
-  .service-room-combined .service-scenes button {
+  .service-room-scene .service-customer, .service-room-combined .service-customer {
+    flex-basis: auto;
+    width: min(158px, 38vw);
+    margin-left: 4%;
+  }
+  .service-thought {
+    flex-basis: auto;
+    border-radius: 42px 55px 49px 45px;
+    padding: 12px;
+  }
+  .service-thought::before {
+    left: 70px;
+    bottom: -18px;
+  }
+  .service-thought::after {
+    left: 55px;
+    bottom: -31px;
+  }
+  .service-scenes button {
     border-width: 2px;
     border-radius: 12px;
     padding: 1px;
