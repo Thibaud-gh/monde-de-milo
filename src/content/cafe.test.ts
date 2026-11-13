@@ -96,8 +96,8 @@ describe('a contrast that requires listening to the sentence', () => {
       expect(narrationFor(`s2-request-${food}`).text).toBe(request(food));
     }
   });
-  it('names the hidden and delivered objects together for every first-stage turn', () => {
-    for (const { cafe, food } of makeCafeTrials('find')) {
+  it.each(['find', 'mission'] as const)('names the hidden and delivered objects together in %s', stage => {
+    for (const { cafe, food } of makeCafeTrials(stage)) {
       expect(narrationFor(cafeHavePairClip(cafe.held, food)).text).toBe(cafeHavePairText(cafe.held, food));
     }
     expect(cafeHavePairText('bread', 'water')).toBe('J’ai du pain et de l’eau.');

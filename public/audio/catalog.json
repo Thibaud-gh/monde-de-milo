@@ -1725,6 +1725,30 @@
       "sourceWavHash": "32f9afc98144cfff927d56c3454969c54d6af21c3807a5e71a2a005d935add55",
       "durationSeconds": 1.76,
       "generation": "whole-utterance"
+    },
+    "cafe-have-milk-and-cheese": {
+      "file": "cafe-have-milk-and-cheese.mp3",
+      "text": "J’ai du lait et du fromage.",
+      "voice": "Milo — On compte",
+      "model": "openbmb/VoxCPM2",
+      "rate": "reference",
+      "signature": "b7076c75c4931a35339aeb4d82e32e784fec67f5160498c7bfd15f786e5e843e",
+      "contentHash": "19ab1476c79f9fdbca55fbb762c799360cad5df9cb4bcb30b551e569f6fde74b",
+      "sourceWavHash": "a77b3823639aea805cc39a88c69dda323e24f2e6d8381c7fca6f2141c06bdf9b",
+      "durationSeconds": 1.92,
+      "generation": "whole-utterance"
+    },
+    "cafe-have-cheese-and-milk": {
+      "file": "cafe-have-cheese-and-milk.mp3",
+      "text": "J’ai du fromage et du lait.",
+      "voice": "Milo — On compte",
+      "model": "openbmb/VoxCPM2",
+      "rate": "reference",
+      "signature": "7b89aa7eec1b7c847a9e96ed16bde4bfa7397f5f481dde157bb3e3678609fa69",
+      "contentHash": "7daa09204aa9e719dfd584a4a62fd18fa485cb508365655d181a40f40de3d269",
+      "sourceWavHash": "b81f5c5050dab1298f78d30d85218a508c44c8e360b84eeb56eaf99f602e2454",
+      "durationSeconds": 1.92,
+      "generation": "whole-utterance"
     }
   }
 }
