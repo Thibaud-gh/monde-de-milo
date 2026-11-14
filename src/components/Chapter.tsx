@@ -42,7 +42,7 @@ export function Chapter({ index, onHome, onActivity, onStory, onRestartListening
     <div className="chapter-welcome"><div><h1>{chapter.title}</h1><p>{index === 2 ? 'Trois étapes d’écoute et un jeu pour parler' : index === 0 ? 'Un jeu et une histoire' : 'Deux jeux et une histoire'}</p></div><Milo waving/></div>
     {chapter.available ? <div className={`game-choices chapter-card-grid ${index !== 1 ? 'two-cards' : ''}`}>
       {games.map((game, i) => {
-        const singleGame = index === 2 && game.kind === 'speaking';
+        const singleGame = game.kind === 'speaking';
         const stage = singleGame ? 3 : gameStage(events, index, game.kind);
         const activity = stageActivities[stage - 1];
         const state = activityState(events, index, activity, game.kind);
@@ -58,6 +58,6 @@ export function Chapter({ index, onHome, onActivity, onStory, onRestartListening
       })}
       {chapter.story && <button className="game-choice game-choice-mission story-card" onClick={onStory} aria-label={`Histoire : ${chapter.story}`}><span className="choice-label">L’histoire</span><div className="choice-picture"><BookArt/><span><Icon name="book" size={30}/></span></div><strong>{chapter.story}</strong><small>{index === 1 ? 'Un petit goûter à partager avec Milo.' : 'Une pomme à retrouver au café…'}</small><span className="choice-start"><Icon name="sound" size={18}/>Écouter</span></button>}
     </div> : <p className="coming-soon">Milo prépare de nouvelles aventures. À bientôt !</p>}
-    <footer className="home-footer"><span className="little-dash"/> Chaque jeu avance à ton rythme. À l’étape 3, on rejoue ! <span className="little-dash"/></footer>
+    <footer className="home-footer"><span className="little-dash"/> À l’étape 3, le jeu d’écoute se rejoue à volonté. <span className="little-dash"/></footer>
   </main>;
 }

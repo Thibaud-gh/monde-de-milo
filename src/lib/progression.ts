@@ -64,7 +64,7 @@ function savedTurns<T>(
   return candidates.sort((a, b) => b.completedTurns - a.completedTurns)[0];
 }
 export function activityState(events: LearningEvent[], chapter: number, activity: ActivityId, kind?: GameKind): ActivityState {
-  if (chapter === 2 && kind === 'speaking') return activity === 'mission' ? 'ready' : 'locked';
+  if ((chapter === 1 || chapter === 2) && kind === 'speaking') return activity === 'mission' ? 'ready' : 'locked';
   if (activity !== 'mission' && completedActivity(events, chapter, activity, kind)) return 'done';
   if (activity !== 'find' && !completedActivity(events, chapter, 'find', kind)) return 'locked';
   if (activity === 'mission' && !completedActivity(events, chapter, 'give', kind)) return 'locked';

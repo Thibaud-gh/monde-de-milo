@@ -48,7 +48,7 @@ export default function App() {
     if (chapterIndex === 2) {
       return gameKind === 'speaking' ? <ServiceSpeaking onHome={back}/> : <ServiceListening key={screen} activity={screen} onHome={back}/>;
     }
-    if (gameKind === 'speaking') return <SessionTwoGame key={screen} activity={screen} onHome={back}/>;
+    if (gameKind === 'speaking') return <SessionTwoGame onHome={back}/>;
     if (chapterIndex === 1) return <CafeGame key={screen} activity={screen} onHome={back}/>;
     return <Game key={screen} chapter={chapterIndex} activity={screen} onHome={back}/>;
   }

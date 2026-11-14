@@ -1,15 +1,10 @@
-import type { ActivityId, Food, Trial } from './week1';
+import type { Food, Trial } from './week1';
 export const requestFood: Record<Food, string> = { apple: 'une pomme', banana: 'une banane', bread: 'du pain', water: 'de l’eau', milk: 'du lait', cheese: 'du fromage' };
 export function request(food: Food) { return `Je voudrais ${requestFood[food]}.`; }
 export function have(food: Food) { return `J’ai ${requestFood[food]}.`; }
 export function understandingPrompt(trial: Pick<Trial, 'food' | 'action'>) {
   return `${request(trial.food)} ${trial.action === 'show' ? 'Montre-moi !' : 'Donne-moi !'}`;
 }
-export const speakingStages = [
-  { id: 'find' as ActivityId, title: 'Avec Milo', instruction: 'Écoute, choisis et dis la phrase.', food: 'apple' as Food, icon: 'sound' as const },
-  { id: 'give' as ActivityId, title: 'À deux voix', instruction: 'Commence la phrase, puis termine-la.', food: 'banana' as Food, icon: 'hand' as const },
-  { id: 'mission' as ActivityId, title: 'Le petit café', instruction: 'Commande ton goûter à Milo.', food: 'bread' as Food, icon: 'basket' as const },
-];
 export const snackStory = [
   { audio: 's2-story-1', food: null, thought: null, hat: false, speaker: 'Milo', text: 'C’est l’heure du goûter. J’ai faim !', direction: 'Rub Milo’s tummy. Let Éva watch; no question yet.' },
   { audio: 's2-story-2', food: null, thought: 'apple', hat: false, speaker: 'Milo', text: 'Je voudrais une pomme.', direction: 'Éva can give the real or pretend apple to the bear.' },
