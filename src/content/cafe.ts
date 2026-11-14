@@ -79,9 +79,6 @@ export function assessCafeChoices(trial: CafeTrial, { held, given }: CafeChoices
     outcome: combinedCorrect ? 'correct' as const : 'retry' as const,
   };
 }
-export function makeSpeakingTrials(): Trial[] {
-  return Array.from({ length: 6 }, (_, i) => ({ id: crypto.randomUUID(), food: 'apple', action: 'give', guided: false, frame: i % 2 === 0 ? 'have' : 'want' }));
-}
 export function cafeHasSupport(events: LearningEvent[], trial: CafeTrial) {
   return trial.guided || events.some(({ payload: p }) =>
     (p.kind === 'attempt' && p.trialId === trial.id && (p.assisted || p.outcome === 'retry')) ||

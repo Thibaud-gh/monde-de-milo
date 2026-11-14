@@ -1,0 +1,130 @@
+import { useEffect, useRef, useState } from 'react';
+import { have, request } from '../content/session2';
+import { isCafeState, useCafeChannel, type CafeAction, type CafeState } from '../lib/liveCafe';
+import { FoodArt } from './Art';
+import { Icon } from './Icon';
+
+export function CafeControls({ cafe, onAction, disabled = false }: {
+  cafe: CafeState; onAction: (action: CafeAction) => void; disabled?: boolean;
+}) {
+  const ordering = cafe.phase === 'order';
+  if (!cafe.food) return null;
+  return <>
+    <div className="cafe-order-ticket">
+      <FoodArt food={cafe.food}/>
+      <div><span>{ordering ? 'Waiting for her order' : 'On her plate'}</span>
+        <strong lang="fr">{ordering ? request(cafe.food) : have(cafe.food)}</strong></div>
+    </div>
+    <div className="cafe-parent-actions">
+      <button className="primary" disabled={disabled} onClick={() => onAction('approve')}>
+        <Icon name="check" size={20}/>{ordering ? 'Serve' : 'Next order'}
+      </button>
+      <button className="secondary" disabled={disabled || cafe.hints === 2} onClick={() => onAction('hint')}>
+        <Icon name="sound" size={20}/>{cafe.hints === 0 ? 'Give a starter' : 'Play the whole phrase'}
+      </button>
+      <button className="secondary" disabled={disabled} onClick={() => onAction('helped')}>{ordering ? 'Serve with help' : 'Next with help'}</button>
+      <button className="text-button" disabled={disabled} onClick={() => onAction('continue')}>{ordering ? 'Serve anyway' : 'Move on'}</button>
+    </div>
+  </>;
+}
+
+type ResponseTimes = { screen?: number; sound?: number };
+
+export function LiveCafeControls({ owner }: { owner: string }) {
+  const [cafe, setCafe] = useState<CafeState>();
+  const [pending, setPending] = useState(false);
+  const [error, setError] = useState('');
+  const [times, setTimes] = useState<ResponseTimes>({});
+  const lastSeen = useRef(0);
+  const activeCafe = useRef<CafeState | undefined>(undefined);
+  const lastCommand = useRef<{ id: string; started: number } | undefined>(undefined);
+  const timeout = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+
+  const { status, send } = useCafeChannel(owner, (event, payload) => {
+    if (event === 'state' && isCafeState(payload)) {
+      const previous = activeCafe.current;
+      if (previous?.id === payload.id && payload.version < previous.version) return;
+      activeCafe.current = payload;
+      lastSeen.current = Date.now();
+      setCafe(payload);
+      if (previous && (previous.id !== payload.id || payload.version > previous.version)) {
+        clearTimeout(timeout.current);
+        setPending(false);
+        setError('');
+      }
+    }
+    if (event === 'closed' && payload && typeof payload === 'object' && 'id' in payload && payload.id === activeCafe.current?.id) {
+      activeCafe.current = undefined;
+      setCafe(undefined);
+      clearTimeout(timeout.current);
+      setPending(false);
+    }
+    if (event !== 'response' || !payload || typeof payload !== 'object' || !('commandId' in payload) || !('effect' in payload)) return;
+    const command = lastCommand.current;
+    const { effect } = payload;
+    if (!command || command.id !== payload.commandId || (effect !== 'screen' && effect !== 'sound')) return;
+    const elapsed = Math.round(performance.now() - command.started);
+    setTimes(previous => ({ ...previous, [effect]: elapsed }));
+  });
+
+  useEffect(() => {
+    if (status !== 'connected') return;
+    const requestState = () => {
+      if (Date.now() - lastSeen.current > 8500) {
+        activeCafe.current = undefined;
+        setCafe(undefined);
+      }
+      void send('request-state', {});
+    };
+    requestState();
+    const timer = setInterval(requestState, 3000);
+    return () => clearInterval(timer);
+    // The channel lives in a ref and is replaced when the status changes.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [status]);
+  useEffect(() => () => clearTimeout(timeout.current), []);
+
+  function act(action: CafeAction) {
+    if (status !== 'connected' || pending || !cafe?.food || cafe.serving) return;
+    const commandId = crypto.randomUUID();
+    lastCommand.current = { id: commandId, started: performance.now() };
+    setTimes({});
+    setError('');
+    setPending(true);
+    const fail = () => {
+      if (lastCommand.current?.id !== commandId || activeCafe.current?.id !== cafe.id || activeCafe.current.version !== cafe.version) return;
+      clearTimeout(timeout.current);
+      setPending(false);
+      setError('Waiting for the iPad. Check that the café game is open.');
+      void send('request-state', {});
+    };
+    timeout.current = setTimeout(fail, 2500);
+    const sent = send('command', { id: cafe.id, version: cafe.version, action, commandId });
+    if (!sent) return fail();
+    void sent.then(result => {
+      if (result !== 'ok') fail();
+    }).catch(fail);
+  }
+
+  return <section className="dashboard-section live-cafe-controls">
+    <h2>Live café</h2>
+    <p>Open <strong lang="fr">Le petit café</strong> on the iPad with the same parent account, then choose <strong lang="fr">Avec le site des parents</strong>.</p>
+    <div className="cafe-connection" role="status">
+      <span className={status === 'connected' && cafe ? 'status-dot' : 'status-dot waiting'}/>
+      {status === 'unavailable' ? 'Live connection unavailable. Retrying…' :
+        status === 'connecting' ? 'Connecting…' : cafe ? 'iPad connected' : 'Waiting for the iPad…'}
+    </div>
+    {status === 'connected' && cafe && (
+      cafe.phase === 'finished' ? <p>The café visit is complete.</p> :
+      cafe.food ? <CafeControls cafe={cafe} onAction={act} disabled={pending || cafe.serving}/> :
+      <p>Waiting for a food choice…</p>
+    )}
+    {error && <p role="alert">{error}</p>}
+    {(times.screen !== undefined || times.sound !== undefined) && <details className="cafe-response-times">
+      <summary>Response timing</summary>
+      <p>{times.screen !== undefined && <span>Tap to screen confirmation {times.screen} ms. </span>}
+        {times.sound !== undefined && <span>Tap to sound confirmation {times.sound} ms.</span>}</p>
+      <p>Includes the confirmation’s trip back from the iPad.</p>
+    </details>}
+  </section>;
+}

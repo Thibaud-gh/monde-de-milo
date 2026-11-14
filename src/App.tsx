@@ -6,7 +6,8 @@ import { Chapter } from './components/Chapter';
 import type { GameKind } from './lib/progression';
 import { activityKey, canStartActivity } from './lib/progression';
 import { getStore, record } from './lib/store';
-import { SessionTwoGame, SessionTwoStory } from './components/SessionTwo';
+import { SessionTwoStory } from './components/SessionTwo';
+import { SpeakingCafe } from './components/SpeakingCafe';
 import { CafeGame } from './components/CafeGame';
 import { Game } from './components/Game';
 import { ServiceListening } from './components/ServiceListening';
@@ -48,7 +49,7 @@ export default function App() {
     if (chapterIndex === 2) {
       return gameKind === 'speaking' ? <ServiceSpeaking onHome={back}/> : <ServiceListening key={screen} activity={screen} onHome={back}/>;
     }
-    if (gameKind === 'speaking') return <SessionTwoGame onHome={back}/>;
+    if (gameKind === 'speaking') return <SpeakingCafe onHome={back}/>;
     if (chapterIndex === 1) return <CafeGame key={screen} activity={screen} onHome={back}/>;
     return <Game key={screen} chapter={chapterIndex} activity={screen} onHome={back}/>;
   }

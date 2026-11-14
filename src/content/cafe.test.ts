@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { assessCafe, assessCafeChoices, cafeClip, cafeFoods, smallCafeFoods, cafeHasSupport, cafeHavePairClip, cafeHavePairText, cafeText, makeCafeTrials, makeSpeakingTrials } from './cafe';
+import { assessCafe, assessCafeChoices, cafeClip, cafeFoods, smallCafeFoods, cafeHasSupport, cafeHavePairClip, cafeHavePairText, cafeText, makeCafeTrials } from './cafe';
 import { have, request, snackStory } from './session2';
 import { foodLayout, makeTrials, phrase } from './week1';
 import { narrationFor } from './narration';
@@ -83,9 +83,6 @@ describe('a contrast that requires listening to the sentence', () => {
   it('leaves chapter one at four foods and its original show/give progression', () => {
     expect(foodLayout()).toHaveLength(4);
     for (const stage of ['find', 'give', 'mission'] as const) expect(makeTrials(stage).every(t => !['milk', 'cheese'].includes(t.food))).toBe(true);
-  });
-  it('gives equal speaking turns to both phrases and preserves the paired role-play', () => {
-    expect(makeSpeakingTrials().map(t => t.frame)).toEqual(['have', 'want', 'have', 'want', 'have', 'want']);
   });
   it('uses a complete prepared utterance for every possible contrast and spoken model', () => {
     for (const stage of ['find', 'give', 'mission'] as const) for (const t of makeCafeTrials(stage)) {

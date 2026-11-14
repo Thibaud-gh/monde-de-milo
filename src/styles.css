@@ -526,3 +526,141 @@
     flex-basis: 225px;
   }
 }
+
+/* The child’s plate and the parent’s order ticket share the café palette. */
+.live-cafe .game-header > .round:last-child {
+  display: grid;
+}
+.cafe-play-together {
+  display: grid;
+  justify-items: center;
+  gap: 12px;
+  padding: 24px;
+  text-align: center;
+}
+.cafe-play-together > svg {
+  width: min(42vw, 220px);
+}
+.cafe-play-together h2 {
+  font: 28px Delius, cursive;
+  margin: 4px 0 10px;
+}
+.live-cafe .parent-read-notice p {
+  margin: 0;
+}
+.cafe-speaking-table {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr) minmax(0, 1fr);
+  align-items: center;
+  justify-items: center;
+  gap: clamp(8px, 3vw, 28px);
+  max-width: 900px;
+  margin: 18px auto;
+  padding: 18px;
+  border-bottom: 8px solid #bf9064;
+}
+.cafe-speaking-table > svg {
+  width: 100%;
+  max-width: 190px;
+}
+.cafe-speaking-table .speech-paper {
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
+  padding: 16px 8px;
+}
+.cafe-speaking-table .speech-paper p {
+  margin: 0;
+  font-size: clamp(20px, 3vw, 32px);
+}
+.cafe-speaking-place {
+  display: grid;
+  justify-items: center;
+  text-align: center;
+  width: 100%;
+}
+.cafe-speaking-plate {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  max-width: 180px;
+  aspect-ratio: 1.3;
+  background: #fffefa;
+  border: 5px double #7598a4;
+  border-radius: 50%;
+}
+.cafe-speaking-plate svg {
+  width: 76%;
+  animation: cafe-serve 360ms ease-out both;
+}
+@keyframes cafe-serve {
+  from { transform: translate(-55%, -20%) scale(.8); opacity: .3; }
+  to { transform: translate(0, 0) scale(1); opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cafe-speaking-plate svg { animation: none; }
+}
+.cafe-speaking-place span {
+  margin-top: 8px;
+}
+.live-cafe-controls {
+  margin-top: 18px;
+}
+.cafe-connection {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin: 12px 0 20px;
+}
+.cafe-connection .waiting {
+  background: #b38b39;
+}
+.adult-response > .cafe-order-ticket, .cafe-order-ticket {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: #fff9ed;
+  border: 1px solid #d8b8a0;
+  border-radius: 5px 16px 5px 14px;
+  padding: 10px 16px;
+}
+.cafe-order-ticket svg {
+  width: 68px;
+  flex-shrink: 0;
+}
+.cafe-order-ticket strong {
+  display: block;
+  font: 25px Delius, cursive;
+}
+.cafe-parent-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 16px 0;
+}
+.cafe-parent-actions button {
+  min-height: 44px;
+}
+.cafe-response-times {
+  margin-top: 18px;
+  font-size: 13px;
+}
+@media (max-width: 760px) {
+  .dashboard-sidebar nav { flex-wrap: wrap; }
+  .cafe-speaking-table {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+  .cafe-speaking-table .speech-paper {
+    grid-column: 2;
+    grid-row: 1;
+  }
+  .cafe-speaking-table > svg {
+    grid-row: span 2;
+  }
+  .cafe-speaking-place {
+    grid-column: 2;
+  }
+  .cafe-speaking-plate {
+    max-width: 115px;
+  }
+}
