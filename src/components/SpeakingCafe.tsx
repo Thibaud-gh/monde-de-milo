@@ -98,6 +98,19 @@ function ConnectedCafe({ owner, onHome }: { owner: string; onHome: () => void })
     say(id, undefined, onStart);
   }
 
+  function playCue(state: CafeState, clip: string, after: () => void, onStart: () => void) {
+    show(state);
+    let finished = false;
+    const finish = () => {
+      if (finished || latest.current.version !== state.version) return;
+      finished = true;
+      clearTimeout(playbackTimer.current);
+      after();
+    };
+    playbackTimer.current = setTimeout(finish, 2000);
+    say(clip, finish, onStart);
+  }
+
   useEffect(() => {
     const id = latest.current.id;
     return () => {
@@ -127,19 +140,17 @@ function ConnectedCafe({ owner, onHome }: { owner: string; onHome: () => void })
     } else {
       const food = current.phase === 'order' ? next.food : current.food;
       if (!food) return;
-      clearTimeout(playbackTimer.current);
+      const soundStarted = () => acknowledge('sound');
       if (next.phase === 'have') {
-        show(next);
-        let finished = false;
-        const askWhatSheHas = () => {
-          if (finished || latest.current.version !== next.version) return;
-          finished = true;
-          clearTimeout(playbackTimer.current);
+        playCue(next, 's2-voila', () => {
           show({ ...next, version: next.version + 1, serving: false });
           say('cafe-have-question');
-        };
-        playbackTimer.current = setTimeout(askWhatSheHas, 1600);
-        say('s2-voila', askWhatSheHas, () => acknowledge('sound'));
+        }, soundStarted);
+      } else if (command.action !== 'continue') {
+        playCue({ ...current, version: next.version, praising: true }, 'bravo', () => {
+          show({ ...next, version: next.version + 1 });
+          prompt();
+        }, soundStarted);
       } else {
         show(next);
         prompt();
@@ -190,14 +201,14 @@ function ConnectedCafe({ owner, onHome }: { owner: string; onHome: () => void })
 
   return <main className="speaking-game live-cafe child-screen">
     <CafeHeader onBack={leave}>
-      <button className="round yellow" aria-label="Réécouter Milo" onClick={() => prompt()} disabled={cafe.serving}><Icon name="sound"/></button>
+      <button className="round yellow" aria-label="Réécouter Milo" onClick={() => prompt()} disabled={cafe.serving || cafe.praising}><Icon name="sound"/></button>
     </CafeHeader>
     {audioError && <button className="audio-notice" onClick={() => prompt()}>Touche ici pour réécouter Milo.</button>}
     <div className="cafe-speaking-table">
-      <Milo happy={having} serving={having}/>
+      <Milo happy={having} serving={having && !cafe.praising} waving={cafe.praising}/>
       <div className="cafe-speaking-menu">
         <div className="speech-paper" aria-live="polite">
-          <p>{cafe.serving ? 'Voilà !' : hint ?? (having ? haveQuestion : orderQuestion)}</p>
+          <p>{cafe.praising ? 'Bravo !' : cafe.serving ? 'Voilà !' : hint ?? (having ? haveQuestion : orderQuestion)}</p>
         </div>
         {!having && <>
           <p className="speaking-invitation">Dis à Milo ce que tu voudrais. Touche une image pour entendre son nom.</p>

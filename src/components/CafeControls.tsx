@@ -98,7 +98,7 @@ export function LiveCafeControls({ owner }: { owner: string }) {
   useEffect(() => () => clearTimeout(timeout.current), []);
 
   function act(action: CafeAction, food?: Food) {
-    if (status !== 'connected' || pending || !cafe || cafe.serving) return;
+    if (status !== 'connected' || pending || !cafe || cafe.serving || cafe.praising) return;
     const commandId = crypto.randomUUID();
     lastCommand.current = { id: commandId, started: performance.now() };
     setTimes({});
@@ -129,7 +129,7 @@ export function LiveCafeControls({ owner }: { owner: string }) {
     </div>
     {status === 'connected' && cafe && (
       cafe.phase === 'finished' ? <p>The café visit is complete.</p> :
-      <CafeControls key={`${cafe.id}:${cafe.round}`} cafe={cafe} onAction={act} disabled={pending || cafe.serving}/>
+      <CafeControls key={`${cafe.id}:${cafe.round}`} cafe={cafe} onAction={act} disabled={pending || cafe.serving || cafe.praising}/>
     )}
     {error && <p role="alert">{error}</p>}
     {(times.screen !== undefined || times.sound !== undefined) && <details className="cafe-response-times">

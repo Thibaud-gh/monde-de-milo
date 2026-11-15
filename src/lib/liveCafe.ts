@@ -13,6 +13,7 @@ export type CafeState = {
   hints: number;
   hintFood: Food | null;
   serving?: boolean;
+  praising?: boolean;
 };
 export type CafeCommand = {
   id: string;
@@ -23,7 +24,7 @@ export type CafeCommand = {
 };
 
 export function advanceCafe(state: CafeState, command: CafeCommand): CafeState | undefined {
-  if (state.id !== command.id || state.version !== command.version || state.serving || state.phase === 'finished') return;
+  if (state.id !== command.id || state.version !== command.version || state.serving || state.praising || state.phase === 'finished') return;
   const food = state.phase === 'order' ? command.food : state.food;
   const version = state.version + 1;
   if (command.action === 'hint') {
@@ -49,7 +50,8 @@ export function isCafeState(value: unknown): value is CafeState {
     (state.food === null || isFood(state.food)) &&
     (state.hintFood === null || isFood(state.hintFood)) &&
     Number.isInteger(state.hints) && state.hints >= 0 && state.hints <= 2 &&
-    (state.serving === undefined || typeof state.serving === 'boolean');
+    (state.serving === undefined || typeof state.serving === 'boolean') &&
+    (state.praising === undefined || typeof state.praising === 'boolean');
 }
 
 export function isCafeCommand(value: unknown): value is CafeCommand {
