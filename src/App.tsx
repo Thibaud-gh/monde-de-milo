@@ -1,3 +1,4 @@
+import { Capacitor } from '@capacitor/core';
 import { initializeMenuMusic, setMenuMusicActive } from './lib/menuMusic';
 import { useEffect, useState } from 'react';
 import type { ActivityId } from './content/week1';
@@ -21,8 +22,8 @@ export default function App() {
   const [screen, setScreen] = useState<Screen>(() => location.hash.startsWith('#/parent') ? 'parent' : 'home');
   const [chapterIndex, setChapterIndex] = useState(0);
   const [gameKind, setGameKind] = useState<GameKind>('understanding');
-  const [gate, setGate] = useState(screen === 'parent');
-  const [parentPassed, setParentPassed] = useState(false);
+  const [parentPassed, setParentPassed] = useState(() => !Capacitor.isNativePlatform());
+  const [gate, setGate] = useState(screen === 'parent' && !parentPassed);
   useEffect(initializeMenuMusic, []);
   useEffect(() => { setMenuMusicActive(!gate && (screen === 'home' || screen === 'chapter')); }, [screen, gate]);
   useEffect(() => {

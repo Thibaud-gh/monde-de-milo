@@ -135,7 +135,9 @@ export function ServiceListening({ activity, onHome }: { activity: ActivityId; o
 
   function inMilo(x: number, y: number) {
     const rect = miloTarget.current?.getBoundingClientRect();
-    return !!rect && x >= rect.left - 16 && x <= rect.right + 16 && y >= rect.top - 16 && y <= rect.bottom + 16;
+    if (!rect) return false;
+    const bottomPadding = turn.kind === 'combined' ? 4 : 16;
+    return x >= rect.left - 16 && x <= rect.right + 16 && y >= rect.top - 16 && y <= rect.bottom + bottomPadding;
   }
   function startDrag(e: PointerEvent<HTMLButtonElement>, food: Food) {
     if (!ready || blocked.current || gesture.current || e.button !== 0) return;
@@ -175,29 +177,8 @@ export function ServiceListening({ activity, onHome }: { activity: ActivityId; o
     turn.kind === 'scene' ? 'Écoute Milo et choisis une image dans sa bulle.' :
     'Choisis une image dans la bulle. Touche un aliment pour le montrer, ou glisse-le vers Milo pour le donner.';
 
-  return <main className="service-game child-screen">
-    <header className="game-header">
-      <button className="round" aria-label="Retour au chapitre" onClick={onHome}><Icon name="left"/></button>
-      <div className="prompt"><span className="game-name">{serviceTitles[activity]} · {index + 1} / {turns.length}</span><h1 aria-live="polite">{status}</h1></div>
-      <button className="round yellow" aria-label="Réécouter Milo" disabled={!!feedback} onClick={playPrompt}><Icon name="sound"/></button>
-    </header>
-    <p className="service-instructions">{instructions}</p>
-    {audioError && <p className="service-audio-caption" role="status">{caption}</p>}
-    <div className={`service-room service-room-${turn.kind}`}>
-      <div className={`service-customer${overMilo ? ' service-receiving' : ''}`} ref={turn.kind !== 'scene' ? miloTarget : undefined}
-        aria-label={turn.kind !== 'scene' ? 'Donner à Milo' : undefined}>
-        <ServiceArt scene={actionScene} food={answer.food}/>
-        {turn.kind === 'combined' && answer.action === 'give' && answer.food && <FoodArt food={answer.food} className="service-served"/>}
-      </div>
-      {turn.kind !== 'need' && <div className="service-thought" role="group" aria-label="La bulle de pensée de Milo">
-        <div className="service-scenes">
-          {turn.scenes.map(scene => <button key={scene} disabled={!ready || !!feedback} aria-label={serviceScenes[scene].label} aria-pressed={answer.scene === scene}
-            data-result={feedback && answer.scene === scene ? feedback.sceneCorrect ? 'correct' : 'wrong' : undefined}
-            onClick={() => choose({ scene })}><ServiceArt scene={scene} food={scene === 'drinking' ? turn.sip : turn.bite}/></button>)}
-        </div>
-      </div>}
-    </div>
-    {turn.kind !== 'scene' && <div className="service-counter" role="group" aria-label="Les aliments">
+  const counter = turn.kind !== 'scene' && (
+    <div className="service-counter" role="group" aria-label="Les aliments">
       {turn.foods.map(food => <button key={food} className={drag?.food === food ? 'service-dragging' : undefined}
         disabled={!ready || !!feedback} aria-label={foods[food].label} aria-pressed={answer.food === food}
         data-result={feedback && answer.food === food ? feedback.foodCorrect && feedback.actionCorrect !== false ? 'correct' : 'wrong' : undefined}
@@ -212,7 +193,33 @@ export function ServiceListening({ activity, onHome }: { activity: ActivityId; o
         aria-keyshortcuts={turn.kind === 'need' ? 'Enter Space' : 'Enter Space G'}>
         <FoodArt food={food}/>
       </button>)}
-    </div>}
+    </div>
+  );
+
+  return <main className="service-game child-screen">
+    <header className="game-header">
+      <button className="round" aria-label="Retour au chapitre" onClick={onHome}><Icon name="left"/></button>
+      <div className="prompt"><span className="game-name">{serviceTitles[activity]} · {index + 1} / {turns.length}</span><h1 aria-live="polite">{status}</h1></div>
+      <button className="round yellow" aria-label="Réécouter Milo" disabled={!!feedback} onClick={playPrompt}><Icon name="sound"/></button>
+    </header>
+    <p className="service-instructions">{instructions}</p>
+    {audioError && <p className="service-audio-caption" role="status">{caption}</p>}
+    <div className={`service-room service-room-${turn.kind}`}>
+      <div className={`service-customer${overMilo ? ' service-receiving' : drag && turn.kind === 'combined' ? ' service-ready-for-drop' : ''}`} ref={turn.kind !== 'scene' ? miloTarget : undefined}
+        aria-label={turn.kind !== 'scene' ? 'Donner à Milo' : undefined}>
+        <ServiceArt scene={actionScene} food={answer.food}/>
+        {turn.kind === 'combined' && answer.action === 'give' && answer.food && <FoodArt food={answer.food} className="service-served"/>}
+      </div>
+      {turn.kind !== 'need' && <div className="service-thought" role="group" aria-label="La bulle de pensée de Milo">
+        <div className="service-scenes">
+          {turn.scenes.map(scene => <button key={scene} disabled={!ready || !!feedback} aria-label={serviceScenes[scene].label} aria-pressed={answer.scene === scene}
+            data-result={feedback && answer.scene === scene ? feedback.sceneCorrect ? 'correct' : 'wrong' : undefined}
+            onClick={() => choose({ scene })}><ServiceArt scene={scene} food={scene === 'drinking' ? turn.sip : turn.bite}/></button>)}
+        </div>
+      </div>}
+      {turn.kind === 'combined' && counter}
+    </div>
+    {turn.kind === 'need' && counter}
     {drag && <div className="drag-ghost" style={{ left: drag.x, top: drag.y }}><FoodArt food={drag.food}/></div>}
   </main>;
 }

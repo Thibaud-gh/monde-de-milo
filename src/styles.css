@@ -345,9 +345,44 @@
   margin: auto;
   padding: 16px;
 }
-.service-room-scene, .service-room-combined {
+.service-room-scene {
   align-items: end;
   gap: clamp(24px, 5vw, 62px);
+}
+.service-room-combined {
+  display: grid;
+  grid-template-columns: minmax(0, 340px) minmax(0, 600px);
+  grid-template-areas: "milo thought" "tray thought";
+  align-items: start;
+  gap: 6px clamp(32px, 5vw, 62px);
+}
+.service-room-combined .service-customer {
+  grid-area: milo;
+  justify-self: center;
+  width: min(100%, 300px);
+  background: #edf3ea;
+}
+.service-room-combined .service-customer.service-ready-for-drop {
+  border-color: #7598a4;
+}
+.service-room-combined .service-customer.service-receiving {
+  border-color: #65885c;
+  background: #e4f0d9;
+}
+.service-room-combined .service-thought {
+  grid-area: thought;
+  align-self: start;
+}
+.service-room-combined .service-counter {
+  grid-area: tray;
+  flex-wrap: nowrap;
+  padding: 8px;
+  border-top-width: 5px;
+  border-radius: 6px 6px 20px 20px;
+}
+.service-room-combined .service-counter button {
+  width: min(30%, 94px);
+  min-width: 0;
 }
 .service-customer {
   position: relative;
@@ -494,12 +529,12 @@
   .service-game .game-header > .round:last-child {
     display: grid;
   }
-  .service-room-scene, .service-room-combined {
+  .service-room-scene {
     flex-direction: column-reverse;
     align-items: stretch;
     gap: 20px;
   }
-  .service-room-scene .service-customer, .service-room-combined .service-customer {
+  .service-room-scene .service-customer {
     flex-basis: auto;
     width: min(158px, 38vw);
     margin-left: 4%;
@@ -516,6 +551,27 @@
   .service-thought::after {
     left: 55px;
     bottom: -31px;
+  }
+  .service-room-combined {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: "thought" "milo" "tray";
+    row-gap: 6px;
+  }
+  .service-room-combined .service-thought {
+    margin-bottom: 22px;
+  }
+  .service-room-combined .service-thought::before {
+    left: calc(50% - 33px);
+  }
+  .service-room-combined .service-thought::after {
+    left: calc(50% - 16px);
+  }
+  .service-room-combined .service-customer {
+    width: min(200px, 54vw);
+  }
+  .service-room-combined .service-counter {
+    justify-self: center;
+    width: min(100%, 320px);
   }
   .service-scenes button {
     border-width: 2px;
