@@ -207,11 +207,16 @@ function ConnectedCafe({ owner, onHome }: { owner: string; onHome: () => void })
     <div className="cafe-speaking-table">
       <Milo happy={having} serving={having && !cafe.praising} waving={cafe.praising}/>
       <div className="cafe-speaking-menu">
-        <div className="speech-paper" aria-live="polite">
-          <p>{cafe.praising ? 'Bravo !' : cafe.serving ? 'Voilà !' : hint ?? (having ? haveQuestion : orderQuestion)}</p>
+        <div className="cafe-speaking-prompts">
+          <div className="speech-paper" aria-live="polite">
+            <p>{cafe.praising ? 'Bravo !' : cafe.serving ? 'Voilà !' : hint ?? (having ? haveQuestion : orderQuestion)}</p>
+          </div>
+          {!cafe.serving && !cafe.praising && <p className="cafe-speaking-turn">
+            <Icon name="speak" size={30}/> À toi de parler !
+          </p>}
         </div>
         {!having && <>
-          <p className="speaking-invitation">Dis à Milo ce que tu voudrais. Touche une image pour entendre son nom.</p>
+          <p className="speaking-invitation">Touche un aliment pour entendre son nom.</p>
           <div className="speaking-foods six-foods cafe-vocabulary" role="group" aria-label="Écouter les mots du menu">
             {cafeFoods.map(food => <button key={food} aria-label={`Écouter : ${foods[food].label}`} onClick={() => say(`cafe-menu-${food}`)}>
               <FoodArt food={food}/><Icon name="sound" size={18}/>

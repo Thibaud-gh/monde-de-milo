@@ -1,5 +1,5 @@
 import type { CSSProperties } from 'react';
-export type IconName = 'star' | 'home' | 'music' | 'music-off' | 'sound' | 'play' | 'pause' | 'left' | 'right' | 'book' | 'basket' | 'hand' | 'flag' | 'help' | 'parent' | 'close' | 'check' | 'download' | 'refresh' | 'flower';
+export type IconName = 'star' | 'home' | 'music' | 'music-off' | 'sound' | 'speak' | 'play' | 'pause' | 'left' | 'right' | 'book' | 'basket' | 'hand' | 'flag' | 'help' | 'parent' | 'close' | 'check' | 'download' | 'refresh' | 'flower';
 const paths: Record<IconName, React.ReactNode> = {
   star: <path d="m12 2 3.1 6.3 6.9 1-5 4.9 1.2 6.8-6.2-3.2L5.8 21 7 14.2l-5-4.9 6.9-1Z"/>,
   flower: <path d="M12 1v22M1 12h22M4 4l16 16M20 4 4 20"/>,
@@ -7,6 +7,7 @@ const paths: Record<IconName, React.ReactNode> = {
   'music-off': <><path d="M9 13V5l11-2v12M9 8l11-2M3 3l18 18"/><ellipse cx="6" cy="18" rx="3" ry="2"/><ellipse cx="17" cy="16" rx="3" ry="2"/></>,
   home: <><path d="m3 11 9-8 9 8M5 10v11h5v-7h4v7h5V10"/></>,
   sound: <><path d="M11 4 6 8H3v8h3l5 4ZM15 8c3 2 3 6 0 8M18 4c6 4 6 12 0 16"/></>,
+  speak: <><path d="M3 11a8 7 0 1 1 8 7H9l-5 3 1-5a7 7 0 0 1-2-5Z"/><path d="M7.5 11h.01M11 11h.01M14.5 11h.01M20 4l2-2M22 8h1"/></>,
   play: <path d="m8 4 13 8-13 8Z"/>, pause: <><path d="M8 4v16M16 4v16"/></>,
   left: <path d="m15 5-7 7 7 7"/>, right: <path d="m9 5 7 7-7 7"/>,
   book: <><path d="M12 6C8 3 4 3 2 4v15c3-1 6-1 10 2 4-3 7-3 10-2V4c-3-1-6-1-10 2ZM12 6v15"/></>,
