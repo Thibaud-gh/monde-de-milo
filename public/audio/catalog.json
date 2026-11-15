@@ -1749,6 +1749,78 @@
       "sourceWavHash": "b81f5c5050dab1298f78d30d85218a508c44c8e360b84eeb56eaf99f602e2454",
       "durationSeconds": 1.92,
       "generation": "whole-utterance"
+    },
+    "cafe-menu-apple": {
+      "file": "cafe-menu-apple.mp3",
+      "text": "Une pomme.",
+      "voice": "Milo — On compte",
+      "model": "openbmb/VoxCPM2",
+      "rate": "reference",
+      "signature": "c1c7fcf2b5b2e312f4dc8d16af1f4a528c8de6da5b1352791a40ea882d813720",
+      "contentHash": "c55178ddab8165385fa4e704ae997024d2a66b111d042264c8a42fad17f9ffd4",
+      "sourceWavHash": "cc6d8a737b3d603df9eb15325ff34c0d6fea9fd65bf9d4c176eabf071a4f69bf",
+      "durationSeconds": 0.96,
+      "generation": "whole-utterance"
+    },
+    "cafe-menu-banana": {
+      "file": "cafe-menu-banana.mp3",
+      "text": "Une banane.",
+      "voice": "Milo — On compte",
+      "model": "openbmb/VoxCPM2",
+      "rate": "reference",
+      "signature": "5a3a4f71d3c350bbd394f1ba3fd8861431134dffcc6071dd85ec309969d16cc7",
+      "contentHash": "65cdd884e6fe63450be4912b0c71c10b79940561ffa90e86eb60b6948d173f10",
+      "sourceWavHash": "7ece34aec5b14daaf58732a7ae6bd804857729fb5a3ab47860732ea262062b39",
+      "durationSeconds": 0.96,
+      "generation": "whole-utterance"
+    },
+    "cafe-menu-bread": {
+      "file": "cafe-menu-bread.mp3",
+      "text": "Du pain.",
+      "voice": "Milo — On compte",
+      "model": "openbmb/VoxCPM2",
+      "rate": "reference",
+      "signature": "a073324cd5a4809d01fda48198518928ee89f7976ba32ad3504082c3d72a32b6",
+      "contentHash": "0a3c4daecff287ce54a0a6ddf09bd840cc4b6f2578f1a34c31de0c649ccd1ee4",
+      "sourceWavHash": "b6a0212a411d253e4e0c9c74ccf2d9e95b34692002c364ca5c081d47cd5e49fb",
+      "durationSeconds": 0.8,
+      "generation": "whole-utterance"
+    },
+    "cafe-menu-water": {
+      "file": "cafe-menu-water.mp3",
+      "text": "De l’eau.",
+      "voice": "Milo — On compte",
+      "model": "openbmb/VoxCPM2",
+      "rate": "reference",
+      "signature": "8c643bb58005de432cb09569db22e4bc242029ae49873b403e4b21f34939bf73",
+      "contentHash": "1f7dd9c1df29fec0c1f7dc4c9a9ebd218703df6825e7e228783e44becf3917cf",
+      "sourceWavHash": "5d59d7c7b0e22b6c2000ced07a64303ab13283ffd524607f499ddefb1c1d8a80",
+      "durationSeconds": 0.64,
+      "generation": "whole-utterance"
+    },
+    "cafe-menu-milk": {
+      "file": "cafe-menu-milk.mp3",
+      "text": "Du lait.",
+      "voice": "Milo — On compte",
+      "model": "openbmb/VoxCPM2",
+      "rate": "reference",
+      "signature": "a3b575a1e2851bc47c00496da4fd757c06d7b65f94ae30ea7b579d1534558aae",
+      "contentHash": "f468301f859ca89a32b0ab202bdb8751bf4b89da5baa7978dc984af00a337caa",
+      "sourceWavHash": "b964b4d3eb643fd9b3410f55a1c6f153684c626c188be946393909f484c3fa1c",
+      "durationSeconds": 0.8,
+      "generation": "whole-utterance"
+    },
+    "cafe-menu-cheese": {
+      "file": "cafe-menu-cheese.mp3",
+      "text": "Du fromage.",
+      "voice": "Milo — On compte",
+      "model": "openbmb/VoxCPM2",
+      "rate": "reference",
+      "signature": "e2bf43e8ed652b750153d3b05358839fe5f2612e92ef82fde6a124c0630edcce",
+      "contentHash": "af209c55a3f9d4a32b60c83e52f216df4c77a702ab338baffaad11c8205cf66f",
+      "sourceWavHash": "d120dc524064feb8d8e5fa5b97e5990a52385a3190436f117de14c436319db57",
+      "durationSeconds": 1.12,
+      "generation": "whole-utterance"
     }
   }
 }

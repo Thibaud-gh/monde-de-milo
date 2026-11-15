@@ -11,6 +11,7 @@ export type CafeState = {
   phase: 'order' | 'have' | 'finished';
   food: Food | null;
   hints: number;
+  hintFood: Food | null;
   serving?: boolean;
 };
 export type CafeCommand = {
@@ -18,18 +19,25 @@ export type CafeCommand = {
   version: number;
   action: CafeAction;
   commandId: string;
+  food?: Food;
 };
 
 export function advanceCafe(state: CafeState, command: CafeCommand): CafeState | undefined {
-  if (state.id !== command.id || state.version !== command.version || !state.food || state.serving || state.phase === 'finished') return;
+  if (state.id !== command.id || state.version !== command.version || state.serving || state.phase === 'finished') return;
+  const food = state.phase === 'order' ? command.food : state.food;
   const version = state.version + 1;
   if (command.action === 'hint') {
-    if (state.hints >= 2) return;
-    return { ...state, version, hints: state.hints + 1 };
+    if (state.hints >= 2 || (state.hints === 1 && !food)) return;
+    return { ...state, version, hints: state.hints + 1, hintFood: state.hints === 1 ? food ?? null : null };
   }
-  if (state.phase === 'order') return { ...state, version, phase: 'have', hints: 0, serving: true };
-  if (state.round === cafeRounds) return { ...state, version, phase: 'finished', hints: 0 };
-  return { ...state, version, phase: 'order', round: state.round + 1, food: null, hints: 0 };
+  if (!food) return;
+  if (state.phase === 'order') return { ...state, version, phase: 'have', food, hints: 0, hintFood: null, serving: true };
+  if (state.round === cafeRounds) return { ...state, version, phase: 'finished', hints: 0, hintFood: null };
+  return { ...state, version, phase: 'order', round: state.round + 1, food: null, hints: 0, hintFood: null };
+}
+
+function isFood(value: unknown): value is Food {
+  return typeof value === 'string' && Object.hasOwn(foods, value);
 }
 
 export function isCafeState(value: unknown): value is CafeState {
@@ -38,7 +46,8 @@ export function isCafeState(value: unknown): value is CafeState {
   return typeof state.id === 'string' && Number.isInteger(state.version) &&
     Number.isInteger(state.round) && state.round >= 1 && state.round <= cafeRounds &&
     ['order', 'have', 'finished'].includes(state.phase) &&
-    (state.food === null || (typeof state.food === 'string' && Object.hasOwn(foods, state.food))) &&
+    (state.food === null || isFood(state.food)) &&
+    (state.hintFood === null || isFood(state.hintFood)) &&
     Number.isInteger(state.hints) && state.hints >= 0 && state.hints <= 2 &&
     (state.serving === undefined || typeof state.serving === 'boolean');
 }
@@ -47,7 +56,8 @@ export function isCafeCommand(value: unknown): value is CafeCommand {
   if (!value || typeof value !== 'object') return false;
   const command = value as CafeCommand;
   return typeof command.id === 'string' && typeof command.commandId === 'string' &&
-    Number.isInteger(command.version) && ['hint', 'approve', 'helped', 'continue'].includes(command.action);
+    Number.isInteger(command.version) && ['hint', 'approve', 'helped', 'continue'].includes(command.action) &&
+    (command.food === undefined || isFood(command.food));
 }
 
 function subscribeToCloud(update: () => void) {

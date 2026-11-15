@@ -17,7 +17,7 @@ export function SpeakingCafe({ onHome }: { onHome: () => void }) {
   const owner = useCafeAccount();
   const [mode, setMode] = useState<'local' | 'live' | null>(null);
   const [cafe, setCafe] = useState<CafeState>(() => ({
-    id: crypto.randomUUID(), version: 0, round: 1, phase: 'order', food: null, hints: 0,
+    id: crypto.randomUUID(), version: 0, round: 1, phase: 'order', food: null, hints: 0, hintFood: null,
   }));
   const latest = useRef(cafe);
   const [player] = useState(() => new Audio());
@@ -64,14 +64,14 @@ export function SpeakingCafe({ onHome }: { onHome: () => void }) {
     }, onStart, player);
   }
 
-  function prompt() {
+  function prompt(onStart?: () => void) {
     const turn = latest.current;
     if (turn.phase === 'finished') return say('s2-fini');
     const having = turn.phase === 'have';
-    const id = turn.hints === 2 && turn.food ? (having ? 'cafe-have-' : 's2-request-') + turn.food :
+    const id = turn.hintFood ? (having ? 'cafe-have-' : 's2-request-') + turn.hintFood :
       turn.hints === 1 ? (having ? 'cafe-have-starter' : 's2-starter') :
       having ? 'cafe-have-question' : 's2-question';
-    say(id);
+    say(id, undefined, onStart);
   }
 
   function start(nextMode: 'local' | 'live') {
@@ -93,16 +93,10 @@ export function SpeakingCafe({ onHome }: { onHome: () => void }) {
     };
   }, []);
 
-  function select(food: Food) {
-    const current = latest.current;
-    if (current.phase !== 'order' || current.food === food) return;
-    show({ ...current, food, version: current.version + 1, hints: 0 });
-  }
-
   function respond(command: CafeCommand) {
     const current = latest.current;
     const next = advanceCafe(current, command);
-    if (!next || !current.food) {
+    if (!next) {
       if (mode === 'live') publish();
       return;
     }
@@ -112,10 +106,10 @@ export function SpeakingCafe({ onHome }: { onHome: () => void }) {
     };
     if (command.action === 'hint') {
       show(next);
-      const id = next.hints === 1 ? (next.phase === 'have' ? 'cafe-have-starter' : 's2-starter') :
-        (next.phase === 'have' ? 'cafe-have-' : 's2-request-') + current.food;
-      say(id, undefined, () => acknowledge('sound'));
+      prompt(() => acknowledge('sound'));
     } else {
+      const food = current.phase === 'order' ? next.food : current.food;
+      if (!food) return;
       clearTimeout(playbackTimer.current);
       if (next.phase === 'have') {
         show(next);
@@ -136,7 +130,7 @@ export function SpeakingCafe({ onHome }: { onHome: () => void }) {
 
       record({
         kind: 'assessment', lesson: 2,
-        term: current.phase === 'order' ? request(current.food) : have(current.food),
+        term: current.phase === 'order' ? request(food) : have(food),
         level: command.action === 'continue' ? 'not-yet' : command.action === 'helped' || current.hints > 0 ? 'prompted' : 'independent',
         note: 'Parent-observed · Le petit café',
       });
@@ -145,9 +139,9 @@ export function SpeakingCafe({ onHome }: { onHome: () => void }) {
     requestAnimationFrame(() => requestAnimationFrame(() => acknowledge('screen')));
   }
 
-  function respondHere(action: CafeAction) {
+  function respondHere(action: CafeAction, food?: Food) {
     const { id, version } = latest.current;
-    respond({ id, version, action, commandId: crypto.randomUUID() });
+    respond({ id, version, action, food, commandId: crypto.randomUUID() });
   }
 
   function leave() {
@@ -156,8 +150,8 @@ export function SpeakingCafe({ onHome }: { onHome: () => void }) {
   }
 
   const having = cafe.phase === 'have';
-  const hint = cafe.hints === 1 ? (having ? 'J’ai…' : 'Je voudrais…') :
-    cafe.hints === 2 && cafe.food ? (having ? have(cafe.food) : request(cafe.food)) : null;
+  const hint = cafe.hintFood ? (having ? have(cafe.hintFood) : request(cafe.hintFood)) :
+    cafe.hints === 1 ? (having ? 'J’ai…' : 'Je voudrais…') : null;
 
   if (cafe.phase === 'finished') return <main className="completion child-screen">
     <Milo happy waving/><h1>Quel bon goûter !</h1>
@@ -168,7 +162,7 @@ export function SpeakingCafe({ onHome }: { onHome: () => void }) {
     <header className="game-header">
       <button className="round" aria-label="Retour au chapitre" onClick={leave}><Icon name="left"/></button>
       <div className="prompt"><h1>Le petit café</h1></div>
-      {mode && <button className="round yellow" aria-label="Réécouter Milo" onClick={prompt} disabled={cafe.serving}><Icon name="sound"/></button>}
+      {mode && <button className="round yellow" aria-label="Réécouter Milo" onClick={() => prompt()} disabled={cafe.serving}><Icon name="sound"/></button>}
     </header>
     {!mode ? <div className="cafe-play-together">
       <Milo waving/>
@@ -181,24 +175,27 @@ export function SpeakingCafe({ onHome }: { onHome: () => void }) {
         <p role="status">{status === 'unavailable' ? 'Connexion au site interrompue.' : 'Sur le site des parents, ouvrez « Live café ».'}</p>
         <button className="text-button" onClick={() => { setMode('local'); clearTimeout(parentTimer.current); }}>Continuer sur cet écran</button>
       </div>}
-      {audioError && <button className="audio-notice" onClick={prompt}>Touche ici pour réécouter Milo.</button>}
+      {audioError && <button className="audio-notice" onClick={() => prompt()}>Touche ici pour réécouter Milo.</button>}
       <div className="cafe-speaking-table">
         <Milo happy={having} serving={having}/>
         <div className="speech-paper" aria-live="polite">
           <p>{cafe.serving ? 'Voilà !' : hint ?? (having ? haveQuestion : orderQuestion)}</p>
-          {!having && cafe.food && <FoodArt food={cafe.food}/>}
         </div>
         <div className="cafe-speaking-place">
           <div className="cafe-speaking-plate" aria-hidden="true">{having && cafe.food && <FoodArt food={cafe.food}/>}</div>
           <span>{having && cafe.food ? foods[cafe.food].label : 'Mon assiette'}</span>
         </div>
       </div>
-      {!having && <div className="speaking-foods six-foods" role="group" aria-label="Le menu">
-        {cafeFoods.map(food => <button key={food} className={cafe.food === food ? 'selected' : ''}
-          aria-pressed={cafe.food === food} aria-label={foods[food].label} onClick={() => select(food)}><FoodArt food={food}/></button>)}
-      </div>}
-      {mode === 'local' && cafe.food && !cafe.serving && <section className="adult-response" lang="en" aria-label="Parent controls">
-        <CafeControls cafe={cafe} onAction={respondHere}/>
+      {!having && <>
+        <p className="speaking-invitation">Dis à Milo ce que tu voudrais. Touche une image pour entendre son nom.</p>
+        <div className="speaking-foods six-foods cafe-vocabulary" role="group" aria-label="Écouter les mots du menu">
+          {cafeFoods.map(food => <button key={food} aria-label={`Écouter : ${foods[food].label}`} onClick={() => say(`cafe-menu-${food}`)}>
+            <FoodArt food={food}/><Icon name="sound" size={18}/>
+          </button>)}
+        </div>
+      </>}
+      {mode === 'local' && !cafe.serving && <section className="adult-response" lang="en" aria-label="Parent controls">
+        <CafeControls key={cafe.round} cafe={cafe} onAction={respondHere}/>
       </section>}
     </>}
   </main>;

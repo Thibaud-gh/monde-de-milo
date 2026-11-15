@@ -1,29 +1,41 @@
 import { useEffect, useRef, useState } from 'react';
+import { cafeFoods } from '../content/cafe';
 import { have, request } from '../content/session2';
+import { foods, type Food } from '../content/week1';
 import { isCafeState, useCafeChannel, type CafeAction, type CafeState } from '../lib/liveCafe';
 import { FoodArt } from './Art';
 import { Icon } from './Icon';
 
 export function CafeControls({ cafe, onAction, disabled = false }: {
-  cafe: CafeState; onAction: (action: CafeAction) => void; disabled?: boolean;
+  cafe: CafeState; onAction: (action: CafeAction, food?: Food) => void; disabled?: boolean;
 }) {
+  const [selected, setSelected] = useState<Food | null>(cafe.hintFood);
   const ordering = cafe.phase === 'order';
-  if (!cafe.food) return null;
+  const food = ordering ? selected : cafe.food;
+  const act = (action: CafeAction) => onAction(action, ordering ? food ?? undefined : undefined);
   return <>
-    <div className="cafe-order-ticket">
-      <FoodArt food={cafe.food}/>
-      <div><span>{ordering ? 'Waiting for her order' : 'On her plate'}</span>
-        <strong lang="fr">{ordering ? request(cafe.food) : have(cafe.food)}</strong></div>
-    </div>
+    {ordering && <>
+      <p>Listen to her order, then choose what to serve.</p>
+      <div className="cafe-parent-menu" role="group" aria-label="Choose what to serve">
+        {cafeFoods.map(item => <button key={item} disabled={disabled} lang="fr" aria-pressed={selected === item} onClick={() => setSelected(item)}>
+          <FoodArt food={item}/><span>{foods[item].label}</span>
+        </button>)}
+      </div>
+    </>}
+    {food && <div className="cafe-order-ticket">
+      <FoodArt food={food}/>
+      <div><span>{ordering ? 'Ready to serve' : 'On her plate'}</span>
+        <strong lang="fr">{ordering ? request(food) : have(food)}</strong></div>
+    </div>}
     <div className="cafe-parent-actions">
-      <button className="primary" disabled={disabled} onClick={() => onAction('approve')}>
+      <button className="primary" disabled={disabled || !food} onClick={() => act('approve')}>
         <Icon name="check" size={20}/>{ordering ? 'Serve' : 'Next order'}
       </button>
-      <button className="secondary" disabled={disabled || cafe.hints === 2} onClick={() => onAction('hint')}>
+      <button className="secondary" disabled={disabled || cafe.hints === 2 || (cafe.hints === 1 && !food)} onClick={() => act('hint')}>
         <Icon name="sound" size={20}/>{cafe.hints === 0 ? 'Give a starter' : 'Play the whole phrase'}
       </button>
-      <button className="secondary" disabled={disabled} onClick={() => onAction('helped')}>{ordering ? 'Serve with help' : 'Next with help'}</button>
-      <button className="text-button" disabled={disabled} onClick={() => onAction('continue')}>{ordering ? 'Serve anyway' : 'Move on'}</button>
+      <button className="secondary" disabled={disabled || !food} onClick={() => act('helped')}>{ordering ? 'Serve with help' : 'Next with help'}</button>
+      <button className="text-button" disabled={disabled || !food} onClick={() => act('continue')}>{ordering ? 'Serve anyway' : 'Move on'}</button>
     </div>
   </>;
 }
@@ -84,8 +96,8 @@ export function LiveCafeControls({ owner }: { owner: string }) {
   }, [status]);
   useEffect(() => () => clearTimeout(timeout.current), []);
 
-  function act(action: CafeAction) {
-    if (status !== 'connected' || pending || !cafe?.food || cafe.serving) return;
+  function act(action: CafeAction, food?: Food) {
+    if (status !== 'connected' || pending || !cafe || cafe.serving) return;
     const commandId = crypto.randomUUID();
     lastCommand.current = { id: commandId, started: performance.now() };
     setTimes({});
@@ -99,7 +111,7 @@ export function LiveCafeControls({ owner }: { owner: string }) {
       void send('request-state', {});
     };
     timeout.current = setTimeout(fail, 2500);
-    const sent = send('command', { id: cafe.id, version: cafe.version, action, commandId });
+    const sent = send('command', { id: cafe.id, version: cafe.version, action, commandId, food });
     if (!sent) return fail();
     void sent.then(result => {
       if (result !== 'ok') fail();
@@ -116,8 +128,7 @@ export function LiveCafeControls({ owner }: { owner: string }) {
     </div>
     {status === 'connected' && cafe && (
       cafe.phase === 'finished' ? <p>The café visit is complete.</p> :
-      cafe.food ? <CafeControls cafe={cafe} onAction={act} disabled={pending || cafe.serving}/> :
-      <p>Waiting for a food choice…</p>
+      <CafeControls key={`${cafe.id}:${cafe.round}`} cafe={cafe} onAction={act} disabled={pending || cafe.serving}/>
     )}
     {error && <p role="alert">{error}</p>}
     {(times.screen !== undefined || times.sound !== undefined) && <details className="cafe-response-times">

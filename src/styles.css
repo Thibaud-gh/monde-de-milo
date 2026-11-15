@@ -632,6 +632,40 @@
   display: block;
   font: 25px Delius, cursive;
 }
+.cafe-vocabulary button {
+  position: relative;
+  padding: 8px 12px 14px;
+}
+.cafe-vocabulary button svg:last-child {
+  position: absolute;
+  right: 5px;
+  bottom: 5px;
+  width: 18px;
+  height: 18px;
+}
+.cafe-parent-menu {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(92px, 1fr));
+  gap: 8px;
+  margin: 12px 0;
+}
+.cafe-parent-menu button {
+  display: grid;
+  justify-items: center;
+  gap: 4px;
+  padding: 6px;
+  background: #fff9ed;
+  border: 2px solid #d8b8a0;
+  border-radius: 12px;
+}
+.cafe-parent-menu button[aria-pressed="true"] {
+  border-color: var(--blue);
+  background: #fff5c3;
+}
+.cafe-parent-menu svg {
+  width: 48px;
+  height: 48px;
+}
 .cafe-parent-actions {
   display: flex;
   flex-wrap: wrap;

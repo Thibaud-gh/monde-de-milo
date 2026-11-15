@@ -143,5 +143,11 @@
   "cafe-have-bread-and-water": "J’ai du pain et de l’eau.",
   "cafe-have-water-and-bread": "J’ai de l’eau et du pain.",
   "cafe-have-milk-and-cheese": "J’ai du lait et du fromage.",
-  "cafe-have-cheese-and-milk": "J’ai du fromage et du lait."
+  "cafe-have-cheese-and-milk": "J’ai du fromage et du lait.",
+  "cafe-menu-apple": "Une pomme.",
+  "cafe-menu-banana": "Une banane.",
+  "cafe-menu-bread": "Du pain.",
+  "cafe-menu-water": "De l’eau.",
+  "cafe-menu-milk": "Du lait.",
+  "cafe-menu-cheese": "Du fromage."
 }
