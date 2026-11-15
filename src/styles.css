@@ -657,13 +657,6 @@
   width: 100%;
   min-width: 0;
 }
-.cafe-speaking-prompts {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
-  gap: 8px 12px;
-}
 .cafe-speaking-turn {
   display: flex;
   align-items: center;
@@ -677,6 +670,8 @@
 }
 .cafe-speaking-turn svg {
   flex-shrink: 0;
+  width: clamp(40px, 6vw, 56px);
+  height: auto;
 }
 .cafe-speaking-menu .speech-paper {
   width: fit-content;
@@ -698,10 +693,10 @@
   grid-template-rows: auto auto;
   align-content: center;
   justify-items: center;
-  gap: 10px;
+  gap: 8px;
   text-align: center;
   min-height: 44dvh;
-  padding: 16px;
+  padding: 12px 16px;
   border-top: 7px solid #bf9064;
   background: repeating-linear-gradient(90deg, transparent 0 28px, #a9c8d03d 28px 56px),
     repeating-linear-gradient(0deg, #fff9ed 0 28px, #e4eee8 28px 56px);
@@ -709,7 +704,7 @@
 .cafe-speaking-plate {
   display: grid;
   place-items: center;
-  width: min(76vw, 76dvh, 680px);
+  width: min(76vw, 70dvh, 680px);
   aspect-ratio: 1.85;
   background: #fffefa;
   border: clamp(5px, 1vw, 9px) double #7598a4;
@@ -727,7 +722,14 @@
 @media (prefers-reduced-motion: reduce) {
   .cafe-speaking-plate svg { animation: none; }
 }
-.cafe-speaking-place span {
+.cafe-speaking-caption {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 6px 12px;
+}
+.cafe-speaking-caption > span {
   padding: 4px 14px;
   background: #fffefa;
   border-radius: 10px;

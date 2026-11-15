@@ -207,13 +207,8 @@ function ConnectedCafe({ owner, onHome }: { owner: string; onHome: () => void })
     <div className="cafe-speaking-table">
       <Milo happy={having} serving={having && !cafe.praising} waving={cafe.praising}/>
       <div className="cafe-speaking-menu">
-        <div className="cafe-speaking-prompts">
-          <div className="speech-paper" aria-live="polite">
-            <p>{cafe.praising ? 'Bravo !' : cafe.serving ? 'Voilà !' : hint ?? (having ? haveQuestion : orderQuestion)}</p>
-          </div>
-          {!cafe.serving && !cafe.praising && <p className="cafe-speaking-turn">
-            <Icon name="speak" size={30}/> À toi de parler !
-          </p>}
+        <div className="speech-paper" aria-live="polite">
+          <p>{cafe.praising ? 'Bravo !' : cafe.serving ? 'Voilà !' : hint ?? (having ? haveQuestion : orderQuestion)}</p>
         </div>
         {!having && <>
           <p className="speaking-invitation">Touche un aliment pour entendre son nom.</p>
@@ -227,7 +222,12 @@ function ConnectedCafe({ owner, onHome }: { owner: string; onHome: () => void })
     </div>
     <div className="cafe-speaking-place">
       <div className="cafe-speaking-plate" aria-hidden="true">{having && cafe.food && <FoodArt food={cafe.food}/>}</div>
-      <span aria-live="polite">{having && cafe.food ? foods[cafe.food].label : 'Mon assiette'}</span>
+      <div className="cafe-speaking-caption">
+        {!cafe.serving && !cafe.praising && <p className="cafe-speaking-turn">
+          <Icon name="speak" size={52}/> À toi de parler !
+        </p>}
+        <span aria-live="polite">{having && cafe.food ? foods[cafe.food].label : 'Mon assiette'}</span>
+      </div>
     </div>
   </main>;
 }

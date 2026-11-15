@@ -7,7 +7,11 @@ const paths: Record<IconName, React.ReactNode> = {
   'music-off': <><path d="M9 13V5l11-2v12M9 8l11-2M3 3l18 18"/><ellipse cx="6" cy="18" rx="3" ry="2"/><ellipse cx="17" cy="16" rx="3" ry="2"/></>,
   home: <><path d="m3 11 9-8 9 8M5 10v11h5v-7h4v7h5V10"/></>,
   sound: <><path d="M11 4 6 8H3v8h3l5 4ZM15 8c3 2 3 6 0 8M18 4c6 4 6 12 0 16"/></>,
-  speak: <><path d="M3 11a8 7 0 1 1 8 7H9l-5 3 1-5a7 7 0 0 1-2-5Z"/><path d="M7.5 11h.01M11 11h.01M14.5 11h.01M20 4l2-2M22 8h1"/></>,
+  speak: <>
+    <path fill="currentColor" stroke="none" d="M8 2a6 6 0 0 1 6 5.3l2.1 3a.8.8 0 0 1-.7 1.2H14v1.1l-2.8-.8a.6.6 0 0 0-.6.9l3.4 2.5v.5a2 2 0 0 1-2 2H9.5V22H3v-5.3A5.8 5.8 0 0 1 2 13V8a6 6 0 0 1 6-6Z"/>
+    <circle cx="10.5" cy="8" r="1.1" fill="var(--yellow)" stroke="none"/>
+    <path d="M17.7 10.7a5 5 0 0 1 0 6.6m3-8.8a8.5 8.5 0 0 1 0 11"/>
+  </>,
   play: <path d="m8 4 13 8-13 8Z"/>, pause: <><path d="M8 4v16M16 4v16"/></>,
   left: <path d="m15 5-7 7 7 7"/>, right: <path d="m9 5 7 7-7 7"/>,
   book: <><path d="M12 6C8 3 4 3 2 4v15c3-1 6-1 10 2 4-3 7-3 10-2V4c-3-1-6-1-10 2ZM12 6v15"/></>,
