@@ -1,21 +1,38 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { cafeFoods } from '../content/cafe';
 import { narrationFor } from '../content/narration';
 import { have, request } from '../content/session2';
-import { foods, type Food } from '../content/week1';
+import { foods } from '../content/week1';
 import { playAudio, stopAudio } from '../lib/audio';
-import { advanceCafe, cafeRounds, isCafeCommand, useCafeAccount, useCafeChannel, type CafeAction, type CafeCommand, type CafeState } from '../lib/liveCafe';
+import { isConfigured } from '../lib/cloud';
+import { advanceCafe, cafeRounds, isCafeCommand, useCafeAccount, useCafeChannel, type CafeCommand, type CafeState } from '../lib/liveCafe';
 import { activityKey } from '../lib/progression';
 import { record } from '../lib/store';
 import { FoodArt, Milo } from './Art';
-import { CafeControls } from './CafeControls';
+import { ParentAuth } from './ParentAuth';
 import { Icon } from './Icon';
 
 const contentId = activityKey(1, 'mission', 'speaking');
 
 export function SpeakingCafe({ onHome }: { onHome: () => void }) {
   const owner = useCafeAccount();
-  const [mode, setMode] = useState<'local' | 'live' | null>(null);
+  if (owner) return <ConnectedCafe key={owner} owner={owner} onHome={onHome}/>;
+  return <main className="speaking-game live-cafe child-screen">
+    <CafeHeader onBack={onHome}/>
+    {isConfigured() ? <div className="cafe-sign-in"><ParentAuth forCafe/></div> :
+      <p className="speaking-invitation">La connexion au site des parents est indisponible.</p>}
+  </main>;
+}
+
+function CafeHeader({ onBack, children }: { onBack: () => void; children?: ReactNode }) {
+  return <header className="game-header">
+    <button className="round" aria-label="Retour au chapitre" onClick={onBack}><Icon name="left"/></button>
+    <div className="prompt"><h1>Le petit café</h1></div>
+    {children}
+  </header>;
+}
+
+function ConnectedCafe({ owner, onHome }: { owner: string; onHome: () => void }) {
   const [cafe, setCafe] = useState<CafeState>(() => ({
     id: crypto.randomUUID(), version: 0, round: 1, phase: 'order', food: null, hints: 0, hintFood: null,
   }));
@@ -23,36 +40,43 @@ export function SpeakingCafe({ onHome }: { onHome: () => void }) {
   const [player] = useState(() => new Audio());
   const [audioError, setAudioError] = useState(false);
   const [parentPresent, setParentPresent] = useState(false);
+  const [helpOpen, setHelpOpen] = useState(false);
   const parentTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const startedAt = useRef<number | undefined>(undefined);
   const playbackTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const orderQuestion = 'Tu voudrais quoi ?';
   const haveQuestion = 'Qu’est-ce que tu as ?';
 
-  const { status, send } = useCafeChannel(mode === 'live' ? owner : null, (event, payload) => {
-    if (mode !== 'live') return;
+  const { status, send } = useCafeChannel(owner, (event, payload) => {
     if (event === 'request-state') {
       clearTimeout(parentTimer.current);
+      if (startedAt.current === undefined) {
+        startedAt.current = Date.now();
+        record({ kind: 'engagement', contentId, sessionId: latest.current.id, event: 'activity_open' });
+        prompt();
+      }
+      setHelpOpen(false);
       setParentPresent(true);
       parentTimer.current = setTimeout(() => setParentPresent(false), 8500);
       publish();
     }
-    if (event === 'command' && isCafeCommand(payload)) respond(payload);
+    if (event === 'command' && startedAt.current !== undefined && isCafeCommand(payload)) respond(payload);
   });
 
   function publish() {
     void send('state', latest.current);
   }
   useEffect(() => {
-    if (status === 'connected') publish();
-    // Re-announce the current turn whenever the channel reconnects.
+    if (status === 'connected') void send('cafe-open', {});
+    else setParentPresent(false);
+    // Ask an open dashboard to connect as soon as the channel joins.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [status]);
 
   function show(next: CafeState) {
     latest.current = next;
     setCafe(next);
-    if (mode === 'live') publish();
+    publish();
   }
 
   function say(id: string, onEnd?: () => void, onStart?: () => void) {
@@ -74,13 +98,6 @@ export function SpeakingCafe({ onHome }: { onHome: () => void }) {
     say(id, undefined, onStart);
   }
 
-  function start(nextMode: 'local' | 'live') {
-    setMode(nextMode);
-    startedAt.current = Date.now();
-    record({ kind: 'engagement', contentId, sessionId: latest.current.id, event: 'activity_open' });
-    prompt();
-  }
-
   useEffect(() => {
     const id = latest.current.id;
     return () => {
@@ -97,12 +114,12 @@ export function SpeakingCafe({ onHome }: { onHome: () => void }) {
     const current = latest.current;
     const next = advanceCafe(current, command);
     if (!next) {
-      if (mode === 'live') publish();
+      publish();
       return;
     }
 
     const acknowledge = (effect: 'screen' | 'sound') => {
-      if (mode === 'live') void send('response', { commandId: command.commandId, effect });
+      void send('response', { commandId: command.commandId, effect });
     };
     if (command.action === 'hint') {
       show(next);
@@ -139,13 +156,8 @@ export function SpeakingCafe({ onHome }: { onHome: () => void }) {
     requestAnimationFrame(() => requestAnimationFrame(() => acknowledge('screen')));
   }
 
-  function respondHere(action: CafeAction, food?: Food) {
-    const { id, version } = latest.current;
-    respond({ id, version, action, food, commandId: crypto.randomUUID() });
-  }
-
   function leave() {
-    if (mode === 'live') void send('closed', { id: latest.current.id });
+    void send('closed', { id: latest.current.id });
     onHome();
   }
 
@@ -158,45 +170,48 @@ export function SpeakingCafe({ onHome }: { onHome: () => void }) {
     <button className="primary" onClick={leave}><Icon name="book"/> Au chapitre</button>
   </main>;
 
-  return <main className="speaking-game live-cafe child-screen">
-    <header className="game-header">
-      <button className="round" aria-label="Retour au chapitre" onClick={leave}><Icon name="left"/></button>
-      <div className="prompt"><h1>Le petit café</h1></div>
-      {mode && <button className="round yellow" aria-label="Réécouter Milo" onClick={() => prompt()} disabled={cafe.serving}><Icon name="sound"/></button>}
-    </header>
-    {!mode ? <div className="cafe-play-together">
+  if (status !== 'connected' || !parentPresent) return <main className="speaking-game live-cafe child-screen">
+    <CafeHeader onBack={leave}/>
+    <div className="cafe-waiting">
       <Milo waving/>
-      <h2>À jouer avec un adulte</h2>
-      {owner && <button className="primary" onClick={() => start('live')}>Avec le site des parents</button>}
-      <button className={owner ? 'secondary' : 'primary'} onClick={() => start('local')}>Sur cet écran</button>
-      {!owner && <p>Pour jouer sur deux écrans, connectez le même compte dans le coin des parents.</p>}
-    </div> : <>
-      {mode === 'live' && (status !== 'connected' || !parentPresent) && <div className="parent-read-notice">
-        <p role="status">{status === 'unavailable' ? 'Connexion au site interrompue.' : 'Sur le site des parents, ouvrez « Live café ».'}</p>
-        <button className="text-button" onClick={() => { setMode('local'); clearTimeout(parentTimer.current); }}>Continuer sur cet écran</button>
+      <div className="cafe-waiting-message">
+        <h2 role="status">En attendant que ton parent se connecte…</h2>
+        <button className="round" aria-label="Aide pour les parents" aria-expanded={helpOpen} aria-controls="cafe-parent-help"
+          onClick={() => setHelpOpen(!helpOpen)}><Icon name="help"/></button>
+      </div>
+      {status === 'unavailable' && <p>La connexion a été interrompue. Nouvel essai en cours…</p>}
+      {helpOpen && <div id="cafe-parent-help" lang="en" className="speech-paper cafe-parent-help">
+        <p>On your computer, open the parent dashboard, sign in with the same account as this iPad, then select <strong>Live café</strong>. The game will start here when you connect.</p>
+        <a href="https://thibaud-gh.github.io/monde-de-milo/#/parent" target="_blank" rel="noopener noreferrer"
+          aria-label="Open the parent dashboard">thibaud-gh.github.io/monde-de-milo/#/parent</a>
       </div>}
-      {audioError && <button className="audio-notice" onClick={() => prompt()}>Touche ici pour réécouter Milo.</button>}
-      <div className="cafe-speaking-table">
-        <Milo happy={having} serving={having}/>
+    </div>
+  </main>;
+
+  return <main className="speaking-game live-cafe child-screen">
+    <CafeHeader onBack={leave}>
+      <button className="round yellow" aria-label="Réécouter Milo" onClick={() => prompt()} disabled={cafe.serving}><Icon name="sound"/></button>
+    </CafeHeader>
+    {audioError && <button className="audio-notice" onClick={() => prompt()}>Touche ici pour réécouter Milo.</button>}
+    <div className="cafe-speaking-table">
+      <Milo happy={having} serving={having}/>
+      <div className="cafe-speaking-menu">
         <div className="speech-paper" aria-live="polite">
           <p>{cafe.serving ? 'Voilà !' : hint ?? (having ? haveQuestion : orderQuestion)}</p>
         </div>
-        <div className="cafe-speaking-place">
-          <div className="cafe-speaking-plate" aria-hidden="true">{having && cafe.food && <FoodArt food={cafe.food}/>}</div>
-          <span>{having && cafe.food ? foods[cafe.food].label : 'Mon assiette'}</span>
-        </div>
+        {!having && <>
+          <p className="speaking-invitation">Dis à Milo ce que tu voudrais. Touche une image pour entendre son nom.</p>
+          <div className="speaking-foods six-foods cafe-vocabulary" role="group" aria-label="Écouter les mots du menu">
+            {cafeFoods.map(food => <button key={food} aria-label={`Écouter : ${foods[food].label}`} onClick={() => say(`cafe-menu-${food}`)}>
+              <FoodArt food={food}/><Icon name="sound" size={18}/>
+            </button>)}
+          </div>
+        </>}
       </div>
-      {!having && <>
-        <p className="speaking-invitation">Dis à Milo ce que tu voudrais. Touche une image pour entendre son nom.</p>
-        <div className="speaking-foods six-foods cafe-vocabulary" role="group" aria-label="Écouter les mots du menu">
-          {cafeFoods.map(food => <button key={food} aria-label={`Écouter : ${foods[food].label}`} onClick={() => say(`cafe-menu-${food}`)}>
-            <FoodArt food={food}/><Icon name="sound" size={18}/>
-          </button>)}
-        </div>
-      </>}
-      {mode === 'local' && !cafe.serving && <section className="adult-response" lang="en" aria-label="Parent controls">
-        <CafeControls key={cafe.round} cafe={cafe} onAction={respondHere}/>
-      </section>}
-    </>}
+    </div>
+    <div className="cafe-speaking-place">
+      <div className="cafe-speaking-plate" aria-hidden="true">{having && cafe.food && <FoodArt food={cafe.food}/>}</div>
+      <span aria-live="polite">{having && cafe.food ? foods[cafe.food].label : 'Mon assiette'}</span>
+    </div>
   </main>;
 }

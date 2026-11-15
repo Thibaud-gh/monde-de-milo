@@ -2,7 +2,7 @@ import { useState } from 'react';
 import type { FormEvent } from 'react';
 import { Capacitor } from '@capacitor/core';
 import { supabase } from '../lib/cloud';
-export function ParentAuth() {
+export function ParentAuth({ forCafe = false }: { forCafe?: boolean }) {
   const [mode, setMode] = useState<'signin' | 'signup'>('signin');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -42,8 +42,11 @@ export function ParentAuth() {
     } catch (error) { setMessage(error instanceof Error ? error.message : 'Could not resend confirmation.'); }
     finally { setBusy(false); }
   }
-  return <section className="dashboard-section sign-in"><p className="journal-date">Your family’s little café</p><h1>{pendingEmail ? 'Check your inbox.' : mode === 'signup' ? 'Start your family’s journal.' : 'Welcome back.'}</h1><p>{mode === 'signup' ? 'Create one parent account for the iPad and this dashboard. Your child doesn’t need a login.' : 'Sign in to see your family’s progress. Use the same account on the iPad and dashboard.'}</p>
+  return <section className="dashboard-section sign-in" lang="en">
+    {!forCafe && <p className="journal-date">Your family’s little café</p>}
+    <h1>{forCafe ? 'Parent sign-in' : pendingEmail ? 'Check your inbox.' : mode === 'signup' ? 'Start your family’s journal.' : 'Welcome back.'}</h1>
+    <p>{forCafe ? 'Sign in with the same parent account you use on the website.' : mode === 'signup' ? 'Create one parent account for the iPad and this dashboard. Your child doesn’t need a login.' : 'Sign in to see your family’s progress. Use the same account on the iPad and dashboard.'}</p>
     {message && <p role="status" className="auth-message">{message}</p>}
-    <div className="auth-tabs" role="group" aria-label="Parent account"><button type="button" aria-pressed={mode === 'signin'} disabled={busy} onClick={() => { setMode('signin'); setMessage(''); }}>Sign in</button><button type="button" aria-pressed={mode === 'signup'} disabled={busy} onClick={() => { setMode('signup'); setMessage(''); }}>Create a parent account</button></div>
+    {!forCafe && <div className="auth-tabs" role="group" aria-label="Parent account"><button type="button" aria-pressed={mode === 'signin'} disabled={busy} onClick={() => { setMode('signin'); setMessage(''); }}>Sign in</button><button type="button" aria-pressed={mode === 'signup'} disabled={busy} onClick={() => { setMode('signup'); setMessage(''); }}>Create a parent account</button></div>}
     <form className="connection-form" onSubmit={submit}>{mode === 'signup' && <label>Child’s first name<input name="childName" maxLength={80} required autoComplete="off" value={firstName} onChange={e => setFirstName(e.target.value)}/><small>Used in Milo’s greetings. One child per parent account for now.</small></label>}<label>Parent email<input name="email" type="email" required autoComplete="username" value={email} onChange={e => setEmail(e.target.value)}/></label><label>Password<input name="password" type="password" minLength={mode === 'signup' ? 8 : 6} required autoComplete={mode === 'signup' ? 'new-password' : 'current-password'} value={password} onChange={e => setPassword(e.target.value)}/>{mode === 'signup' && <small>At least 8 characters.</small>}</label><button className="primary" disabled={busy}>{busy ? 'Connecting…' : mode === 'signup' ? 'Create account' : 'Sign in'}</button>{pendingEmail && mode === 'signin' && <button className="text-button" type="button" disabled={busy} onClick={() => void resend()}>Resend confirmation email</button>}</form></section>;
 }

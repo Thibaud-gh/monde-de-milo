@@ -6,7 +6,7 @@ import { isCafeState, useCafeChannel, type CafeAction, type CafeState } from '..
 import { FoodArt } from './Art';
 import { Icon } from './Icon';
 
-export function CafeControls({ cafe, onAction, disabled = false }: {
+function CafeControls({ cafe, onAction, disabled = false }: {
   cafe: CafeState; onAction: (action: CafeAction, food?: Food) => void; disabled?: boolean;
 }) {
   const [selected, setSelected] = useState<Food | null>(cafe.hintFood);
@@ -53,6 +53,7 @@ export function LiveCafeControls({ owner }: { owner: string }) {
   const timeout = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
   const { status, send } = useCafeChannel(owner, (event, payload) => {
+    if (event === 'cafe-open') void send('request-state', {});
     if (event === 'state' && isCafeState(payload)) {
       const previous = activeCafe.current;
       if (previous?.id === payload.id && payload.version < previous.version) return;
@@ -120,7 +121,7 @@ export function LiveCafeControls({ owner }: { owner: string }) {
 
   return <section className="dashboard-section live-cafe-controls">
     <h2>Live café</h2>
-    <p>Open <strong lang="fr">Le petit café</strong> on the iPad with the same parent account, then choose <strong lang="fr">Avec le site des parents</strong>.</p>
+    <p>Open <strong lang="fr">Le petit café</strong> on the iPad and sign in with the same parent account. Keep this page open while you play.</p>
     <div className="cafe-connection" role="status">
       <span className={status === 'connected' && cafe ? 'status-dot' : 'status-dot waiting'}/>
       {status === 'unavailable' ? 'Live connection unavailable. Retrying…' :
