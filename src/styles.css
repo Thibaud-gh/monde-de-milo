@@ -724,6 +724,18 @@
 .cafe-snack-eating.water {
   animation-name: cafe-sip;
 }
+.cafe-snack-eating.water .cafe-water-fill {
+  transform-box: fill-box;
+  transform-origin: center bottom;
+  animation: cafe-empty-glass 530ms ease-in-out 70ms both;
+}
+.cafe-crust-flakes {
+  animation: cafe-scatter-crumbs 440ms ease-out 160ms both;
+}
+.cafe-cheering .milo-raised-paw {
+  transform-origin: 228px 205px;
+  animation: cafe-paw-wave 700ms ease-in-out both;
+}
 .cafe-snack-eating.milk {
   animation-name: cafe-carton;
 }
@@ -789,6 +801,22 @@
   44%, 62% { transform: translateY(-30px) rotate(55deg); opacity: 1; }
   100% { transform: rotate(12deg) scale(.74); opacity: 0; }
 }
+@keyframes cafe-empty-glass {
+  0%, 18% { transform: scaleY(1); }
+  96% { opacity: 1; }
+  100% { transform: scale(.73, .04); opacity: 0; }
+}
+@keyframes cafe-scatter-crumbs {
+  0% { opacity: 0; transform: translate(-8px, 8px); }
+  12% { opacity: 1; }
+  48% { opacity: 1; transform: translate(8px, -9px) rotate(-4deg); }
+  100% { opacity: 0; transform: translate(23px, 13px) rotate(12deg); }
+}
+@keyframes cafe-paw-wave {
+  0%, 100% { transform: rotate(0); }
+  24%, 68% { transform: rotate(-14deg); }
+  46%, 84% { transform: rotate(6deg); }
+}
 @keyframes cafe-carton {
   0% { transform: rotate(0); opacity: 1; }
   32%, 50% { transform: translateY(-18px) rotate(-42deg); opacity: 1; }
@@ -805,6 +833,8 @@
   35% { transform: translateY(-12px) rotate(-5deg); }
 }
 @media (prefers-reduced-motion: reduce) {
+  .cafe-crust-flakes { display: none; }
+  .cafe-cheering .milo-raised-paw, .cafe-snack-eating.water .cafe-water-fill { animation: none; }
   .cafe-snack-eating { visibility: hidden; }
   .cafe-snack-to-tray { transform: translate(314px, var(--snack-slot-y)) scale(.58); }
   .cafe-snack-served, .cafe-snack-eating, .cafe-snack-to-tray, .cafe-finale-cheer { animation: none; }

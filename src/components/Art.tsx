@@ -3,44 +3,72 @@ import type { Food, StorySceneId } from '../content/week1';
 export function FoodArt({ food, className = '' }: { food: Food; className?: string }) {
   return <svg className={className} viewBox="0 0 180 180" fill="none" aria-hidden="true">
     {food === 'apple' && <>
-      <path d="M92 53c-1-17 7-27 13-32" stroke="#775134" strokeWidth="9" strokeLinecap="round"/>
-      <path d="M96 43c6-24 29-27 41-21-2 19-20 29-41 21" fill="#65885C"/>
-      <path d="M90 56C43 31 23 66 28 103c5 37 28 60 49 53 9-3 15-3 24 0 25 8 47-21 52-53 6-40-24-68-63-47Z" fill="#D9534F"/>
-      <path d="M42 92c-1-12 3-21 11-24" stroke="#F29B81" strokeWidth="8" strokeLinecap="round"/>
-      <path d="M81 61q10 5 20 0" stroke="#AC383B" strokeWidth="4" strokeLinecap="round"/>
+      <path d="M90 60q-4-26 13-40" stroke="#724B39" strokeWidth="8" strokeLinecap="round"/>
+      <path d="M98 43q3-29 40-24-6 29-40 24Z" fill="#638557"/>
+      <path d="M100 41q13-11 28-16" stroke="#9BB375" strokeWidth="2.5" strokeLinecap="round"/>
+      <path d="M88 57C62 39 32 46 25 78c-8 33 9 74 38 83 12 4 17-1 26-1 10 0 16 5 27 1 29-10 48-53 39-84-8-29-35-38-60-23Z" fill="#BB4044"/>
+      <path d="M88 57C58 39 29 50 25 83c-4 29 10 58 31 66 13 6 21 0 32 2 28 6 51-27 54-55 3-23-5-39-20-46-14-3-23 2-34 7Z" fill="#DF5851"/>
+      <path d="M38 92q0-20 14-27" stroke="#F8A17E" strokeWidth="7" strokeLinecap="round"/>
+      <path d="M77 59q12 8 25 0" stroke="#A64440" strokeWidth="3.5" strokeLinecap="round"/>
+      <path d="m115 125 1-1m9-12 1-1m-14 22 1-1" stroke="#F18B69" strokeWidth="3" strokeLinecap="round"/>
     </>}
     {food === 'banana' && <>
-      <path d="m134 31 13 7-5 18c2 56-47 99-99 88l-11-7 2-14C80 126 118 91 126 49Z" fill="#E6B631"/>
-      <path d="m126 36 10 3-4 19c-3 46-49 84-94 75l-5-9C82 121 112 91 118 51Z" fill="#F8D767"/>
-      <path d="m126 36 2-11 13 5-5 9M33 124l-6 3 3 10 8-4" fill="#775134"/>
-      <path d="M55 135c27-1 54-18 69-43" stroke="#C69926" strokeWidth="3" strokeLinecap="round"/>
+      <path d="m128 27 16 4-4 17c6 37-3 66-33 88-26 20-62 19-79-1l-5-9 5-6c23 10 48 0 68-18 17-15 28-40 28-56Z" fill="#C48D35"/>
+      <path d="m127 32 12 3-4 14c5 29-5 55-29 77-22 19-51 23-73 7l-6-9c26 6 50-5 70-23 18-18 27-42 27-55Z" fill="#F4C544"/>
+      <path d="m127 34 7 1-5 18c-1 29-17 53-40 69-19 13-38 16-53 10 21 1 43-11 61-30 18-18 25-41 27-55Z" fill="#FFE995"/>
+      <path d="m126 23 17 4-2 8-15-4Zm-102 96 6 2 3 12-7-4-5-6Z" fill="#76513A"/>
+      <path d="M70 139q20-3 36-16" stroke="#DCAB38" strokeWidth="2.5" strokeLinecap="round"/>
+      <path d="m123 92 1-1m-5 9 1-1" stroke="#AD7738" strokeWidth="3" strokeLinecap="round"/>
     </>}
-    {food === 'water' && <>
-      <path d="m47 36 12 116q30 13 61 0l13-116" fill="#F5FBFC" stroke="#6694AB" strokeWidth="5"/>
-      <path d="m54 74 8 73q28 11 54 0l8-73Z" fill="#88BDCF"/>
-      <ellipse cx="89" cy="75" rx="35" ry="8" fill="#B6DFE8"/>
-      <ellipse cx="90" cy="36" rx="43" ry="11" fill="#EAF6F7" stroke="#6694AB" strokeWidth="5"/>
-      <path d="m62 54 7 71" stroke="white" strokeWidth="6" strokeLinecap="round"/>
-      <path d="M110 94v19" stroke="#D9EFF3" strokeWidth="4" strokeLinecap="round"/>
-    </>}
-    {food === 'milk' && <>
-      <path d="m54 48 17-24h44l17 24v107H54Z" fill="#FFF9ED" stroke="#6D929D" strokeWidth="4" strokeLinejoin="round"/>
-      <path d="m71 24 17 24h44l-17-24Z" fill="#A9C8D0"/><path d="M88 48v107h44V48Z" fill="#D5E6E6"/>
-      <path d="M54 62h34v69H54Z" fill="#6D929D"/><path d="M71 80c-18 24-15 32 0 32s18-8 0-32" fill="#FFF9ED"/>
-      <path d="M71 24v-9h44v9" stroke="#6D929D" strokeWidth="5" strokeLinejoin="round"/>
-    </>}
-    {food === 'cheese' && <>
-      <path d="m28 91 91-47 39 49v53H28Z" fill="#E8B742" stroke="#C39035" strokeWidth="4" strokeLinejoin="round"/>
-      <path d="m28 91 91-47 39 49Z" fill="#F8D767"/><path d="M28 91h130v53H28Z" fill="#F4C653"/>
-      <ellipse cx="86" cy="73" rx="10" ry="5" fill="#D5A239"/><ellipse cx="125" cy="82" rx="8" ry="4" fill="#D5A239"/>
-      <circle cx="52" cy="112" r="8" fill="#D5A239"/><circle cx="103" cy="124" r="11" fill="#D5A239"/><circle cx="141" cy="108" r="6" fill="#D5A239"/>
-    </>}
-    {food === 'bread' && <g transform="rotate(-28 90 90)">
-      <path d="M13 104C9 74 39 59 79 59h43c25 0 45 15 46 34 2 22-18 38-42 38H59c-24 0-43-10-46-27Z" fill="#C28743"/>
-      <path d="M14 94c5-21 30-31 65-31h45c19 0 34 7 39 21-2 23-23 33-49 33H58c-21 0-38-7-44-23Z" fill="#EDBD6E"/>
-      <path d="m48 73 8 22m24-25 8 22m23-21 8 20" stroke="#FFF0CA" strokeWidth="9" strokeLinecap="round"/>
-      <path d="M35 108h2m31 4h2m64-8h2" stroke="#C28743" strokeWidth="3" strokeLinecap="round"/>
+    {food === 'bread' && <g transform="rotate(-24 90 90)">
+      <path d="M12 102c-2-19 16-38 42-43 19-5 62-7 83-1 19 6 31 18 32 34 1 20-20 34-49 36l-61 3c-25 0-45-9-47-29Z" fill="#AB6739"/>
+      <path d="M13 98c0-18 17-33 42-39 22-5 60-7 82-1 12 4 23 12 27 21-3 17-23 30-48 33l-55 4c-20 1-39-4-48-18Z" fill="#E4A654"/>
+      <path d="M40 67q15-5 24 27-15 3-24-27Zm33-8q16-4 24 29-15 2-24-29Zm34-2q17-1 22 27-14 2-22-27Z" fill="#C98542"/>
+      <path d="M39 66q11-4 20 22-13-7-20-22Zm34-8q12-3 20 24-13-8-20-24Zm34-2q12 0 18 22-13-6-18-22Z" fill="#FFDF9F"/>
+      <path d="m31 97 4-1m34 11 5-1m65-13 4-2m-89 11 2-1" stroke="#F9CE85" strokeWidth="2.8" strokeLinecap="round"/>
     </g>}
+    {food === 'water' && <>
+      <path d="m45 39 12 111q32 17 65 0l13-111Z" fill="#F2F9F5" stroke="#557D91" strokeWidth="3.8" strokeLinejoin="round"/>
+      <g className="cafe-water-fill">
+        <path d="m51 76 9 71q29 13 59 0l9-71Z" fill="#79B8CB"/>
+        <path d="m111 79-7 71q8-1 15-4l9-70Z" fill="#64A4B9"/>
+        <path d="M51 76q13-8 37-3 21 4 40 0-2 12-37 12-27 0-40-9Z" fill="#B8E1E3"/>
+        <path d="m72 126 6 1m22-31 3-1" stroke="#D4EFF0" strokeWidth="2.7" strokeLinecap="round"/>
+      </g>
+      <ellipse cx="90" cy="38" rx="45" ry="10" fill="#F1F9F8" stroke="#557D91" strokeWidth="4"/>
+      <path d="M56 38q16-6 35-5m-32 24 5 40m1 9 1 7" stroke="white" strokeWidth="5" strokeLinecap="round"/>
+      <path d="M63 150q27 10 53 0" stroke="#B9D4D7" strokeWidth="3" strokeLinecap="round"/>
+    </>}
+    {food === 'milk' && <g strokeLinejoin="round">
+      <path d="m43 58 12-28 59-5 19 16 8 106-32 14-57-7Z" fill="#FDF4D9" stroke="#517A83" strokeWidth="3.5"/>
+      <path d="m100 54 33-13 8 106-32 14Z" fill="#C1D9CF"/>
+      <path d="m43 58 57-4 14-29-59 5Z" fill="#73A7AA"/>
+      <path d="m100 54 14-29 19 16Z" fill="#4D7E88"/>
+      <path d="m55 30-1-10 59-5 1 10Z" fill="#F4F0D4" stroke="#517A83" strokeWidth="3.5"/>
+      <path d="m50 125 57 6 1 12-57-6Zm57 6 31-13 1 12-31 13Z" fill="#78AAAD"/>
+      <g transform="translate(75 89) rotate(-4)">
+        <path d="M-12-8q-9-13-16-8-1 11 12 14M12-9q8-12 15-8 1 12-12 15" fill="#507680"/>
+        <path d="M-16-8q2-13 16-13t16 13l-3 18h-26Z" fill="#FFFCED" stroke="#507680" strokeWidth="2.5"/>
+        <path d="M-14-11q2-9 12-9-1 11-7 12Z" fill="#507680"/>
+        <ellipse cy="8" rx="14" ry="8" fill="#E8B994"/>
+        <path d="M-7-4h.3M7-4h.3m-13 12h.3m11 0h.3" stroke="#4A5F62" strokeWidth="3.4" strokeLinecap="round"/>
+      </g>
+    </g>}
+    {food === 'cheese' && <>
+      <path d="M21 95 110 42q29 1 47 30l-2 56q-14 11-37 15l-96-6Z" fill="#D39A37" stroke="#B58136" strokeWidth="3.5" strokeLinejoin="round"/>
+      <path d="m21 95 89-53q29 1 47 30-12 10-37 16Z" fill="#FFE291"/>
+      <path d="m21 95 99-7-2 55-96-6Z" fill="#F5C44F"/>
+      <path d="M120 88q24-4 37-16l-2 56q-14 11-37 15Z" fill="#E4AB3D"/>
+      <path d="m22 131 96 6q23-4 37-15v6q-14 11-37 15l-96-6Z" fill="#D39336"/>
+      <g fill="#D39A37">
+        <ellipse cx="88" cy="75" rx="9" ry="3.5" transform="rotate(-15 88 75)"/>
+        <ellipse cx="118" cy="60" rx="6" ry="3"/>
+        <circle cx="45" cy="109" r="5"/>
+        <ellipse cx="89" cy="119" rx="8" ry="7"/>
+      </g>
+      <path d="M132 102q5-9 10-8 4 8-6 14-6 3-4-6Z" fill="#BA8431"/>
+      <path d="m28 95 85-6" stroke="#FFE49A" strokeWidth="2.5" strokeLinecap="round"/>
+    </>}
   </svg>;
 }
 export function Milo({ waving = false, happy = false, serving = false, expression, className = '' }: {
@@ -52,11 +80,12 @@ export function Milo({ waving = false, happy = false, serving = false, expressio
   return <svg className={className} viewBox="0 0 320 350" aria-hidden="true">
     <g fill="#B47D4F"><ellipse cx="105" cy="321" rx="43" ry="24"/><ellipse cx="218" cy="321" rx="43" ry="24"/></g>
     <path d={serving ? 'M93 184C65 180 54 205 33 201C10 196 10 220 32 225C69 239 96 227 114 229' : 'M93 184c-38 24-44 76-27 83 24 10 42-23 48-38'} fill="#C18B58"/>
-    <path d={serving ? 'M225 184C255 180 266 205 287 201C310 196 310 220 288 225C251 239 224 227 206 229' : waving ? 'M225 190c26-6 39-45 61-30 23 17-12 65-46 67' : 'M225 184c38 24 44 76 27 83-24 10-42-23-48-38'} fill="#C18B58"/>
+    <path className={waving && !serving ? 'milo-raised-paw' : undefined} d={serving ? 'M225 184C255 180 266 205 287 201C310 196 310 220 288 225C251 239 224 227 206 229' : waving ? 'M225 190c26-6 39-45 61-30 23 17-12 65-46 67' : 'M225 184c38 24 44 76 27 83-24 10-42-23-48-38'} fill="#C18B58"/>
     <path d="M88 199c5-23 29-43 72-43s68 20 73 43l16 99c-36 32-140 32-177 0Z" fill="#C18B58"/>
     <path d="m110 183 12 46h77l13-46 12 9-12 46 14 73c-35 13-97 14-132 0l14-73-12-46Z" fill="#365878"/>
     <path d="M136 266h50v30c-15 8-35 8-50 0Z" fill="#F8D767"/>
     <path d="m142 272 11 9 11-9 11 9 6-9" fill="none" stroke="#E8BB43" strokeWidth="2"/>
+    <path d="M100 300q27 10 60 10t61-9m-83-28 1 21q21 7 44 0v-22" fill="none" stroke="#9DB6B9" strokeWidth="2.2" strokeDasharray="4 5" strokeLinecap="round"/>
     <circle cx="75" cy="60" r="35" fill="#B47D4F"/><circle cx="246" cy="60" r="35" fill="#B47D4F"/>
     <circle cx="76" cy="61" r="20" fill="#DEB78B"/><circle cx="246" cy="61" r="20" fill="#DEB78B"/>
     <path d="M56 113c0-58 47-89 104-89s105 32 105 89c0 62-43 97-105 97S56 175 56 113" fill="#C18B58"/>

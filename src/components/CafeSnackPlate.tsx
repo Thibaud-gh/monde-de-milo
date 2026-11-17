@@ -31,8 +31,7 @@ function Leftover({ food }: { food: Food }) {
   if (food === 'milk') return <>
     <path d="m-25-23 11-12h34l10 12-7 58h-43Z" fill="#FFF9ED" stroke="#6D929D" strokeWidth="3" strokeLinejoin="round"/>
     <path d="m-14-35 19 16 25-4M5-19 1 34m-21-1 12-13m28-55 4-15-16 4-6 10" fill="none" stroke="#6D929D" strokeWidth="3" strokeLinejoin="round"/>
-    <path d="M-17-12h16l-3 30h-9Z" fill="#A9C8D0"/>
-    <path d="M-9-7c-9 11-7 15 0 15S0 4-9-7Z" fill="#FFF9ED"/>
+    <path d="m-21 11 23 4 23-8-1 8-23 8-21-5Z" fill="#78AAAD"/>
   </>;
   if (food === 'cheese') return <g fill="#F8D767" stroke="#C39035" strokeWidth="2" strokeLinejoin="round">
     <path d="m-30 16 15-18 13 22-26 7Z"/><path d="m5 10 15-16 15 20-23 11Z"/><path d="m-5-13 9-15 11 13-9 7Z"/>
@@ -58,6 +57,10 @@ export function CafeSnackPlate({ food, served, collecting }: {
     <ellipse cx="242" cy="141" rx="229" ry="129" fill="#fffefa" stroke="#7598a4" strokeWidth="4"/>
     <ellipse cx="242" cy="141" rx="212" ry="113" fill="none" stroke="#a9c8d0" strokeWidth="2.5"/>
     <ellipse cx="242" cy="144" rx="173" ry="86" fill="#F9F5E9" stroke="#e4eee8" strokeWidth="2"/>
+    {[0, 180].map(angle => <g key={angle} transform={`rotate(${angle} 242 141) translate(242 40)`} fill="#7298A6">
+      <path d="M-5 0q-12-10-23-4Q-18 4-5 0Zm10 0Q17-10 28-4 18 4 5 0Z"/>
+      <circle cy="-1" r="2.5"/>
+    </g>)}
     <rect x="503" y="13" width="107" height="254" rx="24" fill="#DDBD91" stroke="#A97D59" strokeWidth="3"/>
     {slots.map((y, index) => <ellipse key={y} cx="556" cy={y} rx="38" ry="32" fill="#F4E3C8" stroke="#B98F63" strokeWidth="2" strokeDasharray={served[index] ? undefined : '3 4'}/>)}
     {served.map((item, index) => <g key={index} transform={`translate(556 ${slots[index]}) scale(.58)`}><Leftover food={item}/></g>)}
@@ -71,6 +74,10 @@ export function CafeSnackPlate({ food, served, collecting }: {
         mask={moving && !drink ? `url(#${biteMask})` : undefined}>
         <svg x="-95" y="-95" width="190" height="190"><FoodArt food={food}/></svg>
       </g>
+      {moving && food === 'bread' && <g className="cafe-crust-flakes" fill="#C48848">
+        <path d="m42-27 7-4 5 5-8 4Z"/><path d="m53-11 5-2 3 5-5 2Z"/>
+        <path d="m31-36 4-4 4 2-3 5Z" fill="#E7B578"/>
+      </g>}
       {moving && <g className="cafe-snack-to-tray"
         style={{ '--snack-slot-y': `${slots[served.length] - 141}px` } as CSSProperties}><Leftover food={food}/></g>}
     </g>}

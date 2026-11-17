@@ -254,7 +254,7 @@ function ConnectedCafe({ owner, onHome }: { owner: string; onHome: () => void })
     {audioError && <button className="audio-notice" onClick={() => prompt()}>Touche ici pour réécouter Milo.</button>}
     <div className="cafe-speaking-table">
       <Milo happy={having} serving={having && !cafe.praising} waving={cafe.praising}
-        className={cafe.praising && cafe.round === cafeRounds ? 'cafe-finale-cheer' : undefined}/>
+        className={cafe.praising ? `cafe-cheering${cafe.round === cafeRounds ? ' cafe-finale-cheer' : ''}` : undefined}/>
       <div className="cafe-speaking-menu">
         <div className="speech-paper" aria-live="polite">
           <p>{cafe.praising ? narrationFor(cheers[cafe.round - 1]).text : cafe.serving ? 'Voilà !' : hint ?? (having ? haveQuestion : orderQuestion)}</p>
