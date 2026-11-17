@@ -2,17 +2,27 @@ import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { cafeFoods } from '../content/cafe';
 import { narrationFor } from '../content/narration';
 import { have, request } from '../content/session2';
-import { foods } from '../content/week1';
+import { foods, type Food } from '../content/week1';
 import { playAudio, stopAudio } from '../lib/audio';
 import { isConfigured } from '../lib/cloud';
 import { advanceCafe, cafeRounds, isCafeCommand, useCafeAccount, useCafeChannel, type CafeCommand, type CafeState } from '../lib/liveCafe';
 import { activityKey } from '../lib/progression';
 import { record } from '../lib/store';
 import { FoodArt, Milo } from './Art';
+import { CafeSnackPlate } from './CafeSnackPlate';
 import { ParentAuth } from './ParentAuth';
 import { Icon } from './Icon';
 
 const contentId = activityKey(1, 'mission', 'speaking');
+const cheers = ['bravo', 'cafe-cheer-two', 'cafe-cheer-three'] as const;
+const snackSounds: Record<Food, string> = {
+  apple: 'cafe-snack-crunch', banana: 'cafe-snack-peel', bread: 'cafe-snack-crunch',
+  water: 'cafe-snack-sip', milk: 'cafe-snack-sip', cheese: 'cafe-snack-peel',
+};
+
+function newVisit(): CafeState {
+  return { id: crypto.randomUUID(), version: 0, round: 1, phase: 'order', food: null, hints: 0, hintFood: null };
+}
 
 export function SpeakingCafe({ onHome }: { onHome: () => void }) {
   const owner = useCafeAccount();
@@ -33,9 +43,8 @@ function CafeHeader({ onBack, children }: { onBack: () => void; children?: React
 }
 
 function ConnectedCafe({ owner, onHome }: { owner: string; onHome: () => void }) {
-  const [cafe, setCafe] = useState<CafeState>(() => ({
-    id: crypto.randomUUID(), version: 0, round: 1, phase: 'order', food: null, hints: 0, hintFood: null,
-  }));
+  const [cafe, setCafe] = useState(newVisit);
+  const [leftovers, setLeftovers] = useState<Food[]>([]);
   const latest = useRef(cafe);
   const [player] = useState(() => new Audio());
   const [audioError, setAudioError] = useState(false);
@@ -50,11 +59,7 @@ function ConnectedCafe({ owner, onHome }: { owner: string; onHome: () => void })
   const { status, send } = useCafeChannel(owner, (event, payload) => {
     if (event === 'request-state') {
       clearTimeout(parentTimer.current);
-      if (startedAt.current === undefined) {
-        startedAt.current = Date.now();
-        record({ kind: 'engagement', contentId, sessionId: latest.current.id, event: 'activity_open' });
-        prompt();
-      }
+      startVisit();
       setHelpOpen(false);
       setParentPresent(true);
       parentTimer.current = setTimeout(() => setParentPresent(false), 8500);
@@ -90,7 +95,7 @@ function ConnectedCafe({ owner, onHome }: { owner: string; onHome: () => void })
 
   function prompt(onStart?: () => void) {
     const turn = latest.current;
-    if (turn.phase === 'finished') return say('s2-fini');
+    if (turn.phase === 'finished') return;
     const having = turn.phase === 'have';
     const id = turn.hintFood ? (having ? 'cafe-have-' : 's2-request-') + turn.hintFood :
       turn.hints === 1 ? (having ? 'cafe-have-starter' : 's2-starter') :
@@ -98,28 +103,58 @@ function ConnectedCafe({ owner, onHome }: { owner: string; onHome: () => void })
     say(id, undefined, onStart);
   }
 
-  function playCue(state: CafeState, clip: string, after: () => void, onStart: () => void) {
+  function playCue(state: CafeState, clip: string, after: () => void, onStart: () => void, effect?: string) {
     show(state);
+    const animationEnd = performance.now() + (effect ? 1200 : 0);
+    let soundStarted = false;
+    const reportSound = () => {
+      if (soundStarted) return;
+      soundStarted = true;
+      onStart();
+    };
     let finished = false;
     const finish = () => {
-      if (finished || latest.current.version !== state.version) return;
-      finished = true;
+      if (finished || latest.current.id !== state.id || latest.current.version !== state.version) return;
       clearTimeout(playbackTimer.current);
+      const remaining = animationEnd - performance.now();
+      if (remaining > 0) {
+        playbackTimer.current = setTimeout(finish, remaining);
+        return;
+      }
+      finished = true;
       after();
     };
-    playbackTimer.current = setTimeout(finish, 2000);
-    say(clip, finish, onStart);
+    const startVoice = () => {
+      playbackTimer.current = setTimeout(finish, effect ? 4800 : 2000);
+      say(clip, finish, reportSound);
+    };
+    if (effect) {
+      playAudio(effect, '', undefined, undefined, reportSound, player);
+      // Leave the first bite or sip clear before Milo speaks.
+      playbackTimer.current = setTimeout(startVoice, 750);
+    } else startVoice();
+  }
+
+  function startVisit() {
+    if (startedAt.current !== undefined) return;
+    startedAt.current = Date.now();
+    record({ kind: 'engagement', contentId, sessionId: latest.current.id, event: 'activity_open' });
+    prompt();
+  }
+
+  function closeVisit() {
+    const start = startedAt.current;
+    if (start === undefined) return;
+    startedAt.current = undefined;
+    record({ kind: 'engagement', contentId, sessionId: latest.current.id, event: 'activity_close', durationSeconds: Math.round((Date.now() - start) / 1000) });
   }
 
   useEffect(() => {
-    const id = latest.current.id;
     return () => {
       stopAudio();
       clearTimeout(parentTimer.current);
       clearTimeout(playbackTimer.current);
-      if (startedAt.current !== undefined) {
-        record({ kind: 'engagement', contentId, sessionId: id, event: 'activity_close', durationSeconds: Math.round((Date.now() - startedAt.current) / 1000) });
-      }
+      closeVisit();
     };
   }, []);
 
@@ -146,14 +181,14 @@ function ConnectedCafe({ owner, onHome }: { owner: string; onHome: () => void })
           show({ ...next, version: next.version + 1, serving: false });
           say('cafe-have-question');
         }, soundStarted);
-      } else if (command.action !== 'continue') {
-        playCue({ ...current, version: next.version, praising: true }, 'bravo', () => {
-          show({ ...next, version: next.version + 1 });
-          prompt();
-        }, soundStarted);
       } else {
-        show(next);
-        prompt();
+        playCue({ ...current, version: next.version, praising: true }, cheers[current.round - 1], () => {
+          setLeftovers(items => [...items, food]);
+          show({ ...next, version: next.version + 1 });
+          if (next.phase === 'finished') {
+            record({ kind: 'engagement', contentId, sessionId: next.id, event: 'activity_complete', completedTurns: cafeRounds * 2 });
+          } else prompt();
+        }, soundStarted, snackSounds[food]);
       }
 
       record({
@@ -162,7 +197,6 @@ function ConnectedCafe({ owner, onHome }: { owner: string; onHome: () => void })
         level: command.action === 'continue' ? 'not-yet' : command.action === 'helped' || current.hints > 0 ? 'prompted' : 'independent',
         note: 'Parent-observed · Le petit café',
       });
-      if (next.phase === 'finished') record({ kind: 'engagement', contentId, sessionId: next.id, event: 'activity_complete', completedTurns: cafeRounds * 2 });
     }
     requestAnimationFrame(() => requestAnimationFrame(() => acknowledge('screen')));
   }
@@ -172,13 +206,27 @@ function ConnectedCafe({ owner, onHome }: { owner: string; onHome: () => void })
     onHome();
   }
 
+  function replayVisit() {
+    closeVisit();
+    setLeftovers([]);
+    show(newVisit());
+    if (status === 'connected' && parentPresent) startVisit();
+  }
+
   const having = cafe.phase === 'have';
   const hint = cafe.hintFood ? (having ? have(cafe.hintFood) : request(cafe.hintFood)) :
     cafe.hints === 1 ? (having ? 'J’ai…' : 'Je voudrais…') : null;
 
-  if (cafe.phase === 'finished') return <main className="completion child-screen">
-    <Milo happy waving/><h1>Quel bon goûter !</h1>
-    <button className="primary" onClick={leave}><Icon name="book"/> Au chapitre</button>
+  if (cafe.phase === 'finished') return <main className="speaking-game live-cafe child-screen">
+    <CafeHeader onBack={leave}/>
+    <div className="cafe-snack-finale">
+      <Milo happy waving/>
+      <div>
+        <h2>Quel bon goûter !</h2>
+        <button className="primary" onClick={replayVisit}><Icon name="refresh"/> Encore !</button>
+      </div>
+    </div>
+    <div className="cafe-speaking-place"><CafeSnackPlate food={null} served={leftovers} collecting={false}/></div>
   </main>;
 
   if (status !== 'connected' || !parentPresent) return <main className="speaking-game live-cafe child-screen">
@@ -205,10 +253,11 @@ function ConnectedCafe({ owner, onHome }: { owner: string; onHome: () => void })
     </CafeHeader>
     {audioError && <button className="audio-notice" onClick={() => prompt()}>Touche ici pour réécouter Milo.</button>}
     <div className="cafe-speaking-table">
-      <Milo happy={having} serving={having && !cafe.praising} waving={cafe.praising}/>
+      <Milo happy={having} serving={having && !cafe.praising} waving={cafe.praising}
+        className={cafe.praising && cafe.round === cafeRounds ? 'cafe-finale-cheer' : undefined}/>
       <div className="cafe-speaking-menu">
         <div className="speech-paper" aria-live="polite">
-          <p>{cafe.praising ? 'Bravo !' : cafe.serving ? 'Voilà !' : hint ?? (having ? haveQuestion : orderQuestion)}</p>
+          <p>{cafe.praising ? narrationFor(cheers[cafe.round - 1]).text : cafe.serving ? 'Voilà !' : hint ?? (having ? haveQuestion : orderQuestion)}</p>
         </div>
         {!having && <>
           <p className="speaking-invitation">Touche un aliment pour entendre son nom.</p>
@@ -221,7 +270,7 @@ function ConnectedCafe({ owner, onHome }: { owner: string; onHome: () => void })
       </div>
     </div>
     <div className="cafe-speaking-place">
-      <div className="cafe-speaking-plate" aria-hidden="true">{having && cafe.food && <FoodArt food={cafe.food}/>}</div>
+      <CafeSnackPlate food={having ? cafe.food : null} served={leftovers} collecting={!!cafe.praising}/>
       <div className="cafe-speaking-caption">
         {!cafe.serving && !cafe.praising && <p className="cafe-speaking-turn">
           <Icon name="speak" size={52}/> À toi de parler !

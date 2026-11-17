@@ -1821,6 +1821,48 @@
       "sourceWavHash": "d120dc524064feb8d8e5fa5b97e5990a52385a3190436f117de14c436319db57",
       "durationSeconds": 1.12,
       "generation": "whole-utterance"
+    },
+    "cafe-snack-crunch": {
+      "file": "cafe-snack-crunch.mp3",
+      "signature": "c233665db478694f27ca5a86dc1d6a2b862e9aeec33bdf517c893e7a2e67b001",
+      "contentHash": "c233665db478694f27ca5a86dc1d6a2b862e9aeec33bdf517c893e7a2e67b001",
+      "generation": "synthesized-effect"
+    },
+    "cafe-snack-peel": {
+      "file": "cafe-snack-peel.mp3",
+      "signature": "1980c891383f09666e388721f0570572d69b7e00782f99e6375ee1966624dded",
+      "contentHash": "1980c891383f09666e388721f0570572d69b7e00782f99e6375ee1966624dded",
+      "generation": "synthesized-effect"
+    },
+    "cafe-snack-sip": {
+      "file": "cafe-snack-sip.mp3",
+      "signature": "a64569c57fb2cee2508935a1728b92e6c90b2851d2bcdb8494f53b2ca412e558",
+      "contentHash": "a64569c57fb2cee2508935a1728b92e6c90b2851d2bcdb8494f53b2ca412e558",
+      "generation": "synthesized-effect"
+    },
+    "cafe-cheer-two": {
+      "file": "cafe-cheer-two.mp3",
+      "text": "Miam, quel goûter !",
+      "voice": "Milo — On compte",
+      "model": "openbmb/VoxCPM2",
+      "rate": "reference",
+      "signature": "be5721d8948188d21d8f0c8810e0bc0be28e367bc7894e63586b299b4eb5dde7",
+      "contentHash": "d15acac36813b1bb381d5d5d87e4ea133de0d763991c7f84958eac8e57919fd1",
+      "sourceWavHash": "4de38e2c621563a975aaa3b50b7d80972af4d14261847972c7ff5af9cd3e7497",
+      "durationSeconds": 2.08,
+      "generation": "whole-utterance"
+    },
+    "cafe-cheer-three": {
+      "file": "cafe-cheer-three.mp3",
+      "text": "On a fait un super goûter ensemble !",
+      "voice": "Milo — On compte",
+      "model": "openbmb/VoxCPM2",
+      "rate": "reference",
+      "signature": "55f4e49c67d596f766bcfaccf40585181f267024b1d1efce461a636724d37863",
+      "contentHash": "fc81e8eb231bdfc1e5266994983b320365e0f2820ee4ec8bc3ce6ca269d1e9aa",
+      "sourceWavHash": "a125007c729045e0ff6251cae37715a69a49c2e181523d5a739e914d64dcfca7",
+      "durationSeconds": 3.2,
+      "generation": "whole-utterance"
     }
   }
 }

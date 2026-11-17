@@ -701,26 +701,113 @@
   background: repeating-linear-gradient(90deg, transparent 0 28px, #a9c8d03d 28px 56px),
     repeating-linear-gradient(0deg, #fff9ed 0 28px, #e4eee8 28px 56px);
 }
-.cafe-speaking-plate {
-  display: grid;
-  place-items: center;
-  width: min(76vw, 70dvh, 680px);
-  aspect-ratio: 1.85;
-  background: #fffefa;
-  border: clamp(5px, 1vw, 9px) double #7598a4;
-  border-radius: 50%;
-  box-shadow: 0 5px 0 #36587824;
+.cafe-snack-plate {
+  display: block;
+  width: min(100%, 86dvh, 820px);
+  height: auto;
 }
-.cafe-speaking-plate svg {
-  width: 46%;
+.cafe-snack-served {
   animation: cafe-serve 360ms ease-out both;
 }
+.cafe-snack-eating {
+  animation: cafe-bite 730ms ease both;
+}
+.cafe-snack-eating.banana {
+  animation-name: cafe-peel;
+}
+.cafe-snack-eating.bread {
+  animation-name: cafe-crumble;
+}
+.cafe-snack-eating.cheese {
+  animation-name: cafe-cheese-tumble;
+}
+.cafe-snack-eating.water {
+  animation-name: cafe-sip;
+}
+.cafe-snack-eating.milk {
+  animation-name: cafe-carton;
+}
+.cafe-snack-bite.first {
+  animation: cafe-bite-mark 1ms step-end 160ms both;
+}
+.cafe-snack-bite.second {
+  animation: cafe-bite-mark 1ms step-end 380ms both;
+}
+.cafe-snack-to-tray {
+  animation: cafe-to-tray 1200ms ease both;
+}
+.cafe-finale-cheer {
+  animation: cafe-happy-hop 850ms ease-in-out 2;
+}
+.cafe-snack-finale {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: clamp(10px, 4vw, 42px);
+  margin: 0 auto;
+  padding: 12px 20px 20px;
+}
+.cafe-snack-finale > svg {
+  width: min(25vw, 170px);
+}
+.cafe-snack-finale h2 {
+  margin: 0 0 12px;
+  font: clamp(23px, 3.5vw, 34px) Delius, cursive;
+}
 @keyframes cafe-serve {
-  from { transform: translate(-55%, -20%) scale(.8); opacity: .3; }
+  from { transform: translate(-75px, -30px) scale(.8); opacity: .3; }
   to { transform: translate(0, 0) scale(1); opacity: 1; }
 }
+@keyframes cafe-bite-mark {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes cafe-bite {
+  0%, 27%, 59% { transform: scale(1); opacity: 1; }
+  20%, 52% { transform: rotate(-5deg) scale(.91); opacity: 1; }
+  100% { transform: scale(.6); opacity: 0; }
+}
+@keyframes cafe-peel {
+  0% { transform: rotate(0); opacity: 1; }
+  36% { transform: rotate(-22deg) translate(-11px, -9px); opacity: 1; }
+  64% { transform: rotate(26deg) translate(12px, 8px); opacity: 1; }
+  100% { transform: rotate(45deg) translate(18px, 30px) scale(.72); opacity: 0; }
+}
+@keyframes cafe-crumble {
+  0%, 26% { transform: scale(1); opacity: 1; }
+  51% { transform: rotate(6deg) scale(.73); opacity: 1; }
+  100% { transform: translateY(18px) scale(.32); opacity: 0; }
+}
+@keyframes cafe-cheese-tumble {
+  0% { transform: rotate(0); opacity: 1; }
+  40% { transform: translateY(-18px) rotate(22deg) scale(.82); opacity: 1; }
+  70% { transform: translateY(14px) rotate(-12deg) scale(.64); opacity: 1; }
+  100% { transform: translateY(22px) scale(.42); opacity: 0; }
+}
+@keyframes cafe-sip {
+  0% { transform: rotate(0); opacity: 1; }
+  44%, 62% { transform: translateY(-30px) rotate(55deg); opacity: 1; }
+  100% { transform: rotate(12deg) scale(.74); opacity: 0; }
+}
+@keyframes cafe-carton {
+  0% { transform: rotate(0); opacity: 1; }
+  32%, 50% { transform: translateY(-18px) rotate(-42deg); opacity: 1; }
+  72% { transform: rotate(8deg) scale(.74, .6); opacity: 1; }
+  100% { transform: translateY(14px) scale(.63, .48); opacity: 0; }
+}
+@keyframes cafe-to-tray {
+  0%, 39% { opacity: 0; transform: scale(.75); }
+  60% { opacity: 1; transform: scale(1); }
+  100% { opacity: 1; transform: translate(314px, var(--snack-slot-y)) scale(.58); }
+}
+@keyframes cafe-happy-hop {
+  0%, 70%, 100% { transform: translateY(0); }
+  35% { transform: translateY(-12px) rotate(-5deg); }
+}
 @media (prefers-reduced-motion: reduce) {
-  .cafe-speaking-plate svg { animation: none; }
+  .cafe-snack-eating { visibility: hidden; }
+  .cafe-snack-to-tray { transform: translate(314px, var(--snack-slot-y)) scale(.58); }
+  .cafe-snack-served, .cafe-snack-eating, .cafe-snack-to-tray, .cafe-finale-cheer { animation: none; }
 }
 .cafe-speaking-caption {
   display: flex;
